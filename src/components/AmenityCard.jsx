@@ -1,4 +1,4 @@
-import {School, Hospital, Bus, ShoppingCart, Store, MapPin,} from "lucide-react";
+import { School, Hospital, Bus, ShoppingCart, Store, MapPin } from "lucide-react";
 import "./AmenityCard.css";
 
 function AmenityCard({ amenity }) {
@@ -23,13 +23,10 @@ function AmenityCard({ amenity }) {
   return (
     <div className="amenity-card">
       <Icon size={28} />
-
       <div>
         <h3>{amenity.name}</h3>
-
-        <span className="amenity-type">
-          {labels[amenity.type] || "Other"}
-        </span>
+        <span className="amenity-type">{labels[amenity.type] || "Other"}</span>
+        {amenity.distance && <span className="amenity-distance">{amenity.distance}</span>}
       </div>
     </div>
   );

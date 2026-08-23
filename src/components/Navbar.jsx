@@ -1,19 +1,22 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./Navbar.css";
 
 function Navbar() {
   return (
     <nav className="navbar">
-      <h2 className="navbar-title">Rental Area Explorer</h2>
+      <NavLink to="/" className="navbar-title">Cedar Court</NavLink>
 
       <div className="navbar-links">
-        <Link to="/">Search</Link>
-        <Link to="/map">Map</Link>
-        <Link to="/amenities">Amenities</Link>
+        <NavLink to="/" end className={({ isActive }) => (isActive ? "active" : "")}>Home</NavLink>
+        <NavLink to="/property" className={({ isActive }) => (isActive ? "active" : "")}>Property</NavLink>
+        <NavLink to="/area" className={({ isActive }) => (isActive ? "active" : "")}>Location</NavLink>
+        <NavLink to="/about" className={({ isActive }) => (isActive ? "active" : "")}>About</NavLink>
+        <NavLink to="/tenant" className="navbar-cta">Tenant Dashboard</NavLink>
       </div>
     </nav>
   );
 }
 
 export default Navbar;
+
 

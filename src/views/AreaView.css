@@ -1,0 +1,42 @@
+.area-view h1 {
+    margin: 0 0 0.25rem;
+    font-size: 1.8rem;
+    color: #24231f;
+  }
+  
+  .area-address {
+    margin: 0 0 1.5rem;
+    color: #8a877e;
+  }
+  
+  .map-container {
+    width: 100%;
+    height: 340px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e6e2d9;
+  }
+  
+  .map-container .leaflet-container {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .area-view h2 {
+    margin: 2rem 0 1rem;
+    font-size: 1.2rem;
+    color: #24231f;
+  }
+  
+  .amenities-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  @media (min-width: 700px) {
+    .amenities-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
