@@ -1,274 +1,111 @@
-# Rental Area Explorer
-- A React-based web application that helps users explore Kenyan neighbourhoods and discover nearby amenities such as schools, hospitals, markets, malls, and public transport locations.
-- The application allows a user to search for an area in Kenya, view the selected location on an interactive map, and explore nearby amenities using location data from OpenStreetMap services.
+# Rental Management App
+A React application for managing a single rental property, built for both the landlord and the tenants who live there. The application keeps units, leases, payments, maintenance requests and notices in one place, instead of spread across notebooks, phone calls and message threads.
 
 ## Overview
-Finding a suitable area to rent can involve more than simply looking at available properties. The surrounding neighbourhood and access to everyday services can also be important when deciding where to live.
-**Rental Area Explorer** was developed to provide a simple way to explore a Kenyan neighbourhood and understand what is available nearby.
+Managing a rental property usually means keeping track of several things at once: who is in which unit, whether rent has come in, what needs fixing, and what tenants need to know. This application was built to bring all of that into one application, with a clear landlord side and a clear tenant side.
+
+This project began as a neighbourhood exploration tool (searching a Kenyan area and browsing nearby amenities on a map). It has since evolved into a full property management platform for one specific property. The location and map functionality from that earlier version is preserved and now supports the property itself, rather than being the main purpose of the application.
 
 The application currently focuses on three main areas:
-1. **Search** - search for a Kenyan neighbourhood or area.
-2. **Map** - view the searched location on an interactive map.
-3. **Amenities** - explore nearby amenities around the selected location.
+- **Property information** - a public-facing overview of the property, its location and what is nearby.
+- **Tenant dashboard** - lease details, payment status, maintenance requests and notices, for one logged-in tenant.
+- **Landlord dashboard** - units, tenants, maintenance tickets, payments, leases and notices, across the whole property.
 
-The application is currently a frontend-focused project. Future phases can expand it into a full-stack rental platform with features such as user accounts, rental listings, and personalised user functionality.
+The application is currently a frontend-focused project using mock data.
 
 ## Features
-### Area Search
-Users can enter the name of a Kenyan neighbourhood or area into the search form.
-The application sends the search request to the Nominatim geocoding service and retrieves the location information.
-The search is restricted to Kenya by adding `Kenya` to the user's search query.
+### Property Information
+A public-facing page introduces the property: its name, address, description, number of units and who manages it. This is the page a visitor sees before going into either dashboard.
 
-For example:
-```text
-Elgon View
-```
+### Landlord Dashboard
+The landlord can see an overview of the property (occupancy, open maintenance requests, overdue payments) and move between focused pages:
+- **Units** - every unit, its tenant if occupied, and its status.
+- **Maintenance** - tickets submitted by tenants, with the ability to mark a ticket as Pending or Resolved.
+- **Payments** - rent, water and electricity for every tenant, itemised, with a paid, due or overdue status.
+- **Leases** - lease start and end dates, rent amount, status, and whether an end of stay notice has been submitted.
+- **Notices** - post a notice (for example, a water maintenance schedule or a rent reminder) that tenants can read.
 
-is searched as:
+### Tenant Dashboard
+A tenant sees only information relevant to their own unit:
+- **Home** - unit, lease status, next payment due, any open maintenance request, and the most recent notice.
+- **Lease** - lease start and end dates, monthly rent, and a form to notify the landlord of an intended move-out date.
+- **Payments** - the next payment due, itemised by rent, water and electricity, and a history of past payments.
+- **Maintenance** - submit a new maintenance request with a description and priority, and see the status of previous requests.
+- **Notices** - read notices posted by the landlord.
 
-```text
-Elgon View, Kenya
-```
-
-The application then stores the returned area name and geographic coordinates.
-The coordinates are used internally by the application but are not displayed as raw latitude and longitude values in the user interface.
-
-### Loading State
-
-While the application is communicating with the search service, the search button changes from:
-
-```text
-Search
-```
-
-to:
-
-```text
-Searching...
-```
-
-The button is also disabled during the request to prevent repeated submissions while the search is in progress.
+At present, the application shows one mock tenant at a time.
 
 ### Interactive Map
-After an area has been successfully searched, the Map page uses the returned coordinates to position an interactive Leaflet map.
-
-The map includes:
+The property's location is shown on a Leaflet map using its stored latitude and longitude. The map includes:
 - OpenStreetMap map tiles
-- A marker for the searched location
-- A popup containing the area name
-- Automatic positioning based on the searched coordinates
-
-The application uses React Leaflet to integrate Leaflet into the React application.
+- A marker for the property
+- A popup showing the property name
 
 ### Nearby Amenities
-The Amenities page displays locations near the searched area.
-
-The application currently supports categories including:
-- Schools
-- Hospitals
-- Markets
-- Malls / Shopping Centres
-- Public Transport locations
-
-Amenities are displayed as cards containing:
-- An icon
-- The amenity name
-- The amenity type
-The interface uses Lucide icons to visually distinguish the different amenity categories.
-
-### Shared Location State
-The selected location is stored in the main `App` component.
-This allows the same searched location to be shared between the:
-- Search view
-- Map view
-- Amenities view
-
-For example, after searching for an area, the user can navigate to the Map page without having to search for the area again.
+Nearby schools, hospitals, markets and transport are shown using a manually entered, static list rather than a live third-party API. This replaces an earlier version of the application that queried the Overpass API for this data. The Overpass API proved unreliable during development, so the application no longer depends on it to display this information.
 
 ### Client-Side Routing
-React Router is used to provide navigation between the application's main views.
-The current routes are:
-
+React Router provides navigation between the application's views. The current routes are:
 ```text
-/             Search
-/map          Map
-/amenities    Amenities
+/                        Home
+/property                Property information
+/area                    Location and nearby amenities
+/about                   About
+
+/tenant                  Tenant dashboard, home
+/tenant/lease             Tenant lease and end of stay notice
+/tenant/payments          Tenant payments
+/tenant/maintenance       Tenant maintenance requests
+/tenant/notices           Tenant notices
+
+/landlord                 Landlord dashboard, overview
+/landlord/units            Landlord units
+/landlord/tickets          Landlord maintenance tickets
+/landlord/payments         Landlord payments
+/landlord/leases           Landlord leases
+/landlord/notices          Landlord notices
 ```
 
-The navigation bar provides links to each of these views.
-
 ### Responsive Interface
-The application includes responsive styling so that the interface can adapt to smaller screens.
-Responsive styling is applied to areas including:
-- Navigation
-- Search form
-- Map
-- Amenity cards
-- Overall page spacing
-
-The application is designed to remain usable on both desktop and mobile-sized screens.
+The application includes responsive styling so the interface adapts to smaller screens. This covers navigation, dashboard sections, tables, forms and images, so the application remains usable on desktop, tablet and mobile.
 
 ## Technologies Used
 ### React
-The application is built using React.
-React is used to create reusable components and manage application state.
+The application is built using React. React is used to create reusable components and manage application state.
 
 ### Vite
 Vite is used as the development environment and build tool for the React application.
 
 ### React Router
-React Router is used to handle navigation between the application's views.
+React Router handles navigation between the application's views, including nested tenant and landlord dashboard pages.
 
-Current routes include:
-```text
-/ 
-/map
-/amenities
-```
-
-### React Leaflet
-React Leaflet is used to integrate Leaflet maps into the React application.
-It provides React components for:
-- Map containers
-- Tile layers
-- Markers
-- Popups
-
-### Leaflet
-Leaflet provides the underlying interactive mapping functionality.
-The Leaflet stylesheet is imported in `main.jsx`:
-
+### React Leaflet and Leaflet
+React Leaflet integrates Leaflet maps into the React application, providing map containers, tile layers, markers and popups. The Leaflet stylesheet is imported in `main.jsx`:
 ```jsx
 import "leaflet/dist/leaflet.css";
 ```
-- This provides the required styling for Leaflet's map interface and controls.
 
-### OpenStreetMap
-OpenStreetMap provides the map data displayed in the application.
-The application uses OpenStreetMap tiles for the interactive map.
-
-### Nominatim
-Nominatim is used for geocoding.
-It converts a user's area search into geographic information that the application can use to position the map.
-The current search request follows this structure:
-
-```text
-https://nominatim.openstreetmap.org/search
-```
-
-The request includes:
-
-```text
-q
-format=json
-```
-
-The user's search is combined with `Kenya` before being sent to Nominatim.
-
-### Overpass API
-The Overpass API is used to retrieve OpenStreetMap data for nearby amenities.
+### OpenStreetMap and Nominatim
+OpenStreetMap provides the map tiles used for the property's location. Nominatim was used during development to look up the property's coordinates. Once those coordinates were known, they were stored directly as data, so the running application does not require a live Nominatim request to function.
 
 ### Lucide React
-Lucide React provides the icons used throughout the amenities interface.
-Different amenity types are associated with different icons to make the cards easier to identify visually.
+Lucide React provides the icons used on amenity cards, so different amenity types are easy to tell apart visually.
 
-## Project Structure
-```text
-src/
-│
-├── components/
-│   ├── Navbar.jsx
-│   ├── Navbar.css
-│   ├── AreaSearchForm.jsx
-│   ├── AreaSearchForm.css
-│   ├── AmenityCard.jsx
-│   └── AmenityCard.css
-│
-├── views/
-│   ├── SearchView.jsx
-│   ├── SearchView.css
-│   ├── MapView.jsx
-│   ├── MapView.css
-│   ├── AmenitiesView.jsx
-│   └── AmenitiesView.css
-│
-├── App.jsx
-├── App.css
-├── index.css
-└── main.jsx
-```
+### Data
+`mockData.js` holds the property, units, leases, payments, notices, maintenance tickets and nearby amenities used throughout the application.
+Every component reads from this file rather than defining its own data, so this is the single place mock data will later be replaced by requests to the Flask API.
 
 ### Components
-The "components" folder contains reusable interface components.
-
-#### Navbar
-Provides the main application navigation.
-
-#### AreaSearchForm
-Contains the search input and handles communication with Nominatim.
-
-#### AmenityCard
-Displays an individual nearby amenity with its name, category, and icon.
-
+Reusable interface pieces used across more than one view: `StatusBadge` (a consistent way to show Active, Paid, Pending, Overdue and similar statuses), `TicketCard` and `TicketForm` (maintenance requests), `PaymentRow` (a line of payment history), `NoticeCard`, `EndOfStayForm`, and `DashboardTabs` (the sub-navigation used inside both dashboards).
 
 ### Views
-The "views" folder contains the main pages of the application.
+Public pages (`HomeView`, `PropertyView`, `AreaView`, `AboutView`), tenant dashboard pages under `views/tenant/`, and landlord dashboard pages under `views/landlord/`.
 
-#### SearchView
-Provides the application's landing page and search experience.
+## Running the Application
+The application is deployed and can be accessed directly from the live link below:
+https://rental-area-explorer.vercel.app/
 
-#### MapView
-Displays the searched location on a Leaflet map.
-
-#### AmenitiesView
-Displays nearby amenities around the selected location.
-
-### CSS Organisation
-```text
-index.css
-```
-- Contains global styles such as:
-  - Page background
-  - Default font
-  - Box sizing
-  - Basic element behaviour
-
-```text
-App.css
-```
-- Controls the overall application content layout.
-
-```text
-Navbar.css
-```
-- Controls the navigation bar.
-
-```text
-SearchView.css
-```
-- Controls the search landing page.
-
-```text
-AreaSearchForm.css
-```
-- Controls the search input and button.
-
-```text
-MapView.css
-```
-- Controls the map page and map container.
-
-```text
-AmenitiesView.css
-```
-- Controls the amenities page layout.
-
-```text
-AmenityCard.css
-```
-- Controls individual amenity cards.
-
-This separation makes the styling easier to maintain and modify.
+No installation is required when using the deployed version. Open the link in a browser to explore the application.
 
 ## Installation
 ### 1. Clone the repository
@@ -288,7 +125,6 @@ npm install
 ```
 - This installs the dependencies listed in `package.json`.
 
-## Running the Application
 Start the Vite development server:
 ```bash
 npm run dev
@@ -296,107 +132,36 @@ npm run dev
 Open the provided URL in a browser.
 
 
+
 ## Using the Application
-### Step 1 - Search for an area
-Open the Search page.
+### As a visitor
+Open the Home page to see an introduction to the property, then visit Property or Location for more detail.
 
-Enter a Kenyan neighbourhood or area, for example:
-```text
-Elgon View
-```
+### As a tenant
+Select Tenant Dashboard from the navigation. From there, use the tabs to move between Home, Lease, Payments, Maintenance and Notices. A maintenance request can be submitted from the Maintenance tab, and an end of stay notice can be submitted from the Lease tab.
 
-Click **Search**.
-The application will query Nominatim and retrieve the location.
+### As a landlord
+Select Landlord Dashboard from the navigation. From there, use the tabs to move between Overview, Units, Maintenance, Payments, Leases and Notices. A maintenance ticket's status can be updated from the Maintenance tab, and a new notice can be posted from the Notices tab.
 
-### Step 2 - View the map
-After a successful search, select **Map** from the navigation bar.
-The application will display the selected location on an interactive map.
-A marker will indicate the searched location.
-Clicking the marker displays a popup containing the area name.
+At present there is no login. The application shows one example tenant and the full landlord view.
 
-### Step 3 - Explore amenities
-Select **Amenities** from the navigation bar.
-The application will retrieve and display nearby amenities around the searched location.
+## Mock Data
+The application uses realistic mock data rather than a live database. Property, units, leases, payments and notices are set up so that the interface feels close to what a real running property would look like, including a tenant with no open maintenance ticket and units with no lease, so that empty states are part of the design rather than an afterthought.
 
-The availability and accuracy of individual amenities depend on the OpenStreetMap data available for the selected area.
-
-## Error and Empty States
-The application includes basic handling for situations where a location has not yet been selected.
-For example, if a user opens the Map page before searching for an area, the application displays:
-
-```text
-Map
-
-Search for an area first.
-```
-
-Similarly, the Amenities page asks the user to search for an area first if no location has been selected.
-The search also handles failed network requests by catching the error and logging the failure to the browser console.
+This is temporary frontend data. It is clearly separated in `mockData.js` and structured so that it can be replaced by real API requests without needing to change the components that use it.
 
 ## Data Sources
-This project relies on publicly available OpenStreetMap services.
+The property's location was originally looked up using Nominatim during development. The running application now stores this location directly, so it does not depend on a live request to Nominatim, OpenStreetMap or the Overpass API to function.
 
-### Nominatim
-Used for searching and geocoding locations.
-```text
-https://nominatim.openstreetmap.org/
-```
-
-### OpenStreetMap
-Used for map tiles and geographic map data.
-
-```text
-https://www.openstreetmap.org/
-```
-
-### Overpass API
-Used to query OpenStreetMap data for nearby amenities.
-
-```text
-https://overpass-api.de/
-```
-
-## API Key
-The current application does not rquire an API key for its Nominatim, OpenStreetMap, or Overpass functionality.
-The application communicates directly with publicly available OpenStreetMap services.
-
-## Development Workflow
-The project was developed using Git branches so that individual features could be developed separately before being merged into the main branch.
-
-Examples of feature branches used during development include:
-```text
-feature-navbar
-feature-search
-feature-map
-feature-amenities
-feature-phase1-styling
-feature-documentation
-```
-
-Each feature was developed and tested before being merged into `main`.
+- Nominatim: `https://nominatim.openstreetmap.org/`
+- OpenStreetMap: `https://www.openstreetmap.org/`
 
 ## Future Development
-The current project can be expanded in future phases.
-Possible future improvements include:
+### Authentication
+Add real login and logout, with separate access for the landlord and for tenants, so that each tenant sees only their own lease, payments and maintenance requests.
 
-### Full-Stack Architecture
-Introduce a backend and database to store application data rather than relying entirely on external geographic services.
+### Real Payments
+Add M-Pesa integration so a tenant can pay rent directly from the application, replacing the current mock "Pay" area with a real payment flow.
 
-### User Accounts
-Allow users to:
-- Create accounts
-- Log in
-- Log out
-- Manage personal information
-
-### Rental Listings
-The application could eventually include actual rental properties with information such as:
-- Property name
-- Location
-- Rent
-- Number of bedrooms
-- Property images
-- Description
-- Amenities
-- Contact information
-
+### CRUD for Maintenance, Leases and Notices
+Connect the maintenance ticket, lease and notice features to the backend, so a ticket a tenant submits, a lease the landlord creates, or a notice the landlord posts is stored and updated for real.

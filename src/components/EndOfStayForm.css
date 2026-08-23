@@ -1,0 +1,55 @@
+.end-of-stay-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1.25rem;
+  background-color: #ffffff;
+  border: 1px solid #e6e2d9;
+  border-radius: 10px;
+  max-width: 420px;
+}
+
+.end-of-stay-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #5c584f;
+  margin-top: 0.5rem;
+}
+
+.end-of-stay-form input,
+.end-of-stay-form textarea {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #d9d4c8;
+  border-radius: 8px;
+  color: #24231f;
+}
+
+.end-of-stay-form input:focus,
+.end-of-stay-form textarea:focus {
+  outline: none;
+  border-color: #3f6152;
+}
+
+.end-of-stay-form button {
+  align-self: flex-start;
+  margin-top: 0.75rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #3f6152;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.end-of-stay-form button:hover {
+  background-color: #33503f;
+}
+
+.end-of-stay-confirmation {
+  padding: 1rem 1.1rem;
+  background-color: #eaf3ec;
+  border: 1px solid #cfe1d3;
+  border-radius: 10px;
+  color: #3f6152;
+  max-width: 420px;
+}

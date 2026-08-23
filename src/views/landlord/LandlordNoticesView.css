@@ -1,0 +1,54 @@
+.landlord-notices-view h1 {
+  margin: 0 0 1rem;
+  font-size: 1.6rem;
+  color: #24231f;
+}
+
+.notice-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1.25rem;
+  background-color: #ffffff;
+  border: 1px solid #e6e2d9;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.notice-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #5c584f;
+  margin-top: 0.5rem;
+}
+
+.notice-form input,
+.notice-form textarea {
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #d9d4c8;
+  border-radius: 8px;
+  color: #24231f;
+  resize: vertical;
+}
+
+.notice-form input:focus,
+.notice-form textarea:focus {
+  outline: none;
+  border-color: #3f6152;
+}
+
+.notice-form button {
+  align-self: flex-start;
+  margin-top: 0.75rem;
+  padding: 0.65rem 1.3rem;
+  background-color: #3f6152;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.notice-form button:hover {
+  background-color: #33503f;
+}
+

@@ -1,0 +1,33 @@
+.landlord-units-view h1 {
+  margin: 0 0 1rem;
+  font-size: 1.6rem;
+  color: #24231f;
+}
+
+.units-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  border: 1px solid #e6e2d9;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.units-table th,
+.units-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e6e2d9;
+  font-size: 0.9rem;
+}
+
+.units-table th {
+  background-color: #f5f2ec;
+  color: #5c584f;
+  font-weight: 600;
+}
+
+.units-table tr:last-child td {
+  border-bottom: none;
+}
+

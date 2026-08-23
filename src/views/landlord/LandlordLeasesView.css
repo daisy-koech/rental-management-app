@@ -1,0 +1,33 @@
+.landlord-leases-view h1 {
+  margin: 0 0 1rem;
+  font-size: 1.6rem;
+  color: #24231f;
+}
+
+.leases-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  border: 1px solid #e6e2d9;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.leases-table th,
+.leases-table td {
+  padding: 0.7rem 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid #e6e2d9;
+  font-size: 0.86rem;
+}
+
+.leases-table th {
+  background-color: #f5f2ec;
+  color: #5c584f;
+  font-weight: 600;
+}
+
+.leases-table tr:last-child td {
+  border-bottom: none;
+}
+

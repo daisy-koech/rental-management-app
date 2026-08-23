@@ -1,0 +1,56 @@
+.property-hero-image {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.property-view h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.8rem;
+  color: #24231f;
+}
+
+.property-address {
+  margin: 0 0 1rem;
+  color: #8a877e;
+}
+
+.property-description {
+  margin: 0 0 2rem;
+  color: #5c584f;
+  max-width: 640px;
+}
+
+.property-facts {
+  display: flex;
+  gap: 2.5rem;
+  padding: 1.25rem 0;
+  margin-bottom: 2rem;
+  border-top: 1px solid #e6e2d9;
+  border-bottom: 1px solid #e6e2d9;
+  flex-wrap: wrap;
+}
+
+.fact-label {
+  display: block;
+  font-size: 0.78rem;
+  color: #8a877e;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.fact-value {
+  display: block;
+  color: #24231f;
+  font-weight: 600;
+}
+
+.property-secondary-image {
+  width: 100%;
+  max-width: 500px;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 12px;
+}

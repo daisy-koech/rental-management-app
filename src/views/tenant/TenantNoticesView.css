@@ -1,0 +1,11 @@
+.tenant-notices-view h1 {
+  margin: 0 0 1rem;
+  font-size: 1.6rem;
+  color: #24231f;
+}
+
+.empty-text {
+  color: #8a877e;
+  font-size: 0.9rem;
+}
+

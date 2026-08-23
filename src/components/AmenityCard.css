@@ -4,44 +4,27 @@
   gap: 1rem;
   padding: 1.25rem;
   background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-}
-.amenity-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
-  border-color: #bfdbfe;
-}
-.amenity-card svg {
-  flex-shrink: 0;
-  color: #2563eb;
-  background-color: #eff6ff;
-  padding: 0.5rem;
-  width: 2.25rem;
-  height: 2.25rem;
+  border: 1px solid #e6e2d9;
   border-radius: 10px;
 }
+
 .amenity-card h3 {
   margin: 0 0 0.35rem;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #1e293b;
+  font-size: 1.05rem;
+  color: #24231f;
 }
-.amenity-card p {
-  margin: 0;
-  color: #64748b;
-  font-size: 0.9rem;
-}
+
 .amenity-type {
-  display: inline-block;
-  width: auto;
-  padding: 0.3rem 0.75rem;
-  background-color: #dbeafe;
-  color: #1d4ed8;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: capitalize;
+  display: block;
+  color: #5c584f;
+  font-size: 0.82rem;
 }
+
+.amenity-distance {
+  display: block;
+  color: #8a877e;
+  font-size: 0.78rem;
+  margin-top: 0.15rem;
+}
+
+

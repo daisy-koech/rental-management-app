@@ -1,0 +1,40 @@
+.payment-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.9rem 1.1rem;
+  background-color: #ffffff;
+  border: 1px solid #e6e2d9;
+  border-radius: 10px;
+}
+
+.payment-period {
+  margin: 0 0 0.3rem;
+  font-weight: 600;
+  color: #24231f;
+}
+
+.payment-tenant {
+  font-weight: 400;
+  color: #8a877e;
+  font-size: 0.85rem;
+}
+
+.payment-breakdown {
+  margin: 0;
+  color: #8a877e;
+  font-size: 0.82rem;
+}
+
+.payment-row-side {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.payment-total {
+  margin: 0 0 0.3rem;
+  font-weight: 700;
+  color: #24231f;
+}
+
