@@ -1,8 +1,7 @@
-import { currentTenant, leases } from "../../data/mockData";
+import { useEffect, useState } from "react";
+import { getMyLease } from "../../services/api";
 import StatusBadge from "../../components/StatusBadge";
 import DashboardTabs from "../../components/DashboardTabs";
-import EndOfStayForm from "../../components/EndOfStayForm";
-import { useState } from "react";
 import "./TenantLeaseView.css";
 
 const TABS = [
@@ -14,51 +13,76 @@ const TABS = [
 ];
 
 function TenantLeaseView() {
-  const lease = leases.find((l) => l.unit === currentTenant.unit);
-  const [showForm, setShowForm] = useState(false);
+  const [lease, setLease] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function loadLease() {
+      try {
+        const data = await getMyLease();
+        setLease(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadLease();
+  }, []);
 
   return (
     <div className="tenant-lease-view">
-      <h1>Lease</h1>
+      <h1>My Lease</h1>
+
       <DashboardTabs tabs={TABS} />
 
-      {lease ? (
-        <div className="lease-details">
+      {loading && <p>Loading lease...</p>}
+
+      {error && <p>{error}</p>}
+
+      {!loading && !error && lease && (
+        <div className="lease-card">
+          <div>
+            <span className="lease-label">Lease ID</span>
+            <strong>{lease.id}</strong>
+          </div>
+
           <div>
             <span className="lease-label">Unit</span>
-            <span className="lease-value">{lease.unit}</span>
+            <strong>{lease.unit_id}</strong>
           </div>
+
           <div>
-            <span className="lease-label">Start date</span>
-            <span className="lease-value">{lease.startDate}</span>
+            <span className="lease-label">Monthly Rent</span>
+            <strong>
+              KSh {lease.monthly_rent.toLocaleString()}
+            </strong>
           </div>
+
           <div>
-            <span className="lease-label">End date</span>
-            <span className="lease-value">{lease.endDate}</span>
+            <span className="lease-label">Start Date</span>
+            <strong>{lease.start_date}</strong>
           </div>
+
           <div>
-            <span className="lease-label">Monthly rent</span>
-            <span className="lease-value">KSh {lease.rentAmount.toLocaleString()}</span>
+            <span className="lease-label">End Date</span>
+            <strong>{lease.end_date || "—"}</strong>
           </div>
+
           <div>
             <span className="lease-label">Status</span>
             <StatusBadge status={lease.status} />
           </div>
         </div>
-      ) : (
-        <p>No lease on file.</p>
       )}
 
-      <section className="end-of-stay-section">
-        <h2>Notify landlord of end of stay</h2>
-        {!showForm ? (
-          <button type="submit" className="btn-secondary" onClick={() => setShowForm(true)}>
-            Submit a notice
-          </button>
-        ) : (
-          <EndOfStayForm onSubmit={() => {}} />
-        )}
-      </section>
+      {!loading && !error && !lease && (
+        <p className="empty-text">
+          No active lease found.
+        </p>
+      )}
     </div>
   );
 }

@@ -9,103 +9,296 @@ function HomeView() {
 
   return (
     <div className="home-view">
+
       {/* 1. Hero */}
       <section className="hero">
         <div className="hero-text">
-          <h1>A simpler way to manage {property.name}</h1>
+          <span className="hero-eyebrow">
+            RENTAL PROPERTY MANAGEMENT
+          </span>
+
+          <h1>
+            Everything you need to
+            <br />
+            manage renting, in one place.
+          </h1>
+
           <p>
-            Keep rent, leases and maintenance requests in one place, whether
-            you're a tenant checking your account or the landlord keeping
-            track of the whole building.
+            Keep leases, payments, maintenance and property information
+            organised, whether you're managing a property or making
+            a home in one.
           </p>
+
           <div className="hero-actions">
-            <Link to="/tenant" className="btn-primary">Tenant Dashboard</Link>
-            <Link to="/landlord" className="btn-secondary">Landlord Dashboard</Link>
+            <Link to="/tenant" className="btn-primary">
+              Tenant Dashboard
+            </Link>
+
+            <Link to="/landlord" className="btn-secondary">
+              Landlord Dashboard
+            </Link>
           </div>
         </div>
+
         <div className="hero-image">
-          <img src={property.images.exterior} alt={property.name} />
+          <img
+            src={property.images.exterior}
+            alt={property.name}
+          />
         </div>
       </section>
+
 
       {/* 2. Property introduction */}
       <section className="property-intro">
+
+        <span className="section-eyebrow">
+          THE PROPERTY
+        </span>
+
         <h2>{property.name}</h2>
-        <p>{property.description}</p>
+
+        <p>
+          {property.description}
+        </p>
+
         <div className="property-intro-facts">
-          <span><strong>{property.totalUnits}</strong> units</span>
-          <span>{property.address}</span>
+          <span>
+            <strong>{property.totalUnits}</strong>
+            <small> units</small>
+          </span>
+
+          <span>
+            {property.address}
+          </span>
         </div>
-        <Link to="/property" className="text-link">More about the property</Link>
+
+        <Link
+          to="/property"
+          className="text-link"
+        >
+          Explore the property
+        </Link>
+
       </section>
+
 
       {/* 3. Tenant experience */}
       <section className="split-section">
-        <img src={property.images.interior} alt="Apartment interior" />
-        <div>
-          <h2>For tenants</h2>
+
+        <img
+          src={property.images.interior}
+          alt="Apartment interior"
+        />
+
+        <div className="split-section-content">
+
+          <span className="section-eyebrow">
+            FOR TENANTS
+          </span>
+
+          <h2>
+            Know what's happening
+            <br />
+            with your home.
+          </h2>
+
           <p>
-            See your lease, check whether rent is up to date, and report a
-            maintenance issue without having to call or send a message and wait.
+            Your lease, payments, maintenance requests and important
+            property information are all easier to find in one place.
           </p>
-          <Link to="/tenant" className="text-link">Go to your dashboard</Link>
+
+          <p>
+            Need to report something? Check your payments? See an
+            important notice? You can find it without having to search
+            through old messages.
+          </p>
+
+          <Link
+            to="/tenant"
+            className="text-link"
+          >
+            Visit the tenant dashboard
+          </Link>
+
         </div>
+
       </section>
+
 
       {/* 4. Landlord experience */}
       <section className="split-section reverse">
-        <div>
-          <h2>For the landlord</h2>
+
+        <div className="split-section-content">
+
+          <span className="section-eyebrow">
+            FOR LANDLORDS
+          </span>
+
+          <h2>
+            See the whole property
+            <br />
+            at a glance.
+          </h2>
+
           <p>
-            One view of every unit: who's in it, whether rent has come in,
-            and what needs fixing, without digging through separate notebooks
-            or message threads.
+            Keep track of your units, tenants, leases, payments and
+            maintenance requests without having to piece information
+            together from different places.
           </p>
-          <Link to="/landlord" className="text-link">Go to the landlord dashboard</Link>
+
+          <p>
+            From an individual payment to a maintenance request,
+            everything is easier to see and manage.
+          </p>
+
+          <Link
+            to="/landlord"
+            className="text-link"
+          >
+            Visit the landlord dashboard
+          </Link>
+
         </div>
-        <img src={property.images.exterior} alt="Property exterior" />
+
+        <img
+          src={property.images.exterior}
+          alt="Property exterior"
+        />
+
       </section>
 
-      {/* 5 & 6. Location and map */}
+
+      {/* 5. Location */}
       <section className="location-section">
-        <h2>Where it is</h2>
-        <p>{property.address}</p>
+
+        <div className="location-heading">
+
+          <span className="section-eyebrow">
+            FIND YOUR WAY AROUND
+          </span>
+
+          <h2>
+            Where it is matters too.
+          </h2>
+
+          <p>
+            See where the property is located and get a feel for
+            what is around it.
+          </p>
+
+          <p className="location-address">
+            {property.address}
+          </p>
+
+        </div>
+
         <div className="home-map-container">
-          <MapContainer center={position} zoom={15} scrollWheelZoom={false}>
+
+          <MapContainer
+            center={position}
+            zoom={15}
+            scrollWheelZoom={false}
+          >
             <TileLayer
               attribution="&copy; OpenStreetMap contributors"
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+
             <Marker position={position}>
-              <Popup>{property.name}</Popup>
+              <Popup>
+                {property.name}
+              </Popup>
             </Marker>
+
           </MapContainer>
+
         </div>
+
       </section>
 
-      {/* 7. Nearby amenities */}
+
+      {/* 6. Nearby amenities */}
       <section className="home-amenities">
-        <h2>Nearby</h2>
-        <div className="home-amenities-list">
-          {nearbyPlaces.map((place) => (
-            <AmenityCard key={place.name} amenity={place} />
-          ))}
+
+        <div className="amenities-heading">
+
+          <span className="section-eyebrow">
+            AROUND THE PROPERTY
+          </span>
+
+          <h2>
+            Everything nearby.
+          </h2>
+
+          <p>
+            From everyday shopping to transport, schools and other
+            useful places, see what is around the property.
+          </p>
+
         </div>
-        <Link to="/area" className="text-link">See the full area page</Link>
+
+        <div className="home-amenities-list">
+
+          {nearbyPlaces.map((place) => (
+            <AmenityCard
+              key={place.name}
+              amenity={place}
+            />
+          ))}
+
+        </div>
+
+        <Link
+          to="/area"
+          className="text-link"
+        >
+          Explore the surrounding area
+        </Link>
+
       </section>
 
-      {/* 8. Call to action */}
+
+      {/* 7. Closing CTA */}
       <section className="home-cta">
-        <h2>Ready to take a look?</h2>
-        <p>Enter as a tenant or as the landlord to see how it works.</p>
+
+        <span className="section-eyebrow">
+          GET STARTED
+        </span>
+
+        <h2>
+          See how it works
+          <br />
+          for you.
+        </h2>
+
+        <p>
+          Whether you're looking after a property or living in one,
+          start by exploring the experience from your side.
+        </p>
+
         <div className="hero-actions">
-          <Link to="/tenant" className="btn-primary">Tenant Dashboard</Link>
-          <Link to="/landlord" className="btn-secondary">Landlord Dashboard</Link>
+
+          <Link
+            to="/tenant"
+            className="btn-primary"
+          >
+            Explore as a tenant
+          </Link>
+
+          <Link
+            to="/landlord"
+            className="btn-secondary"
+          >
+            Explore as a landlord
+          </Link>
+
         </div>
+
       </section>
+
     </div>
   );
 }
 
 export default HomeView;
-

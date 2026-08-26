@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 import HomeView from "./views/HomeView";
 import PropertyView from "./views/PropertyView";
 import AreaView from "./views/AreaView";
@@ -33,18 +35,18 @@ function App() {
           <Route path="/area" element={<AreaView />} />
           <Route path="/about" element={<AboutView />} />
 
-          <Route path="/tenant" element={<TenantDashboard />} />
-          <Route path="/tenant/lease" element={<TenantLeaseView />} />
-          <Route path="/tenant/payments" element={<TenantPaymentsView />} />
-          <Route path="/tenant/maintenance" element={<MaintenanceView />} />
-          <Route path="/tenant/notices" element={<TenantNoticesView />} />
+          <Route path="/tenant" element={<ProtectedRoute role="tenant"><TenantDashboard /></ProtectedRoute>} />
+          <Route path="/tenant/lease" element={<ProtectedRoute role="tenant"><TenantLeaseView /></ProtectedRoute>} />
+          <Route path="/tenant/payments" element={<ProtectedRoute role="tenant"><TenantPaymentsView /></ProtectedRoute>} />
+          <Route path="/tenant/maintenance" element={<ProtectedRoute role="tenant"><MaintenanceView /></ProtectedRoute>} />
+          <Route path="/tenant/notices" element={<ProtectedRoute role="tenant"><TenantNoticesView /></ProtectedRoute>} />
 
-          <Route path="/landlord" element={<LandlordDashboard />} />
-          <Route path="/landlord/units" element={<LandlordUnitsView />} />
-          <Route path="/landlord/tickets" element={<LandlordTicketsView />} />
-          <Route path="/landlord/payments" element={<LandlordPaymentsView />} />
-          <Route path="/landlord/leases" element={<LandlordLeasesView />} />
-          <Route path="/landlord/notices" element={<LandlordNoticesView />} />
+          <Route path="/landlord" element={<ProtectedRoute role="landlord"><LandlordDashboard /></ProtectedRoute>} />
+          <Route path="/landlord/units" element={<ProtectedRoute role="landlord"><LandlordUnitsView /></ProtectedRoute>} />
+          <Route path="/landlord/tickets" element={<ProtectedRoute role="landlord"><LandlordTicketsView /></ProtectedRoute>} />
+          <Route path="/landlord/payments" element={<ProtectedRoute role="landlord"><LandlordPaymentsView /></ProtectedRoute>} />
+          <Route path="/landlord/leases" element={<ProtectedRoute role="landlord"><LandlordLeasesView /></ProtectedRoute>} />
+          <Route path="/landlord/notices" element={<ProtectedRoute role="landlord"><LandlordNoticesView /></ProtectedRoute>} />
         </Routes>
       </div>
     </BrowserRouter>

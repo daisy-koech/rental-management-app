@@ -1,5 +1,8 @@
-import {useEffect, useState} from "react";
-import {getLandlordMaintenanceTickets, updateMaintenanceTicket,} from "../../services/api";
+import { useEffect, useState } from "react";
+import {
+  getLandlordMaintenanceTickets,
+  updateMaintenanceTicket,
+} from "../../services/api";
 import StatusBadge from "../../components/StatusBadge";
 import DashboardTabs from "../../components/DashboardTabs";
 import "./LandlordTicketsView.css";
@@ -12,6 +15,23 @@ const TABS = [
   { label: "Leases", to: "/landlord/leases" },
   { label: "Notices", to: "/landlord/notices" },
 ];
+
+function formatDate(dateString) {
+  if (!dateString) {
+    return "";
+  }
+
+  const date = new Date(dateString);
+
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  return date.toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
 
 function LandlordTicketsView() {
   const [tickets, setTickets] = useState([]);
@@ -35,7 +55,9 @@ function LandlordTicketsView() {
 
   async function toggleStatus(ticket) {
     const newStatus =
-      ticket.status === "Pending" ? "Resolved" : "Pending";
+      ticket.status === "pending"
+        ? "resolved"
+        : "pending";
 
     try {
       const updatedTicket = await updateMaintenanceTicket(
@@ -44,8 +66,8 @@ function LandlordTicketsView() {
       );
 
       setTickets((prev) =>
-        prev.map((t) =>
-          t.id === ticket.id ? updatedTicket : t
+        prev.map((item) =>
+          item.id === ticket.id ? updatedTicket : item
         )
       );
     } catch (err) {
@@ -59,7 +81,9 @@ function LandlordTicketsView() {
 
       <DashboardTabs tabs={TABS} />
 
-      {loading && <p>Loading maintenance requests...</p>}
+      {loading && (
+        <p>Loading maintenance requests...</p>
+      )}
 
       {error && <p>{error}</p>}
 
@@ -72,26 +96,36 @@ function LandlordTicketsView() {
       {!loading && !error && tickets.length > 0 && (
         <div className="ticket-list">
           {tickets.map((ticket) => (
-            <div key={ticket.id} className="ticket-row">
+            <div
+              key={ticket.id}
+              className="ticket-row"
+            >
               <div>
                 <p className="ticket-description">
                   {ticket.description}
                 </p>
 
                 <p className="ticket-meta">
-                  Unit {ticket.unit_number || ticket.unit_id} ·{" "}
-                  {ticket.tenant_name || ticket.tenant_id} · Priority{" "}
-                  {ticket.priority} · Submitted{" "}
-                  {ticket.created_at || ticket.date_submitted}
+                  Unit {ticket.unit_number || ticket.unit_id}{" "}
+                  ·{" "}
+                  {ticket.tenant_name || ticket.tenant_id}{" "}
+                  · Submitted{" "}
+                  {formatDate(
+                    ticket.created_at || ticket.date_submitted
+                  )}
                 </p>
               </div>
 
               <div className="ticket-row-side">
                 <StatusBadge status={ticket.status} />
 
-                <button type="button" className="btn-toggle" onClick={() => toggleStatus(ticket)}>
+                <button
+                  type="button"
+                  className="btn-toggle"
+                  onClick={() => toggleStatus(ticket)}
+                >
                   Mark as{" "}
-                  {ticket.status === "Pending"
+                  {ticket.status === "pending"
                     ? "Resolved"
                     : "Pending"}
                 </button>
@@ -105,3 +139,4 @@ function LandlordTicketsView() {
 }
 
 export default LandlordTicketsView;
+
