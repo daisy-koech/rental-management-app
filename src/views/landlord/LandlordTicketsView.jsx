@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { maintenanceTickets as initialTickets } from "../../data/mockData";
+import {useEffect, useState} from "react";
+import {getLandlordMaintenanceTickets, updateMaintenanceTicket,} from "../../services/api";
 import StatusBadge from "../../components/StatusBadge";
 import DashboardTabs from "../../components/DashboardTabs";
 import "./LandlordTicketsView.css";
@@ -14,38 +14,86 @@ const TABS = [
 ];
 
 function LandlordTicketsView() {
-  const [tickets, setTickets] = useState(initialTickets);
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  function toggleStatus(id) {
-    // Local state only for now, becomes a PATCH to the Flask API later.
-    setTickets((prev) =>
-      prev.map((t) =>
-        t.id === id ? { ...t, status: t.status === "Pending" ? "Resolved" : "Pending" } : t
-      )
-    );
+  useEffect(() => {
+    async function loadTickets() {
+      try {
+        const data = await getLandlordMaintenanceTickets();
+        setTickets(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadTickets();
+  }, []);
+
+  async function toggleStatus(ticket) {
+    const newStatus =
+      ticket.status === "Pending" ? "Resolved" : "Pending";
+
+    try {
+      const updatedTicket = await updateMaintenanceTicket(
+        ticket.id,
+        newStatus
+      );
+
+      setTickets((prev) =>
+        prev.map((t) =>
+          t.id === ticket.id ? updatedTicket : t
+        )
+      );
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   return (
     <div className="landlord-tickets-view">
       <h1>Maintenance requests</h1>
+
       <DashboardTabs tabs={TABS} />
 
-      {tickets.length === 0 ? (
-        <p className="empty-text">No maintenance requests have been submitted.</p>
-      ) : (
+      {loading && <p>Loading maintenance requests...</p>}
+
+      {error && <p>{error}</p>}
+
+      {!loading && !error && tickets.length === 0 && (
+        <p className="empty-text">
+          No maintenance requests have been submitted.
+        </p>
+      )}
+
+      {!loading && !error && tickets.length > 0 && (
         <div className="ticket-list">
           {tickets.map((ticket) => (
             <div key={ticket.id} className="ticket-row">
               <div>
-                <p className="ticket-description">{ticket.description}</p>
+                <p className="ticket-description">
+                  {ticket.description}
+                </p>
+
                 <p className="ticket-meta">
-                  Unit {ticket.unit} · {ticket.tenantName} · Priority {ticket.priority} · Submitted {ticket.dateSubmitted}
+                  Unit {ticket.unit_number || ticket.unit_id} ·{" "}
+                  {ticket.tenant_name || ticket.tenant_id} · Priority{" "}
+                  {ticket.priority} · Submitted{" "}
+                  {ticket.created_at || ticket.date_submitted}
                 </p>
               </div>
+
               <div className="ticket-row-side">
                 <StatusBadge status={ticket.status} />
-                <button className="btn-toggle" onClick={() => toggleStatus(ticket.id)}>
-                  Mark as {ticket.status === "Pending" ? "Resolved" : "Pending"}
+
+                <button type="button" className="btn-toggle" onClick={() => toggleStatus(ticket)}>
+                  Mark as{" "}
+                  {ticket.status === "Pending"
+                    ? "Resolved"
+                    : "Pending"}
                 </button>
               </div>
             </div>

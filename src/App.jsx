@@ -5,6 +5,7 @@ import HomeView from "./views/HomeView";
 import PropertyView from "./views/PropertyView";
 import AreaView from "./views/AreaView";
 import AboutView from "./views/AboutView";
+import LoginView from "./views/LoginView";
 
 import TenantDashboard from "./views/tenant/TenantDashboard";
 import TenantLeaseView from "./views/tenant/TenantLeaseView";
@@ -27,6 +28,7 @@ function App() {
       <div className="app-content">
         <Routes>
           <Route path="/" element={<HomeView />} />
+          <Route path="/login" element={<LoginView />} />
           <Route path="/property" element={<PropertyView />} />
           <Route path="/area" element={<AreaView />} />
           <Route path="/about" element={<AboutView />} />

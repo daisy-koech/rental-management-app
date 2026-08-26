@@ -11,6 +11,7 @@ function Navbar() {
         <NavLink to="/property" className={({ isActive }) => (isActive ? "active" : "")}>Property</NavLink>
         <NavLink to="/area" className={({ isActive }) => (isActive ? "active" : "")}>Location</NavLink>
         <NavLink to="/about" className={({ isActive }) => (isActive ? "active" : "")}>About</NavLink>
+        <NavLink to="/login" className={({ isActive }) => (isActive ? "active" : "")}>Login</NavLink>
         <NavLink to="/tenant" className="navbar-cta">Tenant Dashboard</NavLink>
       </div>
     </nav>
