@@ -2,6 +2,8 @@ from flask import Flask
 from flask_cors import CORS
 from config import Config
 from extensions import db, migrate, bcrypt
+from models import User
+from routes import register_routes
 
 
 def create_app():
@@ -9,18 +11,19 @@ def create_app():
 
     app.config.from_object(Config)
 
-    CORS(app)
+    CORS(app, supports_credentials=True)
 
     db.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
+
+    register_routes(app)
 
     @app.route("/")
     def home():
         return {"message": "Welcome!"}, 200
 
     return app
-
 
 app = create_app()
 
