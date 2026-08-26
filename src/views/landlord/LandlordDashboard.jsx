@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { getLandlordUnits } from "../../services/api";
+import {
+  getLandlordProperty,
+  getLandlordUnits,
+  getLandlordLeases,
+  getLandlordMaintenanceTickets,
+  getLandlordPayments,
+} from "../../services/api";
 import DashboardTabs from "../../components/DashboardTabs";
 import "./LandlordDashboard.css";
 
@@ -13,15 +19,40 @@ const TABS = [
 ];
 
 function LandlordDashboard() {
+  const [property, setProperty] = useState(null);
   const [units, setUnits] = useState([]);
+  const [leases, setLeases] = useState([]);
+  const [tickets, setTickets] = useState([]);
+  const [payments, setPayments] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    async function loadUnits() {
+    async function loadDashboard() {
       try {
-        const data = await getLandlordUnits();
-        setUnits(data);
+        setLoading(true);
+        setError("");
+
+        const [
+          propertyData,
+          unitsData,
+          leasesData,
+          ticketsData,
+          paymentsData,
+        ] = await Promise.all([
+          getLandlordProperty(),
+          getLandlordUnits(),
+          getLandlordLeases(),
+          getLandlordMaintenanceTickets(),
+          getLandlordPayments(),
+        ]);
+
+        setProperty(propertyData);
+        setUnits(unitsData);
+        setLeases(leasesData);
+        setTickets(ticketsData);
+        setPayments(paymentsData);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -29,52 +60,93 @@ function LandlordDashboard() {
       }
     }
 
-    loadUnits();
+    loadDashboard();
   }, []);
 
-  const occupiedCount = units.filter(
-    (unit) => unit.status === "occupied"
+  const occupiedCount = leases.filter(
+    (lease) => lease.status === "active"
   ).length;
+
+  const openMaintenanceCount = tickets.filter(
+    (ticket) => ticket.status !== "resolved"
+  ).length;
+
+  const overduePaymentsCount = payments.filter(
+    (payment) => payment.status === "overdue"
+  ).length;
+
+  let dashboardContent;
+
+  if (loading) {
+    dashboardContent = (
+      <p className="dashboard-hint">
+        Loading dashboard...
+      </p>
+    );
+  } else if (error) {
+    dashboardContent = (
+      <p className="dashboard-hint">
+        {error}
+      </p>
+    );
+  } else {
+    dashboardContent = (
+      <>
+        <div className="dashboard-summary">
+          <div className="summary-block">
+            <span className="summary-label">
+              Occupancy
+            </span>
+
+            <span className="summary-value">
+              {occupiedCount} / {units.length} units
+            </span>
+          </div>
+
+          <div className="summary-block">
+            <span className="summary-label">
+              Open maintenance
+            </span>
+
+            <span className="summary-value">
+              {openMaintenanceCount}
+            </span>
+          </div>
+
+          <div className="summary-block">
+            <span className="summary-label">
+              Overdue payments
+            </span>
+
+            <span className="summary-value">
+              {overduePaymentsCount}
+            </span>
+          </div>
+        </div>
+
+        <p className="dashboard-hint">
+          Use the tabs above to view units, maintenance requests,
+          payments, leases and notices.
+        </p>
+      </>
+    );
+  }
 
   return (
     <div className="landlord-dashboard">
-      <h1>Cedar Court</h1>
+      <h1>
+        {property?.name || "Rental Property"}
+      </h1>
+
+      {property?.location && (
+        <p className="dashboard-location">
+          {property.location}
+        </p>
+      )}
 
       <DashboardTabs tabs={TABS} />
 
-      <div className="dashboard-summary">
-        <div className="summary-block">
-          <span className="summary-label">Occupancy</span>
-          <span className="summary-value">
-            {loading
-              ? "Loading..."
-              : `${occupiedCount} / ${units.length} units`}
-          </span>
-        </div>
-
-        <div className="summary-block">
-          <span className="summary-label">Open maintenance</span>
-          <span className="summary-value">—</span>
-        </div>
-
-        <div className="summary-block">
-          <span className="summary-label">Overdue payments</span>
-          <span className="summary-value">—</span>
-        </div>
-      </div>
-
-      {error && (
-        <p className="dashboard-hint">
-          {error}
-        </p>
-      )}
-
-      {!error && !loading && (
-        <p className="dashboard-hint">
-          Use the tabs above to view units, maintenance requests, payments,
-          leases and notices.
-        </p>
-      )}
+      {dashboardContent}
     </div>
   );
 }

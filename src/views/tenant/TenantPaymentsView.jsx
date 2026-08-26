@@ -1,4 +1,5 @@
-import { currentTenant, payments } from "../../data/mockData";
+import { useEffect, useState } from "react";
+import { getMyPayments } from "../../services/api";
 import PaymentRow from "../../components/PaymentRow";
 import DashboardTabs from "../../components/DashboardTabs";
 import "./TenantPaymentsView.css";
@@ -12,36 +13,79 @@ const TABS = [
 ];
 
 function TenantPaymentsView() {
-  const myPayments = payments.filter((p) => p.unit === currentTenant.unit);
-  const upcoming = myPayments.find((p) => p.status === "due" || p.status === "overdue");
-  const history = myPayments.filter((p) => p.status === "paid");
+  const [payments, setPayments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function loadPayments() {
+      try {
+        const data = await getMyPayments();
+        setPayments(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadPayments();
+  }, []);
+
+  const upcoming = payments.find(
+    (payment) =>
+      payment.status === "due" ||
+      payment.status === "overdue"
+  );
+
+  const history = payments.filter(
+    (payment) => payment.status === "paid"
+  );
 
   return (
     <div className="tenant-payments-view">
       <h1>Payments</h1>
+
       <DashboardTabs tabs={TABS} />
 
-      <section className="dashboard-section">
-        <h2>Upcoming</h2>
-        {upcoming ? (
-          <PaymentRow payment={upcoming} />
-        ) : (
-          <p className="empty-text">Nothing due right now.</p>
-        )}
-      </section>
+      {loading && <p>Loading payments...</p>}
 
-      <section className="dashboard-section">
-        <h2>Payment history</h2>
-        {history.length === 0 ? (
-          <p className="empty-text">No payments on file yet.</p>
-        ) : (
-          <div className="payment-list">
-            {history.map((p) => (
-              <PaymentRow key={p.id} payment={p} />
-            ))}
-          </div>
-        )}
-      </section>
+      {error && <p>{error}</p>}
+
+      {!loading && !error && (
+        <>
+          <section className="dashboard-section">
+            <h2>Upcoming</h2>
+
+            {upcoming ? (
+              <PaymentRow payment={upcoming} />
+            ) : (
+              <p className="empty-text">
+                Nothing due right now.
+              </p>
+            )}
+          </section>
+
+          <section className="dashboard-section">
+            <h2>Payment history</h2>
+
+            {history.length === 0 ? (
+              <p className="empty-text">
+                No payments on file yet.
+              </p>
+            ) : (
+              <div className="payment-list">
+                {history.map((payment) => (
+                  <PaymentRow
+                    key={payment.id}
+                    payment={payment}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
+        </>
+      )}
     </div>
   );
 }

@@ -19,6 +19,10 @@ function LoginView() {
     try {
       const user = await login(email, password);
 
+      // Save the logged-in user so the dashboards
+      // know who is currently signed in.
+      localStorage.setItem("user", JSON.stringify(user));
+
       if (user.role === "landlord") {
         navigate("/landlord");
       } else if (user.role === "tenant") {
@@ -40,6 +44,7 @@ function LoginView() {
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="email">Email</label>
+
           <input
             id="email"
             type="email"
@@ -51,6 +56,7 @@ function LoginView() {
 
         <div>
           <label htmlFor="password">Password</label>
+
           <input
             id="password"
             type="password"

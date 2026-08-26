@@ -96,7 +96,6 @@ class Property(db.Model):
             "longitude": self.longitude,
             "landlord_id": self.landlord_id
         }
-
 class Unit(db.Model):
     __tablename__ = "units"
 
@@ -122,12 +121,23 @@ class Unit(db.Model):
     )
 
     def to_dict(self):
+        active_lease = next(
+            (
+                lease
+                for lease in self.leases
+                if lease.status == "active"
+            ),
+            None
+        )
+
         return {
             "id": self.id,
             "unit_number": self.unit_number,
             "monthly_rent": float(self.monthly_rent),
-            "property_id": self.property_id
+            "property_id": self.property_id,
+            "status": "occupied" if active_lease else "vacant"
         }
+
 
 class Lease(db.Model):
     __tablename__ = "leases"
@@ -192,6 +202,60 @@ class Lease(db.Model):
             ),
             "monthly_rent": float(self.monthly_rent),
             "status": self.status
+        }
+
+class Payment(db.Model):
+    __tablename__ = "payments"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    lease_id = db.Column(
+        db.Integer,
+        db.ForeignKey("leases.id"),
+        nullable=False
+    )
+
+    amount = db.Column(
+        db.Numeric(10, 2),
+        nullable=False
+    )
+
+    payment_date = db.Column(
+        db.Date,
+        nullable=False
+    )
+
+    status = db.Column(
+        db.String(30),
+        nullable=False,
+        default="paid"
+    )
+
+    reference = db.Column(
+        db.String(100),
+        nullable=True
+    )
+
+    lease = db.relationship(
+        "Lease",
+        backref=db.backref(
+            "payments",
+            lazy=True,
+            cascade="all, delete-orphan"
+        )
+    )
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "lease_id": self.lease_id,
+            "amount": float(self.amount),
+            "payment_date": self.payment_date.isoformat(),
+            "status": self.status,
+            "reference": self.reference
         }
 
 class Notice(db.Model):
@@ -308,8 +372,10 @@ class MaintenanceTicket(db.Model):
             "status": self.status,
             "created_at": self.created_at.isoformat(),
             "tenant_id": self.tenant_id,
-            "unit_id": self.unit_id
-        }
+            "tenant_name": self.tenant.name if self.tenant else None,
+            "unit_id": self.unit_id,
+            "unit_number": self.unit.unit_number if self.unit else None,
+    }
 
 class EndOfStay(db.Model):
     __tablename__ = "end_of_stays"

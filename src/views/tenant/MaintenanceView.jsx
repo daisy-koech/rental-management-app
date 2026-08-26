@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { currentTenant, maintenanceTickets as initialTickets } from "../../data/mockData";
+import { useEffect, useState } from "react";
+import {getMyMaintenanceTickets, createMaintenanceTicket,}
+from "../../services/api";
 import TicketForm from "../../components/TicketForm";
 import TicketCard from "../../components/TicketCard";
 import DashboardTabs from "../../components/DashboardTabs";
@@ -14,37 +15,71 @@ const TABS = [
 ];
 
 function MaintenanceView() {
-  const [tickets, setTickets] = useState(
-    initialTickets.filter((ticket) => ticket.unit === currentTenant.unit)
-  );
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  function handleNewTicket({ description, priority }) {
-    const newTicket = {
-      id: Date.now(),
-      unit: currentTenant.unit,
-      tenantName: currentTenant.name,
-      description,
-      priority,
-      status: "Pending",
-      dateSubmitted: new Date().toISOString().slice(0, 10),
-    };
-    // Becomes a POST to the Flask API later.
-    setTickets((prev) => [newTicket, ...prev]);
+  useEffect(() => {
+    async function loadTickets() {
+      try {
+        const data = await getMyMaintenanceTickets();
+        setTickets(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadTickets();
+  }, []);
+
+  async function handleNewTicket({ title, description }) {
+    try {
+      setError("");
+
+      const newTicket = await createMaintenanceTicket(
+        title,
+        description
+      );
+
+      setTickets((prev) => [newTicket, ...prev]);
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   return (
     <div className="maintenance-view">
       <h1>Maintenance requests</h1>
+
       <DashboardTabs tabs={TABS} />
+
+      {error && (
+        <p className="error-text">
+          {error}
+        </p>
+      )}
 
       <TicketForm onSubmit={handleNewTicket} />
 
-      {tickets.length === 0 ? (
-        <p className="empty-text">No requests yet.</p>
-      ) : (
+      {loading && (
+        <p>Loading maintenance requests...</p>
+      )}
+
+      {!loading && tickets.length === 0 && (
+        <p className="empty-text">
+          No requests yet.
+        </p>
+      )}
+
+      {!loading && tickets.length > 0 && (
         <div className="ticket-list">
           {tickets.map((ticket) => (
-            <TicketCard key={ticket.id} ticket={ticket} />
+            <TicketCard
+              key={ticket.id}
+              ticket={ticket}
+            />
           ))}
         </div>
       )}
