@@ -1,7 +1,7 @@
 from flask import request, session
 from datetime import date
 from extensions import db
-from models import User, Property, Unit, Lease, Notice, MaintenanceTicket, EndOfStay
+from models import User, Property, Unit, Lease, Payment, Notice, MaintenanceTicket, EndOfStay
 
 
 def get_current_user():
@@ -84,7 +84,6 @@ def check_session():
         }, 401
 
     return user.to_dict(), 200
-
 
 def logout():
     session.clear()
@@ -595,6 +594,202 @@ def property_routes(app):
         db.session.commit()
 
         return {}, 204
+
+# landlord + payments
+    @app.route("/property/payments", methods=["GET"])
+    def get_property_payments():
+        user = get_current_user()
+        if not user:
+            return {"error": "Unauthorized"}, 401
+
+        if user.role != "landlord":
+            return {"error": "Only landlords can view property payments"}, 403
+
+        PROPERTY = Property.query.filter_by (
+            landlord_id=user.id
+        ).first()
+
+        if not PROPERTY:
+            return{"error": "Property not found"}, 404
+
+        payments = (
+            Payment.query
+            .join(Lease)
+            .join(Unit)
+            .filter(Unit.property_id == PROPERTY.id).all()
+        )
+
+        return {
+            "payments": [
+                payment.to_dict()
+                for payment in payments
+            ]
+        }, 200
+
+    @app.route("/property/payments", methods=["POST"])
+    def create_property_payment():
+        user = get_current_user()
+        if not user:
+            return {
+                "error": "Unauthorized"
+            }, 401
+
+        if user.role != "landlord":
+            return {
+                "error": "Only landlords can create payments"
+            }, 403
+
+        PROPERTY = Property.query.filter_by(
+            landlord_id=user.id
+        ).first()
+
+
+        if not PROPERTY:
+            return {
+                "error": "Property not found"
+            }, 404
+
+        data = request.get_json() or {}
+
+        lease_id = data.get("lease_id")
+        amount = data.get("amount")
+        payment_date = data.get("payment_date")
+        status = data.get("status", "paid")
+        reference = data.get("reference")
+
+        if not lease_id or amount is None or not payment_date:
+            return {
+                "error": "Lease, amount and payment date are required"
+            }, 400
+
+        lease = (
+            Lease.query
+            .join(Unit)
+            .filter(
+            Lease.id == lease_id,
+            Unit.property_id == PROPERTY.id
+            ).first()
+        )
+
+        if not lease:
+            return {
+                "error": "Lease not found"
+            }, 404
+
+        try:
+            payment_date = date.fromisoformat(payment_date)
+        except ValueError:
+            return {
+                "error": "Payment date must use YYYY-MM-DD format"
+            }, 400
+
+        payment = Payment(
+            lease_id=lease.id,
+            amount=amount,
+            payment_date=payment_date,
+            status=status,
+            reference=reference
+        )
+
+        db.session.add(payment)
+        db.session.commit()
+
+        return payment.to_dict(), 201
+
+    @app.route("/property/payments/<int:payment_id>", methods=["PATCH"])
+    def update_property_payment(payment_id):
+        user = get_current_user()
+
+        if not user:
+            return {
+                "error": "Unauthorized"
+            }, 401
+
+        if user.role != "landlord":
+            return {
+               "error": "Only landlords can update payments"
+            }, 403
+
+        PROPERTY = Property.query.filter_by(
+            landlord_id=user.id
+        ).first()
+
+        if not PROPERTY:
+            return {
+                "error": "Property not found"
+            }, 404
+
+        payment = (
+            Payment.query
+            .join(Lease)
+            .join(Unit)
+            .filter(
+                Payment.id == payment_id,
+                Unit.property_id == PROPERTY.id
+            )
+            .first()
+        )
+
+        if not payment:
+            return {
+                "error": "Payment not found"
+            }, 404
+
+        data = request.get_json() or {}
+
+        if "amount" in data:
+            payment.amount = data["amount"]
+
+        if "status" in data:
+            payment.status = data["status"]
+
+        if "payment_date" in data:
+            try:
+                payment.payment_date = date.fromisoformat(
+                    data["payment_date"]
+                )
+            except ValueError:
+                return {
+                    "error": "Payment date must use YYYY-MM-DD format"
+                }, 400
+
+        if "reference" in data:
+            payment.reference = data["reference"]
+
+        db.session.commit()
+
+        return payment.to_dict(), 200
+
+# tenants + payments
+    @app.route("/my-payments", methods=["GET"])
+    def get_my_payments():
+        user = get_current_user()
+
+        if not user:
+            return {
+                "error": "Unauthorized"
+            }, 401
+
+        if user.role != "tenant":
+            return {
+                "error": "Only tenants can view their payments"
+            }, 403
+
+        payments = (
+            Payment.query
+            .join(Lease)
+            .filter(
+                Lease.tenant_id == user.id
+            )
+            .all()
+        )
+
+        return {
+            "payments": [
+                payment.to_dict()
+                for payment in payments
+            ]
+        }, 200 
     
 #landlords + notices
     @app.route("/property/notices", methods=["POST"])
