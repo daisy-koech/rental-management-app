@@ -236,7 +236,12 @@ def property_routes(app):
         ).first()
 
         if not PROPERTY:
-            return {"error": "Property not found"}, 404
+            return {
+                "error": "Property not found",
+                "debug_user_id": user.id,
+                "debug_user_email": user.email,
+                "debug_user_role": user.role,
+            }, 404
 
         return {
             "units": [
