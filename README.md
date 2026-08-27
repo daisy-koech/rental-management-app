@@ -1,167 +1,652 @@
 # Rental Management App
-A React application for managing a single rental property, built for both the landlord and the tenants who live there. The application keeps units, leases, payments, maintenance requests and notices in one place, instead of spread across notebooks, phone calls and message threads.
+A full-stack rental property management application built for a single rental property, with separate experiences for landlords and tenants.
 
-## Overview
-Managing a rental property usually means keeping track of several things at once: who is in which unit, whether rent has come in, what needs fixing, and what tenants need to know. This application was built to bring all of that into one application, with a clear landlord side and a clear tenant side.
+The application brings property information, units, leases, payments, maintenance requests and notices into one place instead of relying on notebooks, spreadsheets, phone calls and message threads.
 
-This project began as a neighbourhood exploration tool (searching a Kenyan area and browsing nearby amenities on a map). It has since evolved into a full property management platform for one specific property. The location and map functionality from that earlier version is preserved and now supports the property itself, rather than being the main purpose of the application.
+## Live Application
+### Frontend
+https://rental-management-kenya.vercel.app/
+
+### Backend API
+https://rental-management-app-api.onrender.com/
+
+The frontend is deployed on Vercel and the Flask API is deployed on Render.
+
+
+# Overview
+Managing a rental property usually means keeping track of several things at once: who lives in which unit, whether rent has been paid, what needs fixing, and what tenants need to know.
+
+This application was built to bring those activities into one system with separate dashboards for landlords and tenants.
+
+The original location and map functionality from phase 1 has been preserved and now supports the property itself rather than being the main purpose of the application.
 
 The application currently focuses on three main areas:
-- **Property information** - a public-facing overview of the property, its location and what is nearby.
-- **Tenant dashboard** - lease details, payment status, maintenance requests and notices, for one logged-in tenant.
-- **Landlord dashboard** - units, tenants, maintenance tickets, payments, leases and notices, across the whole property.
+- **Property information** - a public-facing overview of the property, its location and nearby amenities.
+- **Tenant dashboard** - lease information, payment history, maintenance requests and property notices for the logged-in tenant.
+- **Landlord dashboard** - property units, leases, payments, maintenance requests and notices.
 
-The application is currently a frontend-focused project using mock data.
+# Main Features
 
-## Features
-### Property Information
-A public-facing page introduces the property: its name, address, description, number of units and who manages it. This is the page a visitor sees before going into either dashboard.
+## Property Information
+The public property page introduces the rental property and provides information such as:
+- Property name
+- Location
+- Description
+- Number of units
+- Property location on a map
+- Nearby amenities
+The property location is displayed using its stored latitude and longitude.
 
-### Landlord Dashboard
-The landlord can see an overview of the property (occupancy, open maintenance requests, overdue payments) and move between focused pages:
-- **Units** - every unit, its tenant if occupied, and its status.
-- **Maintenance** - tickets submitted by tenants, with the ability to mark a ticket as Pending or Resolved.
-- **Payments** - rent, water and electricity for every tenant, itemised, with a paid, due or overdue status.
-- **Leases** - lease start and end dates, rent amount, status, and whether an end of stay notice has been submitted.
-- **Notices** - post a notice (for example, a water maintenance schedule or a rent reminder) that tenants can read.
 
-### Tenant Dashboard
-A tenant sees only information relevant to their own unit:
-- **Home** - unit, lease status, next payment due, any open maintenance request, and the most recent notice.
-- **Lease** - lease start and end dates, monthly rent, and a form to notify the landlord of an intended move-out date.
-- **Payments** - the next payment due, itemised by rent, water and electricity, and a history of past payments.
-- **Maintenance** - submit a new maintenance request with a description and priority, and see the status of previous requests.
-- **Notices** - read notices posted by the landlord.
+# Authentication
+The application supports separate landlord and tenant accounts.
+Users can:
+- Sign up
+- Log in
+- Log out
+- Maintain a logged-in session
+- Access functionality based on their role
 
-At present, the application shows one mock tenant at a time.
+Two roles are supported:
 
-### Interactive Map
-The property's location is shown on a Leaflet map using its stored latitude and longitude. The map includes:
-- OpenStreetMap map tiles
-- A marker for the property
-- A popup showing the property name
+- `landlord`
+- `tenant`
 
-### Nearby Amenities
-Nearby schools, hospitals, markets and transport are shown using a manually entered, static list rather than a live third-party API. This replaces an earlier version of the application that queried the Overpass API for this data. The Overpass API proved unreliable during development, so the application no longer depends on it to display this information.
+A landlord can manage the property and its associated records.
+A tenant can only access information associated with their own lease and account.
 
-### Client-Side Routing
-React Router provides navigation between the application's views. The current routes are:
+Authentication is handled by the Flask backend using sessions.
+
+
+# Landlord Dashboard
+The landlord dashboard provides an overview of the property and access to the main management features.
+
+The landlord can manage:
+
+### Units
+- View units
+- Add units
+- Update units
+- Delete units
+- View unit numbers
+- View monthly rent
+
+### Leases
+- Create leases
+- View leases
+- Update leases
+- Delete leases
+- Assign a tenant to a unit
+- Set lease start and end dates
+- Track lease status
+
+### Payments
+- View property payments
+- Record payments
+- Update payment information
+- Track payment status
+- Record payment references
+
+### Maintenance
+- View maintenance requests submitted by tenants
+- Update maintenance status
+- Track pending, in-progress and resolved requests
+
+### Notices
+- Create property notices
+- View notices
+- Update notices
+- Delete notices
+
+# Tenant Dashboard
+The tenant dashboard displays information relevant to the currently logged-in tenant.
+
+A tenant can:
+
+### Home
+View:
+- Their unit
+- Lease status
+- Payment information
+- Maintenance information
+- Recent property notices
+
+### Lease
+View:
+- Lease start date
+- Lease end date
+- Monthly rent
+- Lease status
+
+
+
+### Payments
+View:
+- Payment history
+- Payment amounts
+- Payment dates
+- Payment status
+- Payment references
+
+### Maintenance
+Tenants can submit maintenance requests with:
+- Title
+- Description
+
+They can also view their previous maintenance requests and their current status.
+
+
+### Notices
+Tenants can view notices posted by the landlord for their property.
+
+
+# Application Structure
+The application follows a full-stack architecture:
+
 ```text
-/                        Home
-/property                Property information
-/area                    Location and nearby amenities
-/about                   About
+React Frontend
+      |
+      | HTTP Requests
+      ↓
+Flask REST API
+      |
+      | SQLAlchemy
+      ↓
+PostgreSQL Database
+````
 
-/tenant                  Tenant dashboard, home
-/tenant/lease             Tenant lease and end of stay notice
-/tenant/payments          Tenant payments
-/tenant/maintenance       Tenant maintenance requests
-/tenant/notices           Tenant notices
+The frontend is responsible for the user interface and client-side routing.
 
-/landlord                 Landlord dashboard, overview
-/landlord/units            Landlord units
-/landlord/tickets          Landlord maintenance tickets
-/landlord/payments         Landlord payments
-/landlord/leases           Landlord leases
-/landlord/notices          Landlord notices
+The Flask backend handles:
+* Authentication
+* Authorization
+* Business logic
+* CRUD operations
+* Database communication
+* API responses
+
+PostgreSQL stores the application's persistent data.
+
+
+
+# Backend API
+The Flask API provides endpoints for the main application resources.
+
+## Authentication
+
+```text
+POST   /signup
+POST   /login
+GET    /check-session
+DELETE /logout
 ```
 
-### Responsive Interface
-The application includes responsive styling so the interface adapts to smaller screens. This covers navigation, dashboard sections, tables, forms and images, so the application remains usable on desktop, tablet and mobile.
+## Property
 
-## Technologies Used
+```text
+POST   /property
+GET    /property
+PATCH  /property
+DELETE /property
+```
+
+## Units
+
+```text
+GET    /property/units
+POST   /property/units
+PATCH  /property/units/<id>
+DELETE /property/units/<id>
+```
+
+## Leases
+
+```text
+POST   /property/units/<unit_id>/leases
+GET    /property/leases
+GET    /my-lease
+PATCH  /property/leases/<lease_id>
+DELETE /property/leases/<lease_id>
+```
+
+## Payments
+
+```text
+GET    /property/payments
+POST   /property/payments
+PATCH  /property/payments/<payment_id>
+
+GET    /my-payments
+```
+
+## Maintenance
+
+```text
+POST   /maintenance-tickets
+GET    /my-maintenance-tickets
+
+GET    /property/maintenance-tickets
+PATCH  /property/maintenance-tickets/<ticket_id>
+```
+
+## Notices
+
+```text
+POST   /property/notices
+GET    /property/notices
+PATCH  /property/notices/<notice_id>
+DELETE /property/notices/<notice_id>
+
+GET    /my-notices
+```
+## End of Stay (future enhancement)
+
+```text
+POST   /end-of-stay
+GET    /my-end-of-stay
+
+GET    /property/end-of-stay
+PATCH  /property/end-of-stay/<end_of_stay_id>
+```
+
+# Database
+The application uses PostgreSQL for persistent storage.
+The main database relationships are:
+
+```text
+User
+ |
+ |-- Landlord
+ |       |
+ |       └── Property
+ |              |
+ |              └── Units
+ |
+ └── Tenant
+        |
+        └── Leases
+               |
+               └── Payments
+```
+
+Other relationships include:
+
+```text
+Tenant → Maintenance Tickets
+Property → Notices
+Lease → End of Stay Request
+Unit → Lease
+```
+
+This relational structure allows the application to connect the correct information to the correct tenant, unit and property.
+
+
+# Technologies Used
+
+## Frontend
 ### React
-The application is built using React. React is used to create reusable components and manage application state.
+React is used to build the user interface and reusable components.
 
 ### Vite
-Vite is used as the development environment and build tool for the React application.
+Vite is used as the frontend development environment and build tool.
 
 ### React Router
-React Router handles navigation between the application's views, including nested tenant and landlord dashboard pages.
+React Router handles navigation between public pages and tenant and landlord dashboard pages.
 
 ### React Leaflet and Leaflet
-React Leaflet integrates Leaflet maps into the React application, providing map containers, tile layers, markers and popups. The Leaflet stylesheet is imported in `main.jsx`:
+React leaflet integrates Leaflet maps into the React application.
+
+The map displays:
+* OpenStreetMap tiles
+* The property's location
+* A property marker
+* A popup showing the property name
+
+The Leaflet stylesheet is imported in `app.jsx`:
+
 ```jsx
 import "leaflet/dist/leaflet.css";
 ```
 
-### OpenStreetMap and Nominatim
-OpenStreetMap provides the map tiles used for the property's location. Nominatim was used during development to look up the property's coordinates. Once those coordinates were known, they were stored directly as data, so the running application does not require a live Nominatim request to function.
-
 ### Lucide React
-Lucide React provides the icons used on amenity cards, so different amenity types are easy to tell apart visually.
+Lucide React provides icons used throughout the interface.
 
-### Data
-`mockData.js` holds the property, units, leases, payments, notices, maintenance tickets and nearby amenities used throughout the application.
-Every component reads from this file rather than defining its own data, so this is the single place mock data will later be replaced by requests to the Flask API.
+# Backend Technologies
+## Flask
+Flask provides the REST API and backend application logic.
 
-### Components
-Reusable interface pieces used across more than one view: `StatusBadge` (a consistent way to show Active, Paid, Pending, Overdue and similar statuses), `TicketCard` and `TicketForm` (maintenance requests), `PaymentRow` (a line of payment history), `NoticeCard`, `EndOfStayForm`, and `DashboardTabs` (the sub-navigation used inside both dashboards).
+## SQLAlchemy
+SQLAlchemy is used as the ORM for communicating with PostgreSQL and defining database models.
 
-### Views
-Public pages (`HomeView`, `PropertyView`, `AreaView`, `AboutView`), tenant dashboard pages under `views/tenant/`, and landlord dashboard pages under `views/landlord/`.
+## Flask-Migrate
+Flask-Migrate is used to manage database schema migrations.
 
-## Running the Application
-The application is deployed and can be accessed directly from the live link below:
-https://rental-area-explorer.vercel.app/
+## Flask-Bcrypt
+Flask-Bcrypt is used for password hashing.
 
-No installation is required when using the deployed version. Open the link in a browser to explore the application.
+## Flask-CORS
+Flask-CORS allows the deployed React frontend to communicate with the Flask API.
 
-## Installation
-### 1. Clone the repository
+## PostgreSQL
+PostgreSQL is used as the production database for persistent application data.
 
-Clone the project from GitHub:
 
-```bash
-git clone https://github.com/daisy-koech/rental-area-explorer
+# Frontend Routes
+The main React routes are:
+
+```text
+/                           Home
+
+/property                   Property information
+
+/area                       Location and nearby amenities
+
+/about                      About
+
+/tenant                     Tenant dashboard
+
+/tenant/lease               Tenant lease
+
+/tenant/payments            Tenant payments
+
+/tenant/maintenance         Tenant maintenance requests
+
+/tenant/notices             Tenant notices
+
+/landlord                   Landlord dashboard
+
+/landlord/units             Landlord units
+
+/landlord/tickets           Landlord maintenance
+
+/landlord/payments          Landlord payments
+
+/landlord/leases            Landlord leases
+
+/landlord/notices           Landlord notices
 ```
 
-### 2. Navigate into the cloned project directory
+# Location and Nearby Amenities
+The property's location is stored using latitude and longitude.
+The current property is located in:
+```text
+Elgon View, Eldoret, Kenya
+```
 
-### 3. Install dependencies
-Run:
+The map uses the property's stored coordinates rather than requesting coordinates every time the application loads.
+Nearby amenities such as schools, hospitals, markets and transport are represented using a manually maintained static list.
+
+An earlier version of the application used the Overpass API to retrieve nearby amenities dynamically. However, the external API proved unreliable, so the application no longer depends on it.
+
+# Installation
+## 1. Clone the repository
+
+```bash
+git clone https://github.com/daisy-koech/rental-area-explorer.git
+```
+Navigate into the project
+
+# Frontend Setup
+Navigate to the frontend/project directory:
+```bash
+cd frontend
+```
+
+Install the dependencies:
 ```bash
 npm install
 ```
-- This installs the dependencies listed in `package.json`.
 
 Start the Vite development server:
 ```bash
 npm run dev
 ```
-Open the provided URL in a browser.
+The frontend will be available at the local URL provided by Vite, usually:
+
+# Backend Setup
+cd backend directory
+
+## Install Pipenv
+pip install pipenv
+
+## Create the virtual environment and install dependencies
+pipenv install
+
+## Activate the virtual environment
+pipenv shell
+
+## Run database migrations
+flask db upgrade
+
+## Start the Flask server
+python app.py
+
+## Install the backend dependencies:
+pip install -r requirements.txt
 
 
+# Environment Variables
+Create a `.env` file in the backend directory.
+For production, the database URL and secret key are configured through the Render environment variables.
 
-## Using the Application
-### As a visitor
-Open the Home page to see an introduction to the property, then visit Property or Location for more detail.
+# Database Setup
+Make sure PostgreSQL is installed and running.
+Create the database:
 
-### As a tenant
-Select Tenant Dashboard from the navigation. From there, use the tabs to move between Home, Lease, Payments, Maintenance and Notices. A maintenance request can be submitted from the Maintenance tab, and an end of stay notice can be submitted from the Lease tab.
+```sql
+CREATE DATABASE rental_management;
+```
 
-### As a landlord
-Select Landlord Dashboard from the navigation. From there, use the tabs to move between Overview, Units, Maintenance, Payments, Leases and Notices. A maintenance ticket's status can be updated from the Maintenance tab, and a new notice can be posted from the Notices tab.
+Run the Flask application and apply the database migrations.
+If migrations already exist:
 
-At present there is no login. The application shows one example tenant and the full landlord view.
+```bash
+flask db upgrade
+```
+The database will then contain the application's tables.
 
-## Mock Data
-The application uses realistic mock data rather than a live database. Property, units, leases, payments and notices are set up so that the interface feels close to what a real running property would look like, including a tenant with no open maintenance ticket and units with no lease, so that empty states are part of the design rather than an afterthought.
 
-This is temporary frontend data. It is clearly separated in `mockData.js` and structured so that it can be replaced by real API requests without needing to change the components that use it.
+# Running the Backend
+From the backend directory:
 
-## Data Sources
-The property's location was originally looked up using Nominatim during development. The running application now stores this location directly, so it does not depend on a live request to Nominatim, OpenStreetMap or the Overpass API to function.
+```bash
+python app.py
+```
 
-- Nominatim: `https://nominatim.openstreetmap.org/`
-- OpenStreetMap: `https://www.openstreetmap.org/`
+The Flask API will run locally.
+The local API is typically available at:
 
-## Future Development
-### Authentication
-Add real login and logout, with separate access for the landlord and for tenants, so that each tenant sees only their own lease, payments and maintenance requests.
+```text
+http://127.0.0.1:5000
+```
 
-### Real Payments
-Add M-Pesa integration so a tenant can pay rent directly from the application, replacing the current mock "Pay" area with a real payment flow.
+---
 
-### CRUD for Maintenance, Leases and Notices
-Connect the maintenance ticket, lease and notice features to the backend, so a ticket a tenant submits, a lease the landlord creates, or a notice the landlord posts is stored and updated for real.
+# Connecting the Frontend to the Backend
+The frontend uses the Flask API URL for its requests.
+
+For local development, the API URL can point to:
+
+```text
+http://127.0.0.1:5000
+```
+
+For the deployed application, the API URL points to:
+
+```text
+https://rental-management-app-api.onrender.com
+```
+
+# Deployment
+## Frontend - Vercel
+The React frontend is deployed using Vercel.
+Live frontend:
+
+```text
+https://rental-management-kenya.vercel.app/
+```
+
+The frontend is connected to the GitHub repository so that new deployments can be created when changes are pushed.
+
+# Backend - Render
+The Flask backend is deployed using Render.
+Live API:
+
+```text
+https://rental-management-app-api.onrender.com/
+```
+
+Render hosts the Flask application and connects it to the PostgreSQL production database.
+The production environment variables include:
+
+```text
+DATABASE_URL
+SECRET_KEY
+```
+
+The backend also allows the deployed Vercel frontend to make authenticated requests using CORS and session cookies.
+
+
+# Authentication and Sessions
+Authentication is handled by Flask sessions.
+
+When a user successfully logs in, their user ID is stored in the session.
+The backend retrieves the currently authenticated user using:
+
+```python
+session.get("user_id")
+```
+
+The application then checks the user's role before allowing access to protected functionality.
+Session cookies are configured to support authenticated requests between the deployed frontend and backend.
+
+
+# Example User Flow
+
+## Landlord
+```text
+Sign up / Log in
+       ↓
+Create or view property
+       ↓
+Add units
+       ↓
+Create tenant lease
+       ↓
+Record payments
+       ↓
+Manage maintenance requests
+       ↓
+Post property notices
+```
+
+## Tenant
+```text
+Sign up / Log in
+       ↓
+View dashboard
+       ↓
+View lease
+       ↓
+View payments
+       ↓
+Submit maintenance request
+       ↓
+Read property notices
+```
+
+# Data Validation and Authorization
+The backend validates requests before modifying the database.
+
+Examples include:
+* Only landlords can create properties.
+* Only landlords can create units.
+* Only landlords can create leases.
+* Only tenants can view their own lease.
+* Only tenants can submit maintenance requests.
+* Only landlords can update maintenance ticket status.
+* Only landlords can create property notices.
+* Users must be authenticated before accessing protected resources.
+* Tenant IDs must belong to users with the tenant role.
+* Units must belong to the landlord's property before they can be used in leases.
+
+This prevents users from accessing or modifying unrelated property information.
+
+
+# Mock Data
+Mock data `mockData.js`  was used to demonstrate the tenant and landlord interfaces before the backend was implemented.
+
+The Phase 2 version now uses the Flask API and PostgreSQL for the main property management data.
+Some frontend static data is still used for information that does not currently require a database, such as the manually maintained nearby amenities list.
+
+# Development Approach
+The project was developed in two main phases.
+
+## Phase 1 - Frontend Prototype
+The first phase focused on:
+* React
+* Component design
+* Routing
+* Responsive UI
+* Property information
+* Tenant dashboard
+* Landlord dashboard
+* Mock data
+* Map integration
+
+## Phase 2 - Full-Stack Application
+The second phase introduced:
+* Flask
+* REST API endpoints
+* PostgreSQL
+* SQLAlchemy
+* Flask-Migrate
+* Authentication
+* Sessions
+* CRUD operations
+* Persistent data
+* Tenant and landlord roles
+* Production deployment
+
+# Future Development
+## M-Pesa Payments
+Integrate M-Pesa so tenants can make rent payments directly through the application.
+
+## Utility Billing
+Add support for:
+* Water billing
+* Electricity billing
+* Utility usage
+* Automatic utility calculations
+
+## Improved Tenant Management
+Allow landlords to manage tenant information directly from the dashboard.
+
+## Payment Reminders
+Add automatic reminders for upcoming or overdue rent payments.
+
+# Project Goal
+The goal of the Rental Management App is to make everyday rental management easier to organize and understand.
+
+Instead of information being scattered across notebooks, spreadsheets and message threads, the application provides one place for:
+
+```text
+Property
+   ↓
+Units
+   ↓
+Tenants
+   ↓
+Leases
+   ↓
+Payments
+```
+
+with:
+
+```text
+Maintenance
+Notices
+End-of-Stay Requests
+```
+connected to the same property and tenant information.
