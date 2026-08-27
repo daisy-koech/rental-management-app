@@ -5,3 +5,4 @@ Flask-Migrate
 Flask-Bcrypt
 gunicorn
 psycopg2-binary
+python-dotenv
