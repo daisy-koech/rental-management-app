@@ -1,40 +1,32 @@
 .payment-row {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
-  padding: 0.9rem 1.1rem;
-  background-color: #ffffff;
-  border: 1px solid #e6e2d9;
-  border-radius: 10px;
+  padding: 1rem 1.4rem;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  flex-wrap: wrap;
 }
 
-.payment-period {
-  margin: 0 0 0.3rem;
-  font-weight: 600;
-  color: #24231f;
+.payment-row strong {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--color-text);
 }
 
-.payment-tenant {
-  font-weight: 400;
-  color: #8a877e;
+.payment-row p {
+  margin: 0.2rem 0 0;
+  color: var(--color-text-muted);
   font-size: 0.85rem;
 }
 
-.payment-breakdown {
-  margin: 0;
-  color: #8a877e;
-  font-size: 0.82rem;
-}
-
-.payment-row-side {
+.payment-row > div:last-child {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   text-align: right;
-  flex-shrink: 0;
-}
-
-.payment-total {
-  margin: 0 0 0.3rem;
-  font-weight: 700;
-  color: #24231f;
 }
 

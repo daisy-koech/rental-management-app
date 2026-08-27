@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000";
+const API_URL = "https://rental-management-app-api.onrender.com";
 
 export async function login(email, password) {
   const response = await fetch(`${API_URL}/login`, {

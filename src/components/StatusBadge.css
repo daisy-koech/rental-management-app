@@ -1,15 +1,30 @@
 .status-badge {
   display: inline-block;
-  padding: 0.25rem 0.65rem;
-  border-radius: 6px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  border: 1px solid transparent;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
-.status-good { background-color: #eaf3ec; color: #3f6152; border-color: #cfe1d3; }
-.status-warn { background-color: #faf1e2; color: #8a5a1f; border-color: #eeddbe; }
-.status-bad { background-color: #f7e9e6; color: #9c4a3a; border-color: #edd2cb; }
-.status-neutral { background-color: #f0eee9; color: #5c584f; border-color: #e1ddd3; }
+.status-good {
+  background-color: rgba(47, 125, 74, 0.12);
+  color: var(--color-success);
+}
+
+.status-warn {
+  background-color: rgba(201, 154, 59, 0.16);
+  color: #96731f;
+}
+
+.status-bad {
+  background-color: rgba(185, 74, 72, 0.12);
+  color: var(--color-danger);
+}
+
+.status-neutral {
+  background-color: var(--color-background);
+  color: var(--color-text-muted);
+}
 
 
