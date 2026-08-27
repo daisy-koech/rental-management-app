@@ -70,7 +70,8 @@
 .notice-title {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
+  gap: 1rem;
   margin: 0 0 0.5rem;
   font-weight: 600;
   color: var(--color-text);
@@ -80,6 +81,8 @@
   font-size: 0.78rem;
   font-weight: 500;
   color: var(--color-text-muted);
+  white-space: nowrap;
+  margin-left: auto;
 }
 
 .notice-message {
