@@ -3,10 +3,12 @@ from flask_cors import CORS
 from config import Config
 from extensions import db, migrate, bcrypt
 from routes import register_routes
+import os
 
 
 def create_app():
     app = Flask(__name__)
+    app.secret_key = os.environ.get("SECRET_KEY", "dev-only-fallback-change-me")
 
     app.config.from_object(Config)
 
