@@ -107,7 +107,7 @@ function TenantDashboard() {
 
           <span className="summary-value">
             {lease
-              ? `Unit ${lease.unit_id}`
+              ? `Unit ${lease.unit_number || lease.unit_id}`
               : "No unit assigned"}
           </span>
         </div>

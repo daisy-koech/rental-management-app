@@ -51,7 +51,7 @@ function TenantLeaseView() {
 
           <div>
             <span className="lease-label">Unit</span>
-            <strong>{lease.unit_id}</strong>
+            <strong>{lease.unit_number || lease.unit_id}</strong>
           </div>
 
           <div>

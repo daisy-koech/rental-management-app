@@ -195,6 +195,7 @@ class Lease(db.Model):
             "id": self.id,
             "tenant_id": self.tenant_id,
             "unit_id": self.unit_id,
+            "unit_number": self.unit.unit_number if self.unit else None,
             "start_date": self.start_date.isoformat(),
             "end_date": (
                 self.end_date.isoformat()
