@@ -77,6 +77,52 @@ function TenantDashboard() {
     ? user.name.split(" ")[0]
     : "Tenant";
 
+  let paymentsSummary;
+
+  if (nextPayment) {
+    paymentsSummary = (
+      <div className="summary-block">
+        <span className="summary-label">
+          Next payment
+        </span>
+
+        <span className="summary-value">
+          KSh {nextPayment.amount.toLocaleString()}
+        </span>
+
+        <StatusBadge status={nextPayment.status} />
+      </div>
+    );
+  } else if (payments.length > 0) {
+    paymentsSummary = (
+      <div className="summary-block">
+        <span className="summary-label">
+          Payments
+        </span>
+
+        <StatusBadge status="paid" />
+
+        <span className="summary-sub">
+          Nothing due right now
+        </span>
+      </div>
+    );
+  } else {
+    paymentsSummary = (
+      <div className="summary-block">
+        <span className="summary-label">
+          Payments
+        </span>
+
+        <StatusBadge status="No history" />
+
+        <span className="summary-sub">
+          No payments recorded yet
+        </span>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="tenant-dashboard">
@@ -132,31 +178,7 @@ function TenantDashboard() {
           )}
         </div>
 
-        {nextPayment ? (
-          <div className="summary-block">
-            <span className="summary-label">
-              Next payment
-            </span>
-
-            <span className="summary-value">
-              KSh {nextPayment.amount.toLocaleString()}
-            </span>
-
-            <StatusBadge status={nextPayment.status} />
-          </div>
-        ) : (
-          <div className="summary-block">
-            <span className="summary-label">
-              Payments
-            </span>
-
-            <StatusBadge status="paid" />
-
-            <span className="summary-sub">
-              Nothing due right now
-            </span>
-          </div>
-        )}
+        {paymentsSummary}
 
         <div className="summary-block">
           <span className="summary-label">

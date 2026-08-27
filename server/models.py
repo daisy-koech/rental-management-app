@@ -194,6 +194,7 @@ class Lease(db.Model):
         return {
             "id": self.id,
             "tenant_id": self.tenant_id,
+            "tenant_name": self.tenant.name if self.tenant else None,
             "unit_id": self.unit_id,
             "unit_number": self.unit.unit_number if self.unit else None,
             "start_date": self.start_date.isoformat(),

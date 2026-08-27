@@ -228,8 +228,8 @@ function LandlordLeasesView() {
             {leases.map((lease) => (
               <tr key={lease.id}>
                 <td>{lease.id}</td>
-                <td>{lease.tenant_id}</td>
-                <td>{lease.unit_id}</td>
+                <td>{lease.tenant_name || lease.tenant_id}</td>
+                <td>{lease.unit_number || lease.unit_id}</td>
                 <td>{lease.start_date}</td>
                 <td>{lease.end_date || "—"}</td>
                 <td>
