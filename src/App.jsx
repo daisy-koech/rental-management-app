@@ -45,7 +45,7 @@ function App() {
           <Route path="/tenant/notices" element={<ProtectedRoute role="tenant"><TenantNoticesView /></ProtectedRoute>} />
 
           <Route path="/landlord" element={<ProtectedRoute role="landlord"><LandlordDashboard /></ProtectedRoute>} />
-          <Route path="/create-property" element={<CreatePropertyView />} />
+          <Route path="/create-property" element={<ProtectedRoute role="landlord"><CreatePropertyView /></ProtectedRoute>} />
           <Route path="/landlord/units" element={<ProtectedRoute role="landlord"><LandlordUnitsView /></ProtectedRoute>} />
           <Route path="/landlord/tickets" element={<ProtectedRoute role="landlord"><LandlordTicketsView /></ProtectedRoute>} />
           <Route path="/landlord/payments" element={<ProtectedRoute role="landlord"><LandlordPaymentsView /></ProtectedRoute>} />
