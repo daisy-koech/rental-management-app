@@ -1,24 +1,28 @@
 .dashboard-tabs {
   display: flex;
-  gap: 1.5rem;
-  border-bottom: 1px solid #e6e2d9;
-  margin-bottom: 1.75rem;
-  flex-wrap: wrap;
+  gap: 1.75rem;
+  border-bottom: 1px solid var(--color-border);
+  margin: 1.5rem 0 2rem;
+  overflow-x: auto;
 }
 
 .dashboard-tabs a {
-  padding: 0.6rem 0;
-  color: #8a877e;
+  padding: 0 0 0.85rem;
+  color: var(--color-text-muted);
   font-size: 0.92rem;
   font-weight: 600;
+  white-space: nowrap;
   border-bottom: 2px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .dashboard-tabs a:hover {
-  color: #24231f;
+  color: var(--color-primary);
 }
 
 .dashboard-tabs a.active {
-  color: #3f6152;
-  border-bottom-color: #3f6152;
+  color: var(--color-primary);
+  border-bottom-color: var(--color-accent);
 }
+
+

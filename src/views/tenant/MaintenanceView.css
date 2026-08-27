@@ -1,16 +1,25 @@
 .maintenance-view h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
   margin: 0 0 1rem;
   font-size: 1.6rem;
-  color: #24231f;
+  color: var(--color-text);
+}
+
+.error-text {
+  color: var(--color-danger);
+  font-size: 0.9rem;
 }
 
 .ticket-list {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  margin-top: 1.5rem;
 }
 
-.empty-text {
-  color: #8a877e;
+.maintenance-view .empty-text {
+  color: var(--color-text-muted);
   font-size: 0.9rem;
+  margin-top: 1rem;
 }

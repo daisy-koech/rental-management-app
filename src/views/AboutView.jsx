@@ -1,3 +1,5 @@
+import "./AboutView.css";
+
 function AboutView() {
   return (
     <div className="about-view">

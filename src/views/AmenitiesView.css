@@ -1,25 +1,30 @@
 .amenities-view {
-  padding: 1rem 0;
+  padding: 1rem 0 2rem;
 }
+
 .amenities-view h1 {
-  margin: 0 0 0.5rem;
-  color: #0f172a;
-  font-size: 2.1rem;
-  font-weight: 800;
-  letter-spacing: -0.01em;
+  font-family: var(--font-display);
+  font-weight: 500;
+  margin: 0 0 0.6rem;
+  color: var(--color-text);
+  font-size: 2rem;
 }
+
 .amenities-view > p {
   margin: 0;
-  color: #64748b;
+  color: var(--color-text-muted);
   font-size: 1.05rem;
   line-height: 1.6;
+  max-width: 560px;
 }
+
 .amenities-list {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.1rem;
-  margin-top: 2rem;
+  margin-top: 2.5rem;
 }
+
 @media (min-width: 768px) {
   .amenities-list {
     grid-template-columns: repeat(2, 1fr);

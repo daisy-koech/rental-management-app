@@ -1,57 +1,56 @@
 .tenant-lease-view h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
   margin: 0 0 1rem;
   font-size: 1.6rem;
-  color: #24231f;
+  color: var(--color-text);
 }
 
-.lease-details {
+.empty-text {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.lease-card {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  padding: 1.25rem;
-  background-color: #ffffff;
-  border: 1px solid #e6e2d9;
-  border-radius: 10px;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  padding: 2rem;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.lease-card > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
 .lease-label {
-  display: block;
-  font-size: 0.78rem;
-  color: #8a877e;
-  font-weight: 600;
-  margin-bottom: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
 }
 
-.lease-value {
-  display: block;
-  color: #24231f;
-  font-weight: 600;
-}
-
-.end-of-stay-section h2 {
-  margin: 0 0 0.9rem;
+.lease-card strong {
+  font-family: var(--font-display);
   font-size: 1.15rem;
-  color: #24231f;
+  font-weight: 500;
+  color: var(--color-primary);
 }
 
-.btn-secondary {
-  display: inline-block;
-  padding: 0.65rem 1.2rem;
-  background-color: #ffffff;
-  color: #24231f;
-  border: 1px solid #d9d4c8;
-  border-radius: 8px;
-  font-weight: 600;
+@media (max-width: 700px) {
+  .lease-card {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.btn-secondary:hover {
-  border-color: #3f6152;
-  color: #3f6152;
-}
-
-@media (max-width: 500px) {
-  .lease-details {
+@media (max-width: 450px) {
+  .lease-card {
     grid-template-columns: 1fr;
   }
 }

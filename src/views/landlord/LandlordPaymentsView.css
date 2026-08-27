@@ -1,10 +1,155 @@
 .landlord-payments-view h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
   margin: 0 0 1rem;
   font-size: 1.6rem;
-  color: #24231f;
+  color: var(--color-text);
 }
-.payment-list {
+
+.payments-actions {
+  margin-bottom: 1.25rem;
+}
+
+.payments-actions button {
+  padding: 0.65rem 1.3rem;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.payments-actions button:hover {
+  background-color: var(--color-primary-light);
+}
+
+.dashboard-error {
+  color: var(--color-danger);
+  font-size: 0.9rem;
+}
+
+.empty-text {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.payments-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.payments-table th,
+.payments-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.9rem;
+}
+
+.payments-table th {
+  background-color: var(--color-background);
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.payments-table tr:last-child td {
+  border-bottom: none;
+}
+
+.payment-actions button {
+  padding: 0.4rem 0.8rem;
+  background-color: var(--color-white);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.payment-actions button:hover {
+  border-color: var(--color-accent);
+  color: var(--color-primary);
+}
+
+.payment-form-container {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.payment-form-container h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.2rem;
+  margin: 0 0 1.25rem;
+  color: var(--color-text);
+}
+
+.payment-form {
   display: flex;
   flex-direction: column;
+  gap: 0.4rem;
+}
+
+.payment-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-top: 0.5rem;
+}
+
+.payment-form input,
+.payment-form select {
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
+.payment-form input:focus,
+.payment-form select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background-color: var(--color-white);
+}
+
+.payment-form-actions {
+  display: flex;
   gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.payment-form-actions button[type="submit"] {
+  padding: 0.65rem 1.3rem;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+}
+
+.payment-form-actions button[type="submit"]:hover {
+  background-color: var(--color-primary-light);
+}
+
+.payment-form-actions button[type="button"] {
+  padding: 0.65rem 1.3rem;
+  background-color: var(--color-white);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+}
+
+.payment-form-actions button[type="button"]:hover {
+  border-color: var(--color-accent);
+  color: var(--color-primary);
 }

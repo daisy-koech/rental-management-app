@@ -1,15 +1,45 @@
 .landlord-leases-view h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
   margin: 0 0 1rem;
   font-size: 1.6rem;
-  color: #24231f;
+  color: var(--color-text);
+}
+
+.leases-actions {
+  margin-bottom: 1.25rem;
+}
+
+.leases-actions button {
+  padding: 0.65rem 1.3rem;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.leases-actions button:hover {
+  background-color: var(--color-primary-light);
+}
+
+.dashboard-error {
+  color: var(--color-danger);
+  font-size: 0.9rem;
+}
+
+.empty-text {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
 }
 
 .leases-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #ffffff;
-  border: 1px solid #e6e2d9;
-  border-radius: 10px;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   overflow: hidden;
 }
 
@@ -17,17 +47,115 @@
 .leases-table td {
   padding: 0.7rem 0.9rem;
   text-align: left;
-  border-bottom: 1px solid #e6e2d9;
+  border-bottom: 1px solid var(--color-border);
   font-size: 0.86rem;
 }
 
 .leases-table th {
-  background-color: #f5f2ec;
-  color: #5c584f;
+  background-color: var(--color-background);
+  color: var(--color-text-muted);
   font-weight: 600;
 }
 
 .leases-table tr:last-child td {
   border-bottom: none;
+}
+
+.lease-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.lease-actions button {
+  padding: 0.4rem 0.8rem;
+  background-color: var(--color-white);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.lease-actions button:hover {
+  border-color: var(--color-accent);
+  color: var(--color-primary);
+}
+
+.lease-form-container {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.lease-form-container h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.2rem;
+  margin: 0 0 1.25rem;
+  color: var(--color-text);
+}
+
+.lease-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.lease-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-top: 0.5rem;
+}
+
+.lease-form input,
+.lease-form select {
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
+.lease-form input:focus,
+.lease-form select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background-color: var(--color-white);
+}
+
+.lease-form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.lease-form-actions button[type="submit"] {
+  padding: 0.65rem 1.3rem;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+}
+
+.lease-form-actions button[type="submit"]:hover {
+  background-color: var(--color-primary-light);
+}
+
+.lease-form-actions button[type="button"] {
+  padding: 0.65rem 1.3rem;
+  background-color: var(--color-white);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+}
+
+.lease-form-actions button[type="button"]:hover {
+  border-color: var(--color-accent);
+  color: var(--color-primary);
 }
 

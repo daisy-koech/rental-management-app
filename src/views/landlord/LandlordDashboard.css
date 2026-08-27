@@ -1,47 +1,21 @@
 .landlord-dashboard h1 {
-  margin: 0 0 1rem;
-  font-size: 1.6rem;
-  color: #24231f;
+  font-family: var(--font-display);
+  font-weight: 500;
+  margin: 0 0 0.25rem;
+  font-size: 1.7rem;
+  color: var(--color-text);
 }
 
-.dashboard-summary {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.summary-block {
-  padding: 1.1rem;
-  background-color: #ffffff;
-  border: 1px solid #e6e2d9;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.summary-label {
-  font-size: 0.8rem;
-  color: #8a877e;
-  font-weight: 600;
-}
-
-.summary-value {
-  font-size: 1.1rem;
-  color: #24231f;
-  font-weight: 700;
+.dashboard-location {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin: 0 0 0.5rem;
 }
 
 .dashboard-hint {
-  color: #8a877e;
-  font-size: 0.88rem;
-}
-
-@media (max-width: 700px) {
-  .dashboard-summary {
-    grid-template-columns: 1fr;
-  }
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
 }
 
 

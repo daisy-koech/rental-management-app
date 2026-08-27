@@ -1,86 +1,101 @@
 .tenant-dashboard h1 {
-  margin: 0 0 1rem;
-  font-size: 1.6rem;
-  color: #24231f;
+  font-family: var(--font-display);
+  font-weight: 500;
+  margin: 0 0 0.25rem;
+  font-size: 1.7rem;
+  color: var(--color-text);
+}
+
+.error-text {
+  color: var(--color-danger);
+  font-size: 0.9rem;
 }
 
 .dashboard-summary {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin: 1rem 0 2rem;
 }
 
 .summary-block {
-  padding: 1.1rem;
-  background-color: #ffffff;
-  border: 1px solid #e6e2d9;
-  border-radius: 10px;
+  padding: 1.25rem;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
 .summary-label {
-  font-size: 0.78rem;
-  color: #8a877e;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
 }
 
 .summary-value {
-  font-size: 0.98rem;
-  color: #24231f;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--color-primary);
 }
 
 .summary-sub {
-  font-size: 0.8rem;
-  color: #8a877e;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
 }
 
 .dashboard-section {
-  margin-bottom: 2rem;
+  margin-top: 1rem;
 }
 
 .dashboard-section h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.25rem;
+  color: var(--color-text);
   margin: 0 0 1rem;
-  font-size: 1.15rem;
-  color: #24231f;
 }
 
 .notice-item {
-  padding: 0.9rem 1.1rem;
-  background-color: #ffffff;
-  border: 1px solid #e6e2d9;
-  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-md);
 }
 
 .notice-title {
-  margin: 0 0 0.3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 0.5rem;
   font-weight: 600;
-  color: #24231f;
+  color: var(--color-text);
 }
 
 .notice-title span {
-  margin-left: 0.5rem;
-  font-weight: 400;
-  color: #8a877e;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
 }
 
 .notice-message {
   margin: 0;
-  color: #5c584f;
-  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 800px) {
   .dashboard-summary {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .dashboard-summary {
     grid-template-columns: 1fr;
   }

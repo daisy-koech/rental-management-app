@@ -2,54 +2,72 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  padding: 1.25rem;
-  background-color: #ffffff;
-  border: 1px solid #e6e2d9;
-  border-radius: 10px;
-  max-width: 420px;
+  padding: 1.75rem;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  max-width: 480px;
 }
 
 .end-of-stay-form label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #5c584f;
-  margin-top: 0.5rem;
+  color: var(--color-text-muted);
+  margin-top: 0.6rem;
 }
 
 .end-of-stay-form input,
 .end-of-stay-form textarea {
-  padding: 0.6rem 0.75rem;
-  border: 1px solid #d9d4c8;
-  border-radius: 8px;
-  color: #24231f;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  resize: vertical;
 }
 
 .end-of-stay-form input:focus,
 .end-of-stay-form textarea:focus {
   outline: none;
-  border-color: #3f6152;
+  border-color: var(--color-accent);
+  background-color: var(--color-white);
+}
+
+.form-error {
+  margin: 0;
+  color: var(--color-danger);
+  font-size: 0.88rem;
 }
 
 .end-of-stay-form button {
   align-self: flex-start;
-  margin-top: 0.75rem;
-  padding: 0.6rem 1.2rem;
-  background-color: #3f6152;
-  color: #ffffff;
+  margin-top: 0.9rem;
+  padding: 0.65rem 1.4rem;
+  background-color: var(--color-primary);
+  color: var(--color-white);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-weight: 600;
+  transition: background-color 0.2s ease;
 }
 
 .end-of-stay-form button:hover {
-  background-color: #33503f;
+  background-color: var(--color-primary-light);
+}
+
+.end-of-stay-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .end-of-stay-confirmation {
-  padding: 1rem 1.1rem;
-  background-color: #eaf3ec;
-  border: 1px solid #cfe1d3;
-  border-radius: 10px;
-  color: #3f6152;
-  max-width: 420px;
+  padding: 1.5rem 1.75rem;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 480px;
 }
