@@ -1,7 +1,7 @@
 const API_URL = "https://rental-management-app-api.onrender.com";
 
 export async function register(name, email, password, role) {
-  const response = await fetch(`${API_URL}/signup`, {   // <-- changed from /register
+  const response = await fetch(`${API_URL}/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -96,6 +96,21 @@ export async function getLandlordProperty() {
   }
 
   return data;
+}
+
+export async function getLandlordTenants() {
+  const response = await fetch(`${API_URL}/property/tenants`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Failed to load tenants");
+  }
+
+  return data.tenants;
 }
 
 export async function getLandlordUnits() {

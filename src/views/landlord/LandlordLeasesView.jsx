@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   getLandlordLeases,
+  getLandlordTenants,
   createLandlordLease,
   updateLandlordLease,
   deleteLandlordLease,
@@ -28,6 +29,7 @@ const EMPTY_FORM = {
 
 function LandlordLeasesView() {
   const [leases, setLeases] = useState([]);
+  const [tenants, setTenants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -39,6 +41,7 @@ function LandlordLeasesView() {
 
   useEffect(() => {
     loadLeases();
+    loadTenants();
   }, []);
 
   async function loadLeases() {
@@ -52,6 +55,15 @@ function LandlordLeasesView() {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function loadTenants() {
+    try {
+      const data = await getLandlordTenants();
+      setTenants(data);
+    } catch (err) {
+      setError(err.message);
     }
   }
 
@@ -184,130 +196,94 @@ function LandlordLeasesView() {
       <DashboardTabs tabs={TABS} />
 
       <div className="leases-actions">
-        <button
-          type="button"
-          onClick={openAddForm}
-        >
+        <button type="button" onClick={openAddForm}>
           Add Lease
         </button>
       </div>
 
-      {error && (
-        <p className="dashboard-error">
-          {error}
-        </p>
+      {error && <p className="dashboard-error">{error}</p>}
+
+      {loading && <p>Loading leases...</p>}
+
+      {!loading && !error && leases.length === 0 && (
+        <p className="empty-text">No leases have been recorded.</p>
       )}
 
-      {loading && (
-        <p>Loading leases...</p>
-      )}
+      {!loading && leases.length > 0 && (
+        <table className="leases-table">
+          <thead>
+            <tr>
+              <th>Lease ID</th>
+              <th>Tenant</th>
+              <th>Unit</th>
+              <th>Start</th>
+              <th>End</th>
+              <th>Rent</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
 
-      {!loading &&
-        !error &&
-        leases.length === 0 && (
-          <p className="empty-text">
-            No leases have been recorded.
-          </p>
-        )}
+          <tbody>
+            {leases.map((lease) => (
+              <tr key={lease.id}>
+                <td>{lease.id}</td>
+                <td>{lease.tenant_id}</td>
+                <td>{lease.unit_id}</td>
+                <td>{lease.start_date}</td>
+                <td>{lease.end_date || "—"}</td>
+                <td>
+                  KSh{" "}
+                  {Number(lease.monthly_rent).toLocaleString()}
+                </td>
+                <td>
+                  <StatusBadge status={lease.status} />
+                </td>
+                <td className="lease-actions">
+                  <button
+                    type="button"
+                    onClick={() => openEditForm(lease)}
+                  >
+                    Edit
+                  </button>
 
-      {!loading &&
-        leases.length > 0 && (
-          <table className="leases-table">
-            <thead>
-              <tr>
-                <th>Lease ID</th>
-                <th>Tenant</th>
-                <th>Unit</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Rent</th>
-                <th>Status</th>
-                <th>Actions</th>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(lease)}
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
-            </thead>
-
-            <tbody>
-              {leases.map((lease) => (
-                <tr key={lease.id}>
-                  <td>{lease.id}</td>
-
-                  <td>{lease.tenant_id}</td>
-
-                  <td>{lease.unit_id}</td>
-
-                  <td>{lease.start_date}</td>
-
-                  <td>
-                    {lease.end_date || "—"}
-                  </td>
-
-                  <td>
-                    KSh{" "}
-                    {Number(
-                      lease.monthly_rent
-                    ).toLocaleString()}
-                  </td>
-
-                  <td>
-                    <StatusBadge
-                      status={lease.status}
-                    />
-                  </td>
-
-                  <td className="lease-actions">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        openEditForm(lease)
-                      }
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleDelete(lease)
-                      }
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+            ))}
+          </tbody>
+        </table>
+      )}
 
       {showForm && (
         <div className="lease-form-container">
-          <h2>
-            {editingLease
-              ? "Edit Lease"
-              : "Add Lease"}
-          </h2>
+          <h2>{editingLease ? "Edit Lease" : "Add Lease"}</h2>
 
-          <form
-            className="lease-form"
-            onSubmit={handleSubmit}
-          >
-            <label htmlFor="tenant_id">
-              Tenant ID
-            </label>
+          <form className="lease-form" onSubmit={handleSubmit}>
+            <label htmlFor="tenant_id">Tenant</label>
 
-            <input
+            <select
               id="tenant_id"
               name="tenant_id"
-              type="number"
               value={form.tenant_id}
               onChange={handleChange}
               required
               disabled={Boolean(editingLease)}
-            />
+            >
+              <option value="">Select a tenant</option>
+              {tenants.map((tenant) => (
+                <option key={tenant.id} value={tenant.id}>
+                  {tenant.name} ({tenant.email})
+                </option>
+              ))}
+            </select>
 
-            <label htmlFor="unit_id">
-              Unit ID
-            </label>
+            <label htmlFor="unit_id">Unit ID</label>
 
             <input
               id="unit_id"
@@ -319,9 +295,7 @@ function LandlordLeasesView() {
               disabled={Boolean(editingLease)}
             />
 
-            <label htmlFor="start_date">
-              Start date
-            </label>
+            <label htmlFor="start_date">Start date</label>
 
             <input
               id="start_date"
@@ -332,9 +306,7 @@ function LandlordLeasesView() {
               required
             />
 
-            <label htmlFor="end_date">
-              End date
-            </label>
+            <label htmlFor="end_date">End date</label>
 
             <input
               id="end_date"
@@ -344,9 +316,7 @@ function LandlordLeasesView() {
               onChange={handleChange}
             />
 
-            <label htmlFor="status">
-              Status
-            </label>
+            <label htmlFor="status">Status</label>
 
             <select
               id="status"
@@ -354,20 +324,12 @@ function LandlordLeasesView() {
               value={form.status}
               onChange={handleChange}
             >
-              <option value="active">
-                Active
-              </option>
-
-              <option value="ended">
-                Ended
-              </option>
+              <option value="active">Active</option>
+              <option value="ended">Ended</option>
             </select>
 
             <div className="lease-form-actions">
-              <button
-                type="submit"
-                disabled={saving}
-              >
+              <button type="submit" disabled={saving}>
                 {submitButtonText}
               </button>
 

@@ -23,8 +23,8 @@ function CreatePropertyView() {
       await createProperty(
         name,
         location,
-        parseFloat(latitude),
-        parseFloat(longitude)
+        Number.parseFloat(latitude),
+        Number.parseFloat(longitude)
       );
       navigate("/landlord");
     } catch (error) {

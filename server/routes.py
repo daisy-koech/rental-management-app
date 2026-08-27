@@ -223,6 +223,24 @@ def property_routes(app):
         db.session.delete(PROPERTY)
         db.session.commit()
         return {}, 204
+
+    @app.route("/property/tenants", methods=["GET"])
+    def get_tenants():
+        user = get_current_user()
+
+        if not user:
+            return {"error": "Unauthorized"}, 401
+
+        if user.role != "landlord":
+            return {
+                "error": "Only landlords can view tenants"
+            }, 403
+
+        tenants = User.query.filter_by(role="tenant").all()
+
+        return {
+            "tenants": [tenant.to_dict() for tenant in tenants]
+        }, 200
         
     @app.route("/property/units", methods=["GET"])
     def get_units():
