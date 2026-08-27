@@ -7,8 +7,10 @@ import HomeView from "./views/HomeView";
 import PropertyView from "./views/PropertyView";
 import AreaView from "./views/AreaView";
 import AboutView from "./views/AboutView";
+import SignupView from "./views/SignupView";
 import LoginView from "./views/LoginView";
 
+import CreatePropertyView from "./views/CreatePropertyView";
 import TenantDashboard from "./views/tenant/TenantDashboard";
 import TenantLeaseView from "./views/tenant/TenantLeaseView";
 import TenantPaymentsView from "./views/tenant/TenantPaymentsView";
@@ -30,6 +32,7 @@ function App() {
       <div className="app-content">
         <Routes>
           <Route path="/" element={<HomeView />} />
+          <Route path="/signup" element={<SignupView />} />
           <Route path="/login" element={<LoginView />} />
           <Route path="/property" element={<PropertyView />} />
           <Route path="/area" element={<AreaView />} />
@@ -42,6 +45,7 @@ function App() {
           <Route path="/tenant/notices" element={<ProtectedRoute role="tenant"><TenantNoticesView /></ProtectedRoute>} />
 
           <Route path="/landlord" element={<ProtectedRoute role="landlord"><LandlordDashboard /></ProtectedRoute>} />
+          <Route path="/create-property" element={<CreatePropertyView />} />
           <Route path="/landlord/units" element={<ProtectedRoute role="landlord"><LandlordUnitsView /></ProtectedRoute>} />
           <Route path="/landlord/tickets" element={<ProtectedRoute role="landlord"><LandlordTicketsView /></ProtectedRoute>} />
           <Route path="/landlord/payments" element={<ProtectedRoute role="landlord"><LandlordPaymentsView /></ProtectedRoute>} />

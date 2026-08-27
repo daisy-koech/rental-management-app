@@ -1,5 +1,29 @@
 const API_URL = "https://rental-management-app-api.onrender.com";
 
+export async function register(name, email, password, role) {
+  const response = await fetch(`${API_URL}/signup`, {   // <-- changed from /register
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      name,
+      email,
+      password,
+      role,
+    }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Registration failed");
+  }
+
+  return data;
+}
+
 export async function login(email, password) {
   const response = await fetch(`${API_URL}/login`, {
     method: "POST",
@@ -33,6 +57,30 @@ export async function checkSession() {
   }
 
   return response.json();
+}
+
+export async function createProperty(name, location, latitude, longitude) {
+  const response = await fetch(`${API_URL}/property`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      name,
+      location,
+      latitude,
+      longitude,
+    }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Failed to create property");
+  }
+
+  return data;
 }
 
 export async function getLandlordProperty() {

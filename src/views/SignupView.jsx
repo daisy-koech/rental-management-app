@@ -1,26 +1,26 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../services/api";
+import { register } from "../services/api";
 import "./LoginView.css";
 
-function LoginView() {
+function SignupView() {
   const navigate = useNavigate();
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("tenant");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(event) {
     event.preventDefault();
-    console.log("EMAIL:", JSON.stringify(email));
-    console.log("PASSWORD:", JSON.stringify(password));
 
     setError("");
     setLoading(true);
 
     try {
-      const user = await login(email, password);
+      const user = await register(name, email, password, role);
       localStorage.setItem("user", JSON.stringify(user));
 
       if (user.role === "landlord") {
@@ -40,13 +40,24 @@ function LoginView() {
   return (
     <div className="login-view">
       <div className="login-card">
-        <span className="login-eyebrow">WELCOME BACK</span>
-        <h1>Sign in to Cedar Court</h1>
+        <span className="login-eyebrow">JOIN US</span>
+        <h1>Create your Cedar Court account</h1>
         <p className="login-subtitle">
-          Enter your details to reach your dashboard.
+          Sign up to access your dashboard.
         </p>
 
         <form onSubmit={handleSubmit} className="login-form">
+          <div className="login-field">
+            <label htmlFor="name">Full name</label>
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              required
+            />
+          </div>
+
           <div className="login-field">
             <label htmlFor="email">Email</label>
             <input
@@ -69,6 +80,19 @@ function LoginView() {
             />
           </div>
 
+          <div className="login-field">
+            <label htmlFor="role">I am a</label>
+            <select
+              id="role"
+              value={role}
+              onChange={(event) => setRole(event.target.value)}
+              className="login-select"
+            >
+              <option value="tenant">Tenant</option>
+              <option value="landlord">Landlord</option>
+            </select>
+          </div>
+
           {error && <p className="login-error">{error}</p>}
 
           <button
@@ -76,14 +100,16 @@ function LoginView() {
             className="btn-primary login-submit"
             disabled={loading}
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Creating account..." : "Sign Up"}
           </button>
         </form>
-        <p className="login-switch">Don't have an account? <a href="/signup">Sign up</a></p>
+
+        <p className="login-switch">
+          Already have an account? <a href="/login">Log in</a>
+        </p>
       </div>
     </div>
   );
 }
 
-export default LoginView;
-
+export default SignupView;
