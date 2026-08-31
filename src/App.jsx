@@ -26,6 +26,7 @@ import LandlordTicketsView from "./views/landlord/LandlordTicketsView";
 import LandlordPaymentsView from "./views/landlord/LandlordPaymentsView";
 import LandlordLeasesView from "./views/landlord/LandlordLeasesView";
 import LandlordNoticesView from "./views/landlord/LandlordNoticesView";
+import LandlordEndOfStayView from "./views/landlord/LandlordEndOfStayView";
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
           <Route path="/landlord/payments" element={<ProtectedRoute role="landlord"><LandlordPaymentsView /></ProtectedRoute>} />
           <Route path="/landlord/leases" element={<ProtectedRoute role="landlord"><LandlordLeasesView /></ProtectedRoute>} />
           <Route path="/landlord/notices" element={<ProtectedRoute role="landlord"><LandlordNoticesView /></ProtectedRoute>} />
+          <Route path="/landlord/end-of-stay" element={<ProtectedRoute role="landlord"><LandlordEndOfStayView /></ProtectedRoute>}/>
         </Routes>
       </div>
     </BrowserRouter>

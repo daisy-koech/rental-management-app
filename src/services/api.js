@@ -215,13 +215,49 @@ export async function deleteLandlordUnit(unitId) {
     } catch {
       // DELETE may return an empty 204 response
     }
-
     throw new Error(
       data.error || "Failed to delete unit"
     );
   }
 
   return true;
+}
+
+export async function getLandlordEndOfStay() {
+  const response = await fetch(`${API_URL}/property/end-of-stay`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Failed to load end of stay requests");
+  }
+
+  return data.end_of_stays;
+}
+
+export async function updateEndOfStay(endOfStayId, status) {
+  const response = await fetch(
+    `${API_URL}/property/end-of-stay/${endOfStayId}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ status }),
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Failed to update end of stay request");
+  }
+
+  return data;
 }
 
 export async function getLandlordLeases() {
