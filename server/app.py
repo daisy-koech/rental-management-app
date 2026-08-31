@@ -10,7 +10,8 @@ def create_app():
 
     app.config.from_object(Config)
 
-    CORS(app, supports_credentials=True, origins=["https://rental-management-kenya.vercel.app"])
+    CORS(app, supports_credentials=True, origins=["https://rental-management-kenya.vercel.app",
+                                                  "http://localhost:5173"])
 
     db.init_app(app)
     migrate.init_app(app, db)

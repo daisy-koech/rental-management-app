@@ -11,6 +11,7 @@ import "./LandlordUnitsView.css";
 
 const TABS = [
   { label: "Overview", to: "/landlord", end: true },
+  { label: "Property", to: "/landlord/property" },
   { label: "Units", to: "/landlord/units" },
   { label: "Maintenance", to: "/landlord/tickets" },
   { label: "Payments", to: "/landlord/payments" },

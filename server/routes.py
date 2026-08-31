@@ -241,6 +241,15 @@ def property_routes(app):
         return {
             "tenants": [tenant.to_dict() for tenant in tenants]
         }, 200
+
+    @app.route("/property/public", methods=["GET"])
+    def get_public_property():
+        PROPERTY = Property.query.first()
+
+        if not PROPERTY:
+            return {"error": "Property not found"}, 404
+
+        return PROPERTY.to_dict(), 200
         
     @app.route("/property/units", methods=["GET"])
     def get_units():

@@ -59,19 +59,14 @@ export async function checkSession() {
   return response.json();
 }
 
-export async function createProperty(name, location, latitude, longitude) {
+export async function createProperty(propertyData) {
   const response = await fetch(`${API_URL}/property`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify({
-      name,
-      location,
-      latitude,
-      longitude,
-    }),
+    body: JSON.stringify(propertyData),
   });
 
   const data = await response.json();
@@ -83,10 +78,43 @@ export async function createProperty(name, location, latitude, longitude) {
   return data;
 }
 
+export async function updateProperty(propertyData) {
+  const response = await fetch(`${API_URL}/property`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(propertyData),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Failed to update property");
+  }
+
+  return data;
+}
+
 export async function getLandlordProperty() {
   const response = await fetch(`${API_URL}/property`, {
     method: "GET",
     credentials: "include",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Failed to load property");
+  }
+
+  return data;
+}
+
+export async function getPublicProperty() {
+  const response = await fetch(`${API_URL}/property/public`, {
+    method: "GET",
   });
 
   const data = await response.json();

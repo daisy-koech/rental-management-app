@@ -74,6 +74,11 @@ class Property(db.Model):
         nullable=False
     )
 
+    image_url = db.Column(
+        db.String(500),
+        nullable=True
+        )
+
     landlord_id = db.Column(
         db.Integer,
         db.ForeignKey("users.id"),
@@ -94,8 +99,10 @@ class Property(db.Model):
             "location": self.location,
             "latitude": self.latitude,
             "longitude": self.longitude,
-            "landlord_id": self.landlord_id
+            "landlord_id": self.landlord_id,
+            "image_url": self.image_url,
         }
+
 class Unit(db.Model):
     __tablename__ = "units"
 

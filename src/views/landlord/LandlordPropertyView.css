@@ -1,0 +1,85 @@
+.landlord-property-view h1 {
+  margin: 0 0 1rem;
+  font-size: 1.6rem;
+  color: var(--color-text);
+}
+
+.error-message {
+  color: var(--color-danger);
+  margin-bottom: 1rem;
+}
+
+.property-empty-state {
+  padding: 2rem;
+  background-color: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.property-empty-state p {
+  margin: 0 0 1rem;
+  color: var(--color-text-muted);
+}
+
+.property-summary-card {
+  display: flex;
+  gap: 1.5rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.property-summary-image {
+  width: 220px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.property-summary-details h2 {
+  margin: 0 0 0.35rem;
+  color: var(--color-text);
+}
+
+.property-summary-location {
+  margin: 0 0 0.25rem;
+  color: var(--color-text-muted);
+}
+
+.property-summary-coords {
+  margin: 0 0 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.property-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  max-width: 520px;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
