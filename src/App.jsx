@@ -20,6 +20,7 @@ import MaintenanceView from "./views/tenant/MaintenanceView";
 import TenantNoticesView from "./views/tenant/TenantNoticesView";
 
 import LandlordDashboard from "./views/landlord/LandlordDashboard";
+import LandlordPropertyView from "./views/landlord/LandlordPropertyView";
 import LandlordUnitsView from "./views/landlord/LandlordUnitsView";
 import LandlordTicketsView from "./views/landlord/LandlordTicketsView";
 import LandlordPaymentsView from "./views/landlord/LandlordPaymentsView";
@@ -47,6 +48,7 @@ function App() {
           <Route path="/tenant/notices" element={<ProtectedRoute role="tenant"><TenantNoticesView /></ProtectedRoute>} />
 
           <Route path="/landlord" element={<ProtectedRoute role="landlord"><LandlordDashboard /></ProtectedRoute>} />
+          <Route path="/landlord/property" element={<ProtectedRoute role="landlord"><LandlordPropertyView /></ProtectedRoute>}/>
           <Route path="/create-property" element={<ProtectedRoute role="landlord"><CreatePropertyView /></ProtectedRoute>} />
           <Route path="/landlord/units" element={<ProtectedRoute role="landlord"><LandlordUnitsView /></ProtectedRoute>} />
           <Route path="/landlord/tickets" element={<ProtectedRoute role="landlord"><LandlordTicketsView /></ProtectedRoute>} />
