@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getLandlordProperty } from "../services/api";
+import { getPublicProperty } from "../services/api";
 import "./PropertyView.css";
 
 function PropertyView() {
@@ -8,10 +8,10 @@ function PropertyView() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    getLandlordProperty()
-      .then(setProperty)
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+    getPublicProperty()
+    .then(setProperty)
+    .catch((err) => setError(err.message))
+    .finally(() => setLoading(false));
   }, []);
 
   if (loading) {

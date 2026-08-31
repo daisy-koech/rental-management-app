@@ -77,8 +77,6 @@ function LandlordPropertyView() {
       location: location.trim(),
       latitude: Number(latitude),
       longitude: Number(longitude),
-      // Harmless to send even before the backend supports it —
-      // Flask will just ignore the extra key until the column exists.
       image_url: imageUrl.trim() || null,
     };
 
@@ -206,9 +204,7 @@ function LandlordPropertyView() {
               onChange={(e) => setImageUrl(e.target.value)}
               placeholder="https://..."
             />
-            <p className="form-hint">
-              Won't be saved yet until the backend supports it. See the model note.
-            </p>
+            <p className="form-hint">Paste a direct image link (ending in .jpg, .png, etc). You can host photos for free on a service like Imgur or Cloudinary.</p>
           </div>
 
           <div className="form-actions">

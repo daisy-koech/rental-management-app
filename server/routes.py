@@ -115,6 +115,7 @@ def property_routes(app):
         location = data.get("location")
         latitude = data.get("latitude")
         longitude = data.get("longitude")
+        image_url = data.get("image_url")
 
         if not name or not location or latitude is None or longitude is None:
             return {
@@ -126,6 +127,7 @@ def property_routes(app):
             location=location,
             latitude=latitude,
             longitude=longitude,
+            image_url=image_url,
             landlord_id=user.id,
         )
 
@@ -193,36 +195,12 @@ def property_routes(app):
         if "longitude" in data:
             PROPERTY.longitude = data["longitude"]
 
+        if "image_url" in data:
+            PROPERTY.image_url = data["image_url"]
+
         db.session.commit()
 
         return PROPERTY.to_dict(), 200
-
-    @app.route("/property", methods=["DELETE"])
-    def delete_property():
-        user = get_current_user()
-        if not user:
-            return {"error": "Unauthorized"}, 401
-
-        if user.role != "landlord":
-            return {
-                "error": "Only landlords can delete the property"
-            }, 403
-
-        PROPERTY = Property.query.filter_by(
-            landlord_id=user.id
-        ).first()
-
-        if not PROPERTY:
-            return {"error": "Property not found"}, 404
-
-        if PROPERTY.units:
-            return {
-                "error": "Cannot delete property while it has units"
-            }, 409
-
-        db.session.delete(PROPERTY)
-        db.session.commit()
-        return {}, 204
 
     @app.route("/property/tenants", methods=["GET"])
     def get_tenants():
