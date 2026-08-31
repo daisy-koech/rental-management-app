@@ -15,6 +15,7 @@ const TABS = [
   { label: "Payments", to: "/landlord/payments" },
   { label: "Leases", to: "/landlord/leases" },
   { label: "Notices", to: "/landlord/notices" },
+  { label: "End of Stay", to: "/landlord/end-of-stay" },
 ];
 
 function LandlordPropertyView() {
