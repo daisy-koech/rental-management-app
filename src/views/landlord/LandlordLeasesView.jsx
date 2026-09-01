@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   getLandlordLeases,
   getLandlordTenants,
+  getLandlordUnits,
   createLandlordLease,
   updateLandlordLease,
   deleteLandlordLease,
@@ -32,6 +33,7 @@ const EMPTY_FORM = {
 function LandlordLeasesView() {
   const [leases, setLeases] = useState([]);
   const [tenants, setTenants] = useState([]);
+  const [units, setUnits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -44,6 +46,7 @@ function LandlordLeasesView() {
   useEffect(() => {
     loadLeases();
     loadTenants();
+    loadUnits();
   }, []);
 
   async function loadLeases() {
@@ -64,6 +67,15 @@ function LandlordLeasesView() {
     try {
       const data = await getLandlordTenants();
       setTenants(data);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  async function loadUnits() {
+    try {
+      const data = await getLandlordUnits();
+      setUnits(data);
     } catch (err) {
       setError(err.message);
     }
@@ -148,6 +160,10 @@ function LandlordLeasesView() {
           newLease,
           ...currentLeases,
         ]);
+
+        // A unit that just got leased is no longer vacant —
+        // refresh so the dropdown reflects that immediately.
+        loadUnits();
       }
 
       closeForm();
@@ -178,6 +194,9 @@ function LandlordLeasesView() {
             currentLease.id !== lease.id
         )
       );
+
+      // Deleting a lease frees up its unit again.
+      loadUnits();
     } catch (err) {
       setError(err.message);
     }
@@ -285,17 +304,30 @@ function LandlordLeasesView() {
               ))}
             </select>
 
-            <label htmlFor="unit_id">Unit ID</label>
+            <label htmlFor="unit_id">Unit</label>
 
-            <input
+            <select
               id="unit_id"
               name="unit_id"
-              type="number"
               value={form.unit_id}
               onChange={handleChange}
               required
               disabled={Boolean(editingLease)}
-            />
+            >
+              <option value="">Select a unit</option>
+              {units
+                .filter(
+                  (unit) =>
+                    unit.status === "vacant" ||
+                    unit.id === Number(form.unit_id)
+                )
+                .map((unit) => (
+                  <option key={unit.id} value={unit.id}>
+                    {unit.unit_number} — KSh{" "}
+                    {Number(unit.monthly_rent).toLocaleString()}
+                  </option>
+                ))}
+            </select>
 
             <label htmlFor="start_date">Start date</label>
 
