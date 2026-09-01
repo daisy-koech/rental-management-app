@@ -1266,67 +1266,14 @@ def property_routes(app):
 
         return {
             "end_of_stays": [
-                end_of_stay.to_dict()
+                {
+                    **end_of_stay.to_dict(),
+                    "unit_number": end_of_stay.lease.unit.unit_number,
+                    "tenant_name": end_of_stay.lease.tenant.name,
+                }
                 for end_of_stay in end_of_stays
             ]
         }, 200
-
-    @app.route("/property/end-of-stay/<int:end_of_stay_id>", methods=["PATCH"])
-    def update_end_of_stay(end_of_stay_id):
-        user = get_current_user()
-
-        if not user:
-            return {"error": "Unauthorized"}, 401
-
-        if user.role != "landlord":
-            return {
-                "error": "Only landlords can update end of stay forms"
-            }, 403
-
-        PROPERTY = Property.query.filter_by(
-            landlord_id=user.id
-        ).first()
-
-        if not PROPERTY:
-            return {"error": "Property not found"}, 404
-
-        end_of_stay = (
-            EndOfStay.query
-            .join(Lease, EndOfStay.lease_id == Lease.id)
-            .join(Unit, Lease.unit_id == Unit.id)
-            .filter(
-                EndOfStay.id == end_of_stay_id,
-                Unit.property_id == PROPERTY.id
-            )
-            .first()
-        )
-
-        if not end_of_stay:
-            return {
-                "error": "End of stay form not found"
-            }, 404
-
-        data = request.get_json() or {}
-
-        if "status" not in data:
-            return {
-                "error": "Status is required"
-            }, 400
-
-        if data["status"] not in [
-            "submitted",
-            "reviewed",
-            "completed"
-        ]:
-            return {
-                "error": "Status must be submitted, reviewed, or completed"
-            }, 400
-
-        end_of_stay.status = data["status"]
-
-        db.session.commit()
-
-        return end_of_stay.to_dict(), 200
 
 
 def register_routes(app):

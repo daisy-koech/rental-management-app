@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getLandlordEndOfStay, updateEndOfStay } from "../../services/api";
 import DashboardTabs from "../../components/DashboardTabs";
-import "./LandlordPropertyView.css";
+import "./LandlordEndOfStayView.css";
 
 const TABS = [
   { label: "Overview", to: "/landlord", end: true },
@@ -45,7 +45,7 @@ function LandlordEndOfStayView() {
   }
 
   return (
-    <div className="landlord-property-view">
+    <div className="landlord-eos-view">
       <h1>End of Stay Requests</h1>
       <DashboardTabs tabs={TABS} />
 
@@ -54,19 +54,41 @@ function LandlordEndOfStayView() {
       {loading && <p>Loading requests...</p>}
 
       {!loading && requests.length === 0 && (
-        <p>No end of stay requests yet.</p>
+        <p className="eos-empty">No end of stay requests yet.</p>
       )}
 
-      {!loading &&
-        requests.map((request) => (
-          <div key={request.id} className="property-summary-card">
-            <div className="property-summary-details">
-              <h2>Move-out: {request.move_out_date}</h2>
-              <p>Reason: {request.reason || "Not specified"}</p>
-              {request.notes && <p>Notes: {request.notes}</p>}
-              <p>Status: {request.status}</p>
+      {!loading && (
+        <div className="eos-list">
+          {requests.map((request) => (
+            <div key={request.id} className="eos-card">
+              <div className="eos-card-header">
+                <span className="eos-unit">Unit {request.unit_number}</span>
+                <span className={`eos-status eos-status-${request.status}`}>
+                  {request.status}
+                </span>
+              </div>
+
+              <p className="eos-tenant">{request.tenant_name}</p>
+
+              <div className="eos-details">
+                <div>
+                  <span className="eos-label">Move-out date</span>
+                  <span className="eos-value">{request.move_out_date}</span>
+                </div>
+                <div>
+                  <span className="eos-label">Reason</span>
+                  <span className="eos-value">
+                    {request.reason || "Not specified"}
+                  </span>
+                </div>
+              </div>
+
+              {request.notes && (
+                <p className="eos-notes">{request.notes}</p>
+              )}
 
               <select
+                className="eos-select"
                 value={request.status}
                 onChange={(e) =>
                   handleStatusChange(request.id, e.target.value)
@@ -77,8 +99,9 @@ function LandlordEndOfStayView() {
                 <option value="completed">Completed</option>
               </select>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+      )}
     </div>
   );
 }
