@@ -1,7 +1,22 @@
+.eos-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 0.5rem;
+}
+
 .landlord-eos-view h1 {
-  margin: 0 0 1rem;
-  font-size: 1.6rem;
+  margin: 0 0 0.25rem;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.7rem;
   color: var(--color-text);
+}
+
+.eos-subtitle {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
 }
 
 .error-message {
@@ -9,9 +24,81 @@
   margin-bottom: 1rem;
 }
 
+.eos-loading {
+  color: var(--color-text-muted);
+}
+
+.eos-filters {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1.25rem 0 1.5rem;
+  flex-wrap: wrap;
+}
+
+.eos-filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-white);
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+
+.eos-filter-pill:hover {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.eos-filter-pill.active {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.eos-filter-count {
+  font-size: 0.75rem;
+  font-weight: 700;
+  background-color: rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  padding: 0.05rem 0.45rem;
+}
+
+.eos-filter-pill.active .eos-filter-count {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
 .eos-empty {
   color: var(--color-text-muted);
   font-size: 0.9rem;
+}
+
+.eos-empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-muted);
+}
+
+.eos-empty-state p {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.eos-empty-state span {
+  font-size: 0.88rem;
+}
+
+.eos-empty-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
 }
 
 .eos-list {
@@ -21,30 +108,77 @@
 }
 
 .eos-card {
-  background-color: var(--color-surface);
+  background-color: var(--color-white);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  padding: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  transition: box-shadow 0.2s ease;
 }
 
-.eos-card-header {
+.eos-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.eos-card-main {
+  display: flex;
+  gap: 1rem;
+}
+
+.eos-avatar {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.eos-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.eos-card-top {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.6rem;
 }
 
-.eos-unit {
+.eos-tenant-name {
+  display: block;
   font-weight: 700;
   color: var(--color-text);
+  font-size: 1rem;
+}
+
+.eos-unit-tag {
+  display: inline-block;
+  margin-top: 0.15rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.eos-unit-tag::before {
+  content: "•";
+  margin-right: 0.4rem;
+  color: var(--color-border);
 }
 
 .eos-status {
+  flex-shrink: 0;
   padding: 0.25rem 0.65rem;
   border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 700;
   text-transform: capitalize;
 }
 
@@ -63,42 +197,79 @@
   color: var(--color-success);
 }
 
-.eos-tenant {
-  margin: 0 0 0.75rem;
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-}
-
 .eos-details {
   display: flex;
-  gap: 2rem;
+  gap: 2.5rem;
   margin-bottom: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .eos-label {
   display: block;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--color-text-muted);
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.25rem;
 }
 
 .eos-value {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--color-text);
+  font-size: 0.94rem;
+}
+
+.eos-countdown {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+}
+
+.eos-countdown-normal {
+  background-color: var(--color-background);
+  color: var(--color-text-muted);
+}
+
+.eos-countdown-soon {
+  background-color: rgba(212, 160, 23, 0.15);
+  color: var(--color-warning);
+}
+
+.eos-countdown-overdue {
+  background-color: rgba(185, 74, 72, 0.12);
+  color: var(--color-danger);
 }
 
 .eos-notes {
-  margin: 0 0 0.75rem;
-  padding: 0.75rem;
+  margin: 0.5rem 0 0;
+  padding: 0.7rem 0.9rem;
   background-color: var(--color-background);
   border-radius: var(--radius-sm);
   color: var(--color-text-muted);
   font-size: 0.88rem;
 }
 
+.eos-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.eos-card-footer label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
 .eos-select {
-  padding: 0.5rem 0.75rem;
+  padding: 0.45rem 0.7rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   color: var(--color-text);
