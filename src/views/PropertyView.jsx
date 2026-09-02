@@ -9,9 +9,9 @@ function PropertyView() {
 
   useEffect(() => {
     getPublicProperty()
-    .then(setProperty)
-    .catch((err) => setError(err.message))
-    .finally(() => setLoading(false));
+      .then(setProperty)
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) {
@@ -45,40 +45,39 @@ function PropertyView() {
         )}
 
         <div className="property-hero-content">
-          <span className="property-eyebrow">WELCOME HOME</span>
+          <span className="property-eyebrow">STEP INSIDE</span>
           <h1>{property.name}</h1>
           <p className="property-address">{property.location}</p>
           <p className="property-hero-description">
-            A comfortable residential community designed for
-            everyday living, with everything you need close to home.
+            A residential property with more attention paid to the
+            details than the address alone lets on.
           </p>
         </div>
       </section>
 
       {/* About the property */}
       <section className="property-introduction">
-        <div className="property-section-label">ABOUT THE PROPERTY</div>
+        <div className="property-section-label">THE PLACE ITSELF</div>
 
         <div className="property-introduction-content">
           <div>
             <h2>
-              A place that feels
+              Built for living,
               <br />
-              like home.
+              not just leasing.
             </h2>
           </div>
 
           <div>
             <p>
-              {property.name} brings together comfortable homes,
-              a welcoming environment and the convenience of
-              having the essentials of everyday life within reach.
+              {property.name} isn't trying to be flashy. It's trying to
+              be somewhere you don't mind coming back to at the end of
+              a long day.
             </p>
             <p>
-              Whether you are looking for your first home,
-              somewhere closer to work or simply a place where
-              you can settle down, {property.name} offers a practical
-              space to make your own.
+              If you're looking, or you already live here, this page is
+              the honest version: where it is, what's around, and who
+              to talk to about the rest.
             </p>
           </div>
         </div>
@@ -87,37 +86,36 @@ function PropertyView() {
       {/* Property facts */}
       <section className="property-facts-section">
         <div className="property-section-label">
-          {property.name.toUpperCase()} AT A GLANCE
+          {property.name.toUpperCase()}, IN BRIEF
         </div>
 
-        <h2>Everything starts with a good place to live.</h2>
+        <h2>A few things worth knowing.</h2>
 
         <div className="property-facts">
           <div>
             <span className="fact-label">Location</span>
             <span className="fact-value">{property.location}</span>
-            <p>Conveniently located for everyday travel and errands.</p>
+            <p>Close enough to the essentials that you stop thinking about the commute.</p>
           </div>
 
           <div>
             <span className="fact-label">Community</span>
             <span className="fact-value">Residential</span>
-            <p>A comfortable setting for individuals and families.</p>
+            <p>Neighbours, not strangers passing through.</p>
           </div>
         </div>
       </section>
 
-      {/* Closing */}
       <section className="property-closing">
         <span>{property.name}</span>
         <h2>
-          Find your place.
+          This is the part where you
           <br />
-          Make it home.
+          stop scrolling and go see it.
         </h2>
         <p>
-          A comfortable home, a convenient location and a place
-          to build your everyday life.
+          An address is just information until you've stood in the
+          doorway. {property.name} is worth the trip.
         </p>
       </section>
     </div>
