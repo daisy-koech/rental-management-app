@@ -4,8 +4,7 @@
 
 .property-introduction h2,
 .property-facts-section h2,
-.location-section h2,
-.home-amenities h2,
+.property-details h2,
 .property-closing h2 {
   font-family: var(--font-display);
   font-weight: 500;
@@ -57,7 +56,11 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(18, 53, 36, 0.1) 0%, rgba(18, 53, 36, 0.85) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(18, 53, 36, 0.08) 0%,
+    rgba(18, 53, 36, 0.9) 100%
+  );
 }
 
 .property-hero-content {
@@ -78,7 +81,7 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--color-accent-light);
-  background-color: rgba(18, 53, 36, 0.55);
+  background-color: rgba(18, 53, 36, 0.65);
   padding: 0.35rem 0.85rem;
   border-radius: 999px;
   margin-bottom: 0.9rem;
@@ -88,30 +91,19 @@
   font-family: var(--font-display);
   font-weight: 500;
   font-size: clamp(2rem, 4vw, 2.9rem);
-  margin: 0 0 0.5rem;
-}
-
-.property-address {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
   margin: 0 0 0.75rem;
-  font-size: 1rem;
-  color: rgba(245, 245, 242, 0.9);
-}
-
-.property-address svg {
-  color: var(--color-accent-light);
+  color: var(--color-white);
 }
 
 .property-hero-description {
   margin: 0;
-  max-width: 460px;
-  color: rgba(245, 245, 242, 0.8);
-  line-height: 1.6;
+  max-width: 520px;
+  color: rgba(245, 245, 242, 0.86);
+  line-height: 1.7;
+  font-size: 1rem;
 }
 
-/* ---------- About ---------- */
+/* ---------- Introduction ---------- */
 
 .property-introduction {
   padding: 3rem 0;
@@ -132,24 +124,25 @@
 }
 
 .intro-icon {
-  color: var(--color-primary);
+  color: var(--color-accent);
   flex-shrink: 0;
   margin-top: 0.15rem;
 }
 
 .property-introduction-content h2 {
-  font-size: 1.7rem;
+  font-size: 1.9rem;
   line-height: 1.25;
   margin: 0;
 }
 
 .property-introduction-content p {
   color: var(--color-text-muted);
-  line-height: 1.7;
+  line-height: 1.75;
   margin: 0 0 1rem;
+  max-width: 620px;
 }
 
-/* ---------- Property details cards ---------- */
+/* ---------- Property details ---------- */
 
 .property-facts-section {
   padding: 3.5rem 0;
@@ -157,71 +150,92 @@
 }
 
 .property-facts-section h2 {
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   margin: 0.25rem 0 2rem;
+  max-width: 560px;
 }
 
 .property-facts {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
 }
 
 .fact-card {
+  min-height: 190px;
   padding: 1.75rem;
   border-radius: var(--radius-md);
   background-color: var(--color-white);
   border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.fact-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .fact-icon {
   color: var(--color-accent);
-  margin-bottom: 0.75rem;
-}
-
-.fact-card-filled {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
-}
-
-.fact-card-filled .fact-icon {
-  color: var(--color-accent-light);
-}
-
-.fact-card-filled .fact-label,
-.fact-card-filled .fact-value {
-  color: var(--color-white) !important;
+  margin-bottom: 0.9rem;
 }
 
 .fact-label {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   color: var(--color-text-muted);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.45rem;
 }
 
 .fact-value {
   display: block;
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   color: var(--color-primary);
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.65rem;
 }
 
 .fact-card p {
   margin: 0;
   color: var(--color-text-muted);
   font-size: 0.92rem;
-  line-height: 1.55;
+  line-height: 1.6;
+  max-width: 400px;
+}
+
+/* ---------- Manager card ---------- */
+
+.fact-card-filled {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.fact-card-filled:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.fact-card-filled .fact-icon {
+  color: var(--color-accent);
+}
+
+.fact-card-filled .fact-label {
+  color: var(--color-accent-light);
+}
+
+.fact-card-filled .fact-value {
+  color: var(--color-white);
 }
 
 .fact-contact {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 0.4rem;
+  gap: 0.55rem;
+  margin-top: 0.35rem;
 }
 
 .fact-contact a {
@@ -234,7 +248,7 @@
 }
 
 .fact-contact a svg {
-  color: var(--color-accent-light);
+  color: var(--color-accent);
   flex-shrink: 0;
 }
 
@@ -242,75 +256,38 @@
   color: var(--color-accent-light);
 }
 
-/* ---------- Location ---------- */
+/* ---------- Living here ---------- */
 
-.location-section {
+.property-details {
   display: grid;
-  grid-template-columns: 0.85fr 1.15fr;
+  grid-template-columns: 1fr 1.4fr;
   gap: 3rem;
-  align-items: center;
   padding: 3.5rem 0;
   border-bottom: 1px solid var(--color-border);
 }
 
-.location-section h2 {
-  margin: 0 0 0.5rem;
-  font-size: 1.6rem;
-}
-
-.location-address {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-weight: 600;
-  color: var(--color-primary) !important;
-  margin-top: 0.5rem !important;
-}
-
-.location-address svg {
-  color: var(--color-accent);
-}
-
-.home-map-container {
-  width: 100%;
-  height: 300px;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  border: 3px solid var(--color-primary);
-}
-
-.home-map-container .leaflet-container {
-  width: 100%;
-  height: 100%;
-}
-
-/* ---------- Nearby ---------- */
-
-.home-amenities {
-  padding: 3.5rem 0;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.amenities-heading {
-  max-width: 520px;
-  margin-bottom: 1.75rem;
-}
-
-.amenities-heading h2 {
-  margin: 0 0 0.4rem;
-  font-size: 1.6rem;
-}
-
-.amenities-heading p {
+.property-details-heading h2 {
   margin: 0;
-  color: var(--color-text-muted);
+  font-size: 1.9rem;
+  line-height: 1.25;
 }
 
-.home-amenities-list {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.1rem;
+.property-details-copy {
+  padding-top: 0.25rem;
 }
+
+.property-details-copy p {
+  margin: 0 0 1.1rem;
+  color: var(--color-text-muted);
+  line-height: 1.75;
+  max-width: 620px;
+}
+
+.property-details-copy p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Contact ---------- */
 
 .property-closing {
   padding: 3.5rem 2.5rem;
@@ -331,15 +308,15 @@
 
 .property-closing h2 {
   color: var(--color-white) !important;
-  font-size: clamp(1.6rem, 3vw, 2rem);
-  margin: 0 0 1rem;
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+  margin: 0 0 0.9rem;
   max-width: 520px;
 }
 
 .property-closing p {
-  color: rgba(245, 245, 242, 0.85);
-  max-width: 460px;
-  line-height: 1.65;
+  color: rgba(245, 245, 242, 0.86);
+  max-width: 540px;
+  line-height: 1.7;
   margin: 0 0 1.75rem;
 }
 
@@ -358,7 +335,11 @@
   border-radius: var(--radius-md);
   font-weight: 600;
   font-size: 0.92rem;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease;
 }
 
 .btn-cta-primary {
@@ -368,6 +349,7 @@
 
 .btn-cta-primary:hover {
   background-color: var(--color-accent-light);
+  transform: translateY(-1px);
 }
 
 .btn-cta-secondary {
@@ -379,27 +361,76 @@
 .btn-cta-secondary:hover {
   border-color: var(--color-accent-light);
   color: var(--color-accent-light);
+  transform: translateY(-1px);
 }
+
+/* ---------- Empty state ---------- */
 
 .empty-text {
   color: var(--color-text-muted);
 }
 
+/* ---------- Responsive ---------- */
+
 @media (max-width: 800px) {
   .property-introduction-content,
-  .property-facts,
-  .location-section {
+  .property-details {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .property-facts {
     grid-template-columns: 1fr;
   }
+
   .property-hero {
     height: 380px;
   }
+
   .property-hero-content {
     padding: 2rem 1.5rem;
   }
+
   .property-closing {
     padding: 2.5rem 1.5rem;
   }
 }
+
+@media (max-width: 500px) {
+  .property-hero {
+    height: 340px;
+    margin-bottom: 2.5rem;
+  }
+
+  .property-hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .property-introduction,
+  .property-facts-section,
+  .property-details {
+    padding: 2.5rem 0;
+  }
+
+  .fact-card {
+    min-height: auto;
+    padding: 1.5rem;
+  }
+
+  .property-closing {
+    padding: 2rem 1.25rem;
+  }
+
+  .closing-contact {
+    flex-direction: column;
+  }
+
+  .btn-cta-primary,
+  .btn-cta-secondary {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
 
 
