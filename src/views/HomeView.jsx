@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { MapPin, Users, Home as HomeIcon, Wrench } from "lucide-react";
+import { MapPin, Users, Home as HomeIcon } from "lucide-react";
 import { getPublicProperty } from "../services/api";
 import { nearbyPlaces } from "../data/mockData";
 import AmenityCard from "../components/AmenityCard";
@@ -90,34 +90,25 @@ function HomeView() {
 
       {/* Who this is for */}
       <section className="audience-section">
-        <div className="audience-grid">
-          <div className="audience-card">
-            <MapPin size={20} className="audience-icon" />
-            <span className="audience-label">Visiting</span>
-            <p>
-              See the property's location and what's nearby before you
-              decide to rent.
-            </p>
-          </div>
-
-          <div className="audience-card audience-card-filled">
-            <Users size={20} className="audience-icon" />
-            <span className="audience-label">Tenants</span>
-            <p>
-              Check your lease, keep track of payments, and report
-              maintenance issues.
-            </p>
-          </div>
-
-          <div className="audience-card">
-            <Wrench size={20} className="audience-icon" />
-            <span className="audience-label">Landlords</span>
-            <p>
-              Manage units, tenants, rent and maintenance requests in
-              one place.
-            </p>
-          </div>
+      <div className="audience-grid">
+        <div className="audience-card">
+         <HomeIcon size={21} className="audience-icon" />
+         <span className="audience-label">VISITING</span>
+         <p>Explore the property, see where it is and find out what is nearby.</p>
         </div>
+
+        <div className="audience-card audience-card-filled">
+          <Users size={21} className="audience-icon" />
+          <span className="audience-label">TENANTS</span>
+          <p>View your lease, check payments and report anything that needs attention.</p>
+        </div>
+
+        <div className="audience-card">
+         <HomeIcon size={21} className="audience-icon" />
+         <span className="audience-label">LANDLORDS</span>
+         <p>Keep track of units, tenants, payments, repairs and property updates.</p>
+        </div>
+      </div>
       </section>
 
       {/* Property intro */}

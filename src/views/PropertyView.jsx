@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
 import {
   Home as HomeIcon,
-  MapPin,
   Building2,
   User,
   Mail,
   Phone,
+  Layers3,
 } from "lucide-react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { getPublicProperty } from "../services/api";
-import { nearbyPlaces } from "../data/mockData";
-import AmenityCard from "../components/AmenityCard";
 import "./PropertyView.css";
 
 const MANAGER = {
@@ -49,9 +46,6 @@ function PropertyView() {
     );
   }
 
-  const position = [property.latitude, property.longitude];
-  const hasCoordinates = property.latitude && property.longitude;
-
   return (
     <div className="property-view">
       {/* Hero */}
@@ -65,70 +59,102 @@ function PropertyView() {
         )}
 
         <div className="property-hero-content">
-          <span className="property-eyebrow">PROPERTY INFORMATION</span>
+          <span className="property-eyebrow">THE PROPERTY</span>
 
           <h1>{property.name}</h1>
 
-          <p className="property-address">
-            <MapPin size={16} />
-            {property.location}
-          </p>
-
           <p className="property-hero-description">
-            A residential property with convenient access to everyday
-            shops, services and transport.
+            A residential property designed for comfortable,
+            everyday living, with the important details kept simple.
           </p>
         </div>
       </section>
 
-      {/* About the property */}
+      {/* About */}
       <section className="property-introduction">
-        <div className="property-section-label">ABOUT THE PROPERTY</div>
+        <div className="property-section-label">A CLOSER LOOK</div>
 
         <div className="property-introduction-content">
           <div className="property-introduction-heading">
             <HomeIcon size={22} className="intro-icon" />
-            <h2>About {property.name}</h2>
+
+            <h2>
+              A place to live,
+              <br />
+              settle in and stay.
+            </h2>
           </div>
 
           <div>
             <p>
-              {property.name} is located in {property.location}. The
-              property is set up for day-to-day residential living, with
-              shops, services and transport links nearby.
+              {property.name} is a residential property in{" "}
+              {property.location}, made up of individual units for
+              tenants to call their own.
             </p>
+
             <p>
-              This page covers the basics — where the property is, what to
-              expect nearby, and who to contact if you have questions about
-              renting or visiting.
+              The focus is on comfortable homes and straightforward
+              day-to-day management. From tenancy details to property
+              maintenance, the things that matter are kept organised
+              and easy to access.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Property details cards */}
+      {/* Property details */}
       <section className="property-facts-section">
         <div className="property-section-label">PROPERTY DETAILS</div>
-        <h2>Key details</h2>
+
+        <h2>What makes up the property.</h2>
 
         <div className="property-facts">
           <div className="fact-card">
-            <MapPin size={20} className="fact-icon" />
-            <span className="fact-label">Location</span>
-            <span className="fact-value">{property.location}</span>
-            <p>Close to everyday shops, services and transport links.</p>
+            <Building2 size={20} className="fact-icon" />
+
+            <span className="fact-label">PROPERTY TYPE</span>
+
+            <span className="fact-value">Residential</span>
+
+            <p>
+              A residential property with individually managed
+              rental units.
+            </p>
           </div>
 
           <div className="fact-card">
-            <Building2 size={20} className="fact-icon" />
-            <span className="fact-label">Property type</span>
-            <span className="fact-value">Residential</span>
-            <p>A residential property with individually let units.</p>
+            <Layers3 size={20} className="fact-icon" />
+
+            <span className="fact-label">UNITS</span>
+
+            <span className="fact-value">
+              {property.number_of_units || "Multiple"}
+            </span>
+
+            <p>
+              Individual homes within the property, each with its
+              own tenancy and lease details.
+            </p>
+          </div>
+
+          <div className="fact-card">
+            <HomeIcon size={20} className="fact-icon" />
+
+            <span className="fact-label">TENANCY</span>
+
+            <span className="fact-value">Long-term rental</span>
+
+            <p>
+              Homes intended for residents looking for a place to
+              live rather than a short stay.
+            </p>
           </div>
 
           <div className="fact-card fact-card-filled">
             <User size={20} className="fact-icon" />
-            <span className="fact-label">Managed by</span>
+
+            <span className="fact-label">PROPERTY MANAGER</span>
+
             <span className="fact-value">{MANAGER.name}</span>
 
             <div className="fact-contact">
@@ -136,7 +162,10 @@ function PropertyView() {
                 <Mail size={15} />
                 {MANAGER.email}
               </a>
-              <a href={`tel:${MANAGER.phone.replace(/\s/g, "")}`}>
+
+              <a
+                href={`tel:${MANAGER.phone.replace(/\s/g, "")}`}
+              >
                 <Phone size={15} />
                 {MANAGER.phone}
               </a>
@@ -145,74 +174,62 @@ function PropertyView() {
         </div>
       </section>
 
-      {/* Location */}
-      {hasCoordinates && (
-        <section className="location-section">
-          <div className="location-heading">
-            <div className="property-section-label">LOCATION</div>
-            <h2>Where to find us</h2>
-            <p className="location-address">
-              <MapPin size={16} />
-              {property.location}
-            </p>
-          </div>
+      {/* Living here */}
+      <section className="property-details">
+        <div className="property-details-heading">
+          <span className="property-section-label">LIVING HERE</span>
 
-          <div className="home-map-container">
-            <MapContainer
-              center={position}
-              zoom={15}
-              scrollWheelZoom={false}
-            >
-              <TileLayer
-                attribution="&copy; OpenStreetMap contributors"
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <Marker position={position}>
-                <Popup>{property.name}</Popup>
-              </Marker>
-            </MapContainer>
-          </div>
-        </section>
-      )}
-
-      {/* Nearby */}
-      <section className="home-amenities">
-        <div className="amenities-heading">
-          <div className="property-section-label">NEARBY</div>
-          <h2>What's around the property</h2>
-          <p>
-            A look at some of the schools, shops, services and transport
-            options near {property.name}.
-          </p>
+          <h2>
+            The everyday details
+            <br />
+            matter.
+          </h2>
         </div>
 
-        <div className="home-amenities-list">
-          {nearbyPlaces.map((place) => (
-            <AmenityCard key={place.name} amenity={place} />
-          ))}
+        <div className="property-details-copy">
+          <p>
+            A good rental experience is about more than the home
+            itself. It is also about knowing where to find your
+            information and who to contact when something needs
+            attention.
+          </p>
+
+          <p>
+            At {property.name}, leases, payments, maintenance
+            requests and property updates are kept organised so
+            residents and management can stay informed without
+            having to search through old messages or paperwork.
+          </p>
         </div>
       </section>
 
       {/* Contact */}
       <section className="property-closing">
-        <span>QUESTIONS?</span>
-        <h2>Get in touch with the property manager</h2>
+        <span>PROPERTY MANAGEMENT</span>
+
+        <h2>Have a question?</h2>
+
         <p>
-          For questions about renting, viewing or anything else related to{" "}
-          {property.name}, contact {MANAGER.name} directly.
+          For questions about {property.name}, arranging a viewing,
+          renting a unit or anything else related to the property,
+          get in touch with the property manager.
         </p>
 
         <div className="closing-contact">
-          <a href={`mailto:${MANAGER.email}`} className="btn-cta-primary">
+          <a
+            href={`mailto:${MANAGER.email}`}
+            className="btn-cta-primary"
+          >
             <Mail size={16} />
-            {MANAGER.email}
+            Email {MANAGER.name}
           </a>
+
           <a
             href={`tel:${MANAGER.phone.replace(/\s/g, "")}`}
             className="btn-cta-secondary"
           >
             <Phone size={16} />
-            {MANAGER.phone}
+            Call {MANAGER.name}
           </a>
         </div>
       </section>
@@ -221,3 +238,4 @@ function PropertyView() {
 }
 
 export default PropertyView;
+
