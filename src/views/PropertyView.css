@@ -15,7 +15,7 @@
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: var(--color-accent);
+  color: var(--color-primary-light);
   margin-bottom: 0.75rem;
   position: relative;
   padding-bottom: 0.6rem;
@@ -27,8 +27,9 @@
   left: 0;
   bottom: 0;
   width: 2.5rem;
-  height: 2px;
-  background-color: var(--color-accent);
+  height: 3px;
+  border-radius: 2px;
+  background-color: var(--color-primary);
 }
 
 .property-hero {
@@ -37,6 +38,7 @@
   border-radius: var(--radius-lg);
   overflow: hidden;
   margin-bottom: 3.5rem;
+  border: 3px solid var(--color-primary);
 }
 
 .property-hero-image {
@@ -51,7 +53,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(32, 60, 49, 0.05) 0%, rgba(28, 28, 26, 0.75) 100%);
+  background: linear-gradient(180deg, rgba(18, 53, 36, 0.1) 0%, rgba(18, 53, 36, 0.85) 100%);
 }
 
 .property-hero-content {
@@ -72,6 +74,9 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--color-accent-light);
+  background-color: rgba(18, 53, 36, 0.55);
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
   margin-bottom: 0.9rem;
 }
 
@@ -83,9 +88,12 @@
 }
 
 .property-address {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   margin: 0 0 0.75rem;
   font-size: 1rem;
-  color: rgba(245, 245, 242, 0.85);
+  color: rgba(245, 245, 242, 0.9);
 }
 
 .property-hero-description {
@@ -105,6 +113,18 @@
   grid-template-columns: 1fr 1.4fr;
   gap: 3rem;
   margin-top: 1rem;
+}
+
+.property-introduction-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.intro-icon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+  margin-top: 0.3rem;
 }
 
 .property-introduction-content h2 {
@@ -132,18 +152,34 @@
 .property-facts {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0;
-  border-top: 1px solid var(--color-border);
+  gap: 1.5rem;
 }
 
-.property-facts > div {
-  padding: 1.75rem 2rem 1.75rem 0;
-  border-left: 1px solid var(--color-border);
+.fact-card {
+  padding: 1.75rem;
+  border-radius: var(--radius-md);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
 }
 
-.property-facts > div:first-child {
-  border-left: none;
-  padding-left: 0;
+.fact-card svg {
+  color: var(--color-primary);
+  margin-bottom: 0.75rem;
+}
+
+.fact-card-filled {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.fact-card-filled svg,
+.fact-card-filled .fact-label,
+.fact-card-filled .fact-value {
+  color: var(--color-white) !important;
+}
+
+.fact-card-filled p {
+  color: rgba(245, 245, 242, 0.85) !important;
 }
 
 .fact-label {
@@ -163,7 +199,7 @@
   margin-bottom: 0.6rem;
 }
 
-.property-facts p {
+.fact-card p {
   margin: 0;
   color: var(--color-text-muted);
   font-size: 0.92rem;
@@ -171,7 +207,11 @@
 }
 
 .property-closing {
-  padding: 4rem 0 2rem;
+  padding: 3.5rem 2.5rem;
+  margin: 1rem 0 2rem;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-primary);
+  color: var(--color-white);
 }
 
 .property-closing > span {
@@ -179,19 +219,19 @@
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.14em;
-  color: var(--color-accent);
+  color: var(--color-accent-light);
   margin-bottom: 1rem;
 }
 
 .property-closing h2 {
-  color: var(--color-text);
+  color: var(--color-white) !important;
   font-size: clamp(1.7rem, 3.2vw, 2.2rem);
   margin: 0 0 1rem;
   max-width: 540px;
 }
 
 .property-closing p {
-  color: var(--color-text-muted);
+  color: rgba(245, 245, 242, 0.85);
   max-width: 460px;
   line-height: 1.65;
   margin: 0;
@@ -206,19 +246,15 @@
   .property-facts {
     grid-template-columns: 1fr;
   }
-  .property-facts > div {
-    border-left: none;
-    border-top: 1px solid var(--color-border);
-    padding: 1.5rem 0;
-  }
-  .property-facts > div:first-child {
-    border-top: none;
-    padding-top: 0;
-  }
   .property-hero {
     height: 380px;
   }
   .property-hero-content {
     padding: 2rem 1.5rem;
   }
+  .property-closing {
+    padding: 2.5rem 1.5rem;
+  }
 }
+
+

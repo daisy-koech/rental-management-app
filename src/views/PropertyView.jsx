@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Home as HomeIcon, MapPin, Users } from "lucide-react";
 import { getPublicProperty } from "../services/api";
 import "./PropertyView.css";
 
@@ -45,39 +46,48 @@ function PropertyView() {
         )}
 
         <div className="property-hero-content">
-          <span className="property-eyebrow">STEP INSIDE</span>
+          <span className="property-eyebrow">PROPERTY INFORMATION</span>
+
           <h1>{property.name}</h1>
-          <p className="property-address">{property.location}</p>
+
+          <p className="property-address">
+            <MapPin size={15} />
+            {property.location}
+          </p>
+
           <p className="property-hero-description">
-            A residential property with more attention paid to the
-            details than the address alone lets on.
+            A comfortable residential property with the essentials close
+            at hand and the day-to-day details kept simple.
           </p>
         </div>
       </section>
 
       {/* About the property */}
       <section className="property-introduction">
-        <div className="property-section-label">THE PLACE ITSELF</div>
+        <div className="property-section-label">ABOUT THE PROPERTY</div>
 
         <div className="property-introduction-content">
-          <div>
+          <div className="property-introduction-heading">
+            <HomeIcon size={22} className="intro-icon" />
+
             <h2>
-              Built for living,
+              A place to live
               <br />
-              not just leasing.
+              and settle in.
             </h2>
           </div>
 
           <div>
             <p>
-              {property.name} isn't trying to be flashy. It's trying to
-              be somewhere you don't mind coming back to at the end of
-              a long day.
+              {property.name} is a residential property located in{" "}
+              {property.location}, with the everyday essentials within
+              reach.
             </p>
+
             <p>
-              If you're looking, or you already live here, this page is
-              the honest version: where it is, what's around, and who
-              to talk to about the rest.
+              Whether you're considering making it your home or already
+              live here, this page gives you the information you need about
+              the property and its surroundings.
             </p>
           </div>
         </div>
@@ -89,33 +99,50 @@ function PropertyView() {
           {property.name.toUpperCase()}, IN BRIEF
         </div>
 
-        <h2>A few things worth knowing.</h2>
+        <h2>The details at a glance.</h2>
 
         <div className="property-facts">
-          <div>
+          <div className="fact-card fact-card-filled">
+            <MapPin size={18} />
+
             <span className="fact-label">Location</span>
+
             <span className="fact-value">{property.location}</span>
-            <p>Close enough to the essentials that you stop thinking about the commute.</p>
+
+            <p>
+              Conveniently located with shops, services and other
+              everyday amenities nearby.
+            </p>
           </div>
 
-          <div>
-            <span className="fact-label">Community</span>
+          <div className="fact-card">
+            <Users size={18} />
+
+            <span className="fact-label">Property type</span>
+
             <span className="fact-value">Residential</span>
-            <p>Neighbours, not strangers passing through.</p>
+
+            <p>
+              A shared residential community with dedicated homes and
+              spaces for its tenants.
+            </p>
           </div>
         </div>
       </section>
 
+      {/* Closing */}
       <section className="property-closing">
         <span>{property.name}</span>
+
         <h2>
-          This is the part where you
+          A good place to call
           <br />
-          stop scrolling and go see it.
+          home.
         </h2>
+
         <p>
-          An address is just information until you've stood in the
-          doorway. {property.name} is worth the trip.
+          Find out more about the location, what's nearby and the
+          information available to residents.
         </p>
       </section>
     </div>
@@ -123,3 +150,4 @@ function PropertyView() {
 }
 
 export default PropertyView;
+

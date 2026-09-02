@@ -14,7 +14,7 @@
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: var(--color-accent);
+  color: var(--color-primary-light);
   margin-bottom: 0.6rem;
   position: relative;
   padding-bottom: 0.6rem;
@@ -27,8 +27,9 @@
   left: 0;
   bottom: 0;
   width: 2.5rem;
-  height: 2px;
-  background-color: var(--color-accent);
+  height: 3px;
+  border-radius: 2px;
+  background-color: var(--color-primary);
 }
 
 .hero {
@@ -67,27 +68,33 @@
   border-radius: var(--radius-md);
   font-weight: 600;
   font-size: 0.95rem;
-  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
 }
 
 .btn-primary {
   background-color: var(--color-primary);
   color: var(--color-white);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-primary:hover {
   background-color: var(--color-primary-light);
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
   background-color: transparent;
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
 }
 
 .btn-secondary:hover {
-  border-color: var(--color-accent);
-  color: var(--color-primary);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.hero-image {
+  position: relative;
 }
 
 .hero-image img {
@@ -95,26 +102,47 @@
   height: 340px;
   object-fit: cover;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
+  border: 3px solid var(--color-primary);
 }
 
-.audience-strip {
+.hero-image-tag {
+  position: absolute;
+  bottom: -1rem;
+  left: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+}
+
+.audience-band {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-  padding: 1.75rem 0;
-  margin-bottom: 1rem;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-lg);
+  padding: 2rem 1rem;
+  margin: 1rem 0 3rem;
+  box-shadow: var(--shadow-md);
 }
 
-.audience-strip > div {
+.audience-band > div {
   padding: 0 1.5rem;
-  border-left: 1px solid var(--color-border);
+  border-left: 1px solid rgba(245, 245, 242, 0.18);
 }
 
-.audience-strip > div:first-child {
+.audience-band > div:first-child {
   border-left: none;
-  padding-left: 0;
+}
+
+.audience-icon {
+  color: var(--color-accent-light);
+  margin-bottom: 0.5rem;
 }
 
 .audience-label {
@@ -122,18 +150,19 @@
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.1em;
-  color: var(--color-primary);
+  color: var(--color-accent-light);
   margin-bottom: 0.4rem;
 }
 
-.audience-strip p {
+.audience-band p {
   margin: 0;
-  color: var(--color-text-muted);
+  color: rgba(245, 245, 242, 0.9);
   font-size: 0.94rem;
+  line-height: 1.5;
 }
 
 .property-intro {
-  padding: 3.5rem 0;
+  padding: 3rem 0;
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -158,8 +187,8 @@
 }
 
 .text-link:hover {
-  color: var(--color-accent);
-  border-bottom-color: var(--color-accent);
+  color: var(--color-primary-light);
+  border-bottom-color: var(--color-primary-light);
 }
 
 .location-section {
@@ -167,7 +196,7 @@
   grid-template-columns: 0.85fr 1.15fr;
   gap: 3rem;
   align-items: center;
-  padding: 3.5rem 0;
+  padding: 3rem 0;
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -176,15 +205,18 @@
   font-size: 1.6rem;
 }
 
-.location-section > .location-heading > p {
+.location-section .location-heading > p {
   margin: 0;
   color: var(--color-text-muted);
 }
 
 .location-address {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   font-weight: 600;
   color: var(--color-primary) !important;
-  margin-top: 0.4rem !important;
+  margin-top: 0.5rem !important;
 }
 
 .home-map-container {
@@ -192,7 +224,7 @@
   height: 300px;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 1px solid var(--color-border);
+  border: 3px solid var(--color-primary);
 }
 
 .home-map-container .leaflet-container {
@@ -200,10 +232,8 @@
   height: 100%;
 }
 
-/* ---------- Amenities ---------- */
-
 .home-amenities {
-  padding: 3.5rem 0;
+  padding: 3rem 0;
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -229,20 +259,62 @@
 }
 
 .home-cta {
-  padding: 4rem 0 3rem;
-  text-align: left;
+  padding: 3.5rem 2.5rem;
+  margin: 1rem 0 2rem;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.cta-eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--color-accent-light);
+  margin-bottom: 0.8rem;
 }
 
 .home-cta h2 {
-  margin: 0 0 0.5rem;
+  color: var(--color-white) !important;
+  margin: 0 0 0.6rem;
   font-size: 1.8rem;
   max-width: 480px;
 }
 
 .home-cta p {
   margin: 0 0 1.5rem;
-  color: var(--color-text-muted);
+  color: rgba(245, 245, 242, 0.85);
   max-width: 480px;
+}
+
+.btn-cta-primary,
+.btn-cta-secondary {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-cta-primary {
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+}
+
+.btn-cta-primary:hover {
+  background-color: var(--color-accent-light);
+}
+
+.btn-cta-secondary {
+  background-color: transparent;
+  color: var(--color-white);
+  border: 1.5px solid rgba(245, 245, 242, 0.4);
+}
+
+.btn-cta-secondary:hover {
+  border-color: var(--color-white);
 }
 
 @media (min-width: 700px) {
@@ -256,18 +328,24 @@
   .location-section {
     grid-template-columns: 1fr;
   }
-  .audience-strip {
+  .audience-band {
     grid-template-columns: 1fr;
     gap: 1.25rem;
   }
-  .audience-strip > div {
+  .audience-band > div {
     border-left: none;
     padding-left: 0;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid rgba(245, 245, 242, 0.18);
     padding-top: 1rem;
   }
-  .audience-strip > div:first-child {
+  .audience-band > div:first-child {
     border-top: none;
     padding-top: 0;
   }
+  .home-cta {
+    padding: 2.5rem 1.5rem;
+  }
 }
+
+
+
