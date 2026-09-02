@@ -4,6 +4,8 @@
 
 .property-introduction h2,
 .property-facts-section h2,
+.location-section h2,
+.home-amenities h2,
 .property-closing h2 {
   font-family: var(--font-display);
   font-weight: 500;
@@ -29,8 +31,10 @@
   width: 2.5rem;
   height: 3px;
   border-radius: 2px;
-  background-color: var(--color-primary);
+  background-color: var(--color-accent);
 }
+
+/* ---------- Hero ---------- */
 
 .property-hero {
   position: relative;
@@ -96,12 +100,18 @@
   color: rgba(245, 245, 242, 0.9);
 }
 
+.property-address svg {
+  color: var(--color-accent-light);
+}
+
 .property-hero-description {
   margin: 0;
   max-width: 460px;
   color: rgba(245, 245, 242, 0.8);
   line-height: 1.6;
 }
+
+/* ---------- About ---------- */
 
 .property-introduction {
   padding: 3rem 0;
@@ -124,12 +134,13 @@
 .intro-icon {
   color: var(--color-primary);
   flex-shrink: 0;
-  margin-top: 0.3rem;
+  margin-top: 0.15rem;
 }
 
 .property-introduction-content h2 {
-  font-size: 1.9rem;
+  font-size: 1.7rem;
   line-height: 1.25;
+  margin: 0;
 }
 
 .property-introduction-content p {
@@ -137,6 +148,8 @@
   line-height: 1.7;
   margin: 0 0 1rem;
 }
+
+/* ---------- Property details cards ---------- */
 
 .property-facts-section {
   padding: 3.5rem 0;
@@ -146,12 +159,11 @@
 .property-facts-section h2 {
   font-size: 1.7rem;
   margin: 0.25rem 0 2rem;
-  max-width: 520px;
 }
 
 .property-facts {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
 }
 
@@ -162,8 +174,8 @@
   border: 1px solid var(--color-border);
 }
 
-.fact-card svg {
-  color: var(--color-primary);
+.fact-icon {
+  color: var(--color-accent);
   margin-bottom: 0.75rem;
 }
 
@@ -172,14 +184,13 @@
   border-color: var(--color-primary);
 }
 
-.fact-card-filled svg,
+.fact-card-filled .fact-icon {
+  color: var(--color-accent-light);
+}
+
 .fact-card-filled .fact-label,
 .fact-card-filled .fact-value {
   color: var(--color-white) !important;
-}
-
-.fact-card-filled p {
-  color: rgba(245, 245, 242, 0.85) !important;
 }
 
 .fact-label {
@@ -194,7 +205,7 @@
 .fact-value {
   display: block;
   font-family: var(--font-display);
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   color: var(--color-primary);
   margin-bottom: 0.6rem;
 }
@@ -204,6 +215,101 @@
   color: var(--color-text-muted);
   font-size: 0.92rem;
   line-height: 1.55;
+}
+
+.fact-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.fact-contact a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(245, 245, 242, 0.9);
+  font-size: 0.88rem;
+  transition: color 0.15s ease;
+}
+
+.fact-contact a svg {
+  color: var(--color-accent-light);
+  flex-shrink: 0;
+}
+
+.fact-contact a:hover {
+  color: var(--color-accent-light);
+}
+
+/* ---------- Location ---------- */
+
+.location-section {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 3rem;
+  align-items: center;
+  padding: 3.5rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.location-section h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.6rem;
+}
+
+.location-address {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  color: var(--color-primary) !important;
+  margin-top: 0.5rem !important;
+}
+
+.location-address svg {
+  color: var(--color-accent);
+}
+
+.home-map-container {
+  width: 100%;
+  height: 300px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 3px solid var(--color-primary);
+}
+
+.home-map-container .leaflet-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Nearby ---------- */
+
+.home-amenities {
+  padding: 3.5rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.amenities-heading {
+  max-width: 520px;
+  margin-bottom: 1.75rem;
+}
+
+.amenities-heading h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1.6rem;
+}
+
+.amenities-heading p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.home-amenities-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.1rem;
 }
 
 .property-closing {
@@ -225,16 +331,54 @@
 
 .property-closing h2 {
   color: var(--color-white) !important;
-  font-size: clamp(1.7rem, 3.2vw, 2.2rem);
+  font-size: clamp(1.6rem, 3vw, 2rem);
   margin: 0 0 1rem;
-  max-width: 540px;
+  max-width: 520px;
 }
 
 .property-closing p {
   color: rgba(245, 245, 242, 0.85);
   max-width: 460px;
   line-height: 1.65;
-  margin: 0;
+  margin: 0 0 1.75rem;
+}
+
+.closing-contact {
+  display: flex;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.btn-cta-primary,
+.btn-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.92rem;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-cta-primary {
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+}
+
+.btn-cta-primary:hover {
+  background-color: var(--color-accent-light);
+}
+
+.btn-cta-secondary {
+  background-color: transparent;
+  color: var(--color-white);
+  border: 1.5px solid rgba(245, 245, 242, 0.4);
+}
+
+.btn-cta-secondary:hover {
+  border-color: var(--color-accent-light);
+  color: var(--color-accent-light);
 }
 
 .empty-text {
@@ -243,7 +387,8 @@
 
 @media (max-width: 800px) {
   .property-introduction-content,
-  .property-facts {
+  .property-facts,
+  .location-section {
     grid-template-columns: 1fr;
   }
   .property-hero {

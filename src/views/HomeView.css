@@ -29,8 +29,10 @@
   width: 2.5rem;
   height: 3px;
   border-radius: 2px;
-  background-color: var(--color-primary);
+  background-color: var(--color-accent);
 }
+
+/* ---------- Hero ---------- */
 
 .hero {
   display: grid;
@@ -41,13 +43,26 @@
 }
 
 .hero-text h1 {
-  margin: 0 0 1.1rem;
+  margin: 0 0 0.5rem;
   font-size: clamp(2rem, 3.5vw, 2.65rem);
-  line-height: 1.18;
+  line-height: 1.15;
   letter-spacing: -0.01em;
 }
 
-.hero-text p {
+.hero-location {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin: 0 0 1.25rem !important;
+}
+
+.hero-location svg {
+  color: var(--color-accent);
+}
+
+.hero-text > p {
   margin: 0 0 1.75rem;
   color: var(--color-text-muted);
   font-size: 1.06rem;
@@ -121,45 +136,65 @@
   box-shadow: var(--shadow-md);
 }
 
-.audience-band {
+/* ---------- Audience cards ---------- */
+
+.audience-section {
+  padding: 0 0 3rem;
+}
+
+.audience-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  background-color: var(--color-primary);
-  border-radius: var(--radius-lg);
-  padding: 2rem 1rem;
-  margin: 1rem 0 3rem;
-  box-shadow: var(--shadow-md);
+  gap: 1.25rem;
 }
 
-.audience-band > div {
-  padding: 0 1.5rem;
-  border-left: 1px solid rgba(245, 245, 242, 0.18);
-}
-
-.audience-band > div:first-child {
-  border-left: none;
+.audience-card {
+  padding: 1.75rem;
+  border-radius: var(--radius-md);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
 }
 
 .audience-icon {
+  color: var(--color-accent);
+  margin-bottom: 0.75rem;
+}
+
+.audience-card-filled {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.audience-card-filled .audience-icon {
   color: var(--color-accent-light);
-  margin-bottom: 0.5rem;
+}
+
+.audience-card-filled .audience-label {
+  color: var(--color-white);
+}
+
+.audience-card-filled p {
+  color: rgba(245, 245, 242, 0.85);
 }
 
 .audience-label {
   display: block;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--color-accent-light);
-  margin-bottom: 0.4rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
 }
 
-.audience-band p {
+.audience-card p {
   margin: 0;
-  color: rgba(245, 245, 242, 0.9);
-  font-size: 0.94rem;
-  line-height: 1.5;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
 }
+
+/* ---------- Property intro ---------- */
 
 .property-intro {
   padding: 3rem 0;
@@ -191,6 +226,8 @@
   border-bottom-color: var(--color-primary-light);
 }
 
+/* ---------- Location ---------- */
+
 .location-section {
   display: grid;
   grid-template-columns: 0.85fr 1.15fr;
@@ -219,6 +256,10 @@
   margin-top: 0.5rem !important;
 }
 
+.location-address svg {
+  color: var(--color-accent);
+}
+
 .home-map-container {
   width: 100%;
   height: 300px;
@@ -231,6 +272,8 @@
   width: 100%;
   height: 100%;
 }
+
+/* ---------- Amenities ---------- */
 
 .home-amenities {
   padding: 3rem 0;
@@ -257,6 +300,8 @@
   grid-template-columns: 1fr;
   gap: 1.1rem;
 }
+
+/* ---------- CTA ---------- */
 
 .home-cta {
   padding: 3.5rem 2.5rem;
@@ -314,7 +359,8 @@
 }
 
 .btn-cta-secondary:hover {
-  border-color: var(--color-white);
+  border-color: var(--color-accent-light);
+  color: var(--color-accent-light);
 }
 
 @media (min-width: 700px) {
@@ -328,19 +374,8 @@
   .location-section {
     grid-template-columns: 1fr;
   }
-  .audience-band {
+  .audience-grid {
     grid-template-columns: 1fr;
-    gap: 1.25rem;
-  }
-  .audience-band > div {
-    border-left: none;
-    padding-left: 0;
-    border-top: 1px solid rgba(245, 245, 242, 0.18);
-    padding-top: 1rem;
-  }
-  .audience-band > div:first-child {
-    border-top: none;
-    padding-top: 0;
   }
   .home-cta {
     padding: 2.5rem 1.5rem;

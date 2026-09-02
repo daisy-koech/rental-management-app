@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { MapPin, Users, Home as HomeIcon } from "lucide-react";
+import { MapPin, Users, Home as HomeIcon, Wrench } from "lucide-react";
 import { getPublicProperty } from "../services/api";
 import { nearbyPlaces } from "../data/mockData";
 import AmenityCard from "../components/AmenityCard";
@@ -47,21 +47,22 @@ function HomeView() {
 
   return (
     <div className="home-view">
+      {/* Hero */}
       <section className="hero">
         <div className="hero-text">
-          <span className="hero-eyebrow">WELCOME HOME</span>
+          <span className="hero-eyebrow">WELCOME</span>
 
-          <h1>
-            A better way to stay
-            <br />
-            connected to home.
-          </h1>
+          <h1>{property.name}</h1>
+
+          <p className="hero-location">
+            <MapPin size={16} />
+            {property.location}
+          </p>
 
           <p>
-            Keep up with the things that matter during your stay. Find your
-            lease details, check payments, report a repair and catch up on
-            important property updates without having to search through
-            messages or paperwork.
+            Sign in below to check your lease, keep up with payments,
+            report a repair, or manage the property if you're the
+            landlord.
           </p>
 
           <div className="hero-actions">
@@ -87,57 +88,63 @@ function HomeView() {
         </div>
       </section>
 
-      <div className="audience-band">
-        <div>
-          <span className="audience-label">VISITING</span>
-          <p>
-            Get to know the property, its location and what you can find
-            nearby.
-          </p>
-        </div>
+      {/* Who this is for */}
+      <section className="audience-section">
+        <div className="audience-grid">
+          <div className="audience-card">
+            <MapPin size={20} className="audience-icon" />
+            <span className="audience-label">Visiting</span>
+            <p>
+              See the property's location and what's nearby before you
+              decide to rent.
+            </p>
+          </div>
 
-        <div>
-          <Users size={17} className="audience-icon" />
-          <span className="audience-label">TENANTS</span>
-          <p>
-            Check your lease, keep up with payments and let us know when
-            something needs attention.
-          </p>
-        </div>
+          <div className="audience-card audience-card-filled">
+            <Users size={20} className="audience-icon" />
+            <span className="audience-label">Tenants</span>
+            <p>
+              Check your lease, keep track of payments, and report
+              maintenance issues.
+            </p>
+          </div>
 
-        <div>
-          <HomeIcon size={17} className="audience-icon" />
-          <span className="audience-label">LANDLORDS</span>
-          <p>
-            Keep track of units, tenants, rent, repairs and property
-            announcements.
-          </p>
+          <div className="audience-card">
+            <Wrench size={20} className="audience-icon" />
+            <span className="audience-label">Landlords</span>
+            <p>
+              Manage units, tenants, rent and maintenance requests in
+              one place.
+            </p>
+          </div>
         </div>
-      </div>
+      </section>
 
+      {/* Property intro */}
       <section className="property-intro">
         <span className="section-eyebrow">THE PROPERTY</span>
 
         <h2>{property.name}</h2>
 
         <p>
-          Located in {property.location}, {property.name} brings everyday
-          rental information together in one place. From keeping track of
-          leases and payments to handling repairs and property updates,
-          everything is easier to find when you need it.
+          {property.name} is located in {property.location}. This site
+          brings together leases, payments, maintenance requests and
+          property updates so tenants and the landlord can find what
+          they need without digging through messages or paperwork.
         </p>
 
         <Link to="/property" className="text-link">
-          Explore the property
+          View full property details
         </Link>
       </section>
 
+      {/* Location */}
       {property.latitude && property.longitude && (
         <section className="location-section">
           <div className="location-heading">
             <span className="section-eyebrow">LOCATION</span>
 
-            <h2>Find us in {property.location}.</h2>
+            <h2>Where it is</h2>
 
             <p className="location-address">
               <MapPin size={15} />
@@ -164,15 +171,16 @@ function HomeView() {
         </section>
       )}
 
+      {/* Nearby */}
       <section className="home-amenities">
         <div className="amenities-heading">
           <span className="section-eyebrow">NEARBY</span>
 
-          <h2>Everything you need, close by.</h2>
+          <h2>What's around the property</h2>
 
           <p>
-            Take a look at some of the schools, shops, services and transport
-            options around the property.
+            A look at some of the schools, shops, services and transport
+            options nearby.
           </p>
         </div>
 
@@ -183,14 +191,15 @@ function HomeView() {
         </div>
       </section>
 
+      {/* CTA */}
       <section className="home-cta">
         <span className="cta-eyebrow">GET STARTED</span>
 
-        <h2>Looking after a home or living in one?</h2>
+        <h2>Sign in to your dashboard</h2>
 
         <p>
-          Sign in to access the information and tools available for your
-          property.
+          Tenants and landlords each have their own dashboard, with the
+          information and tools relevant to them.
         </p>
 
         <div className="hero-actions">
