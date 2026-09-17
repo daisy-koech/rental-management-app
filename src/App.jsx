@@ -32,10 +32,10 @@ import LandlordEndOfStayView from "./views/landlord/LandlordEndOfStayView";
 function App() {
   return (
     <BrowserRouter>
+    <div className="app">
       <Navbar />
-
-      <div className="app-content">
-        <Routes>
+      <main className="app-content">
+      <Routes>
           <Route path="/" element={<HomeView />} />
           <Route path="/signup" element={<SignupView />} />
           <Route path="/login" element={<LoginView />} />
@@ -59,8 +59,10 @@ function App() {
           <Route path="/landlord/notices" element={<ProtectedRoute role="landlord"><LandlordNoticesView /></ProtectedRoute>} />
           <Route path="/landlord/end-of-stay" element={<ProtectedRoute role="landlord"><LandlordEndOfStayView /></ProtectedRoute>}/>
         </Routes>
-      </div>
+      </main>
+        
       <Footer />
+    </div>
     </BrowserRouter>
   );
 }

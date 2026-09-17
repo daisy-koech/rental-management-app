@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, Code2, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 import "./Footer.css";
 
 function Footer() {
@@ -48,12 +48,12 @@ function Footer() {
           </span>
 
           <div className="footer-socials">
-            <a
+            {/* <a
             href="https://github.com/daisy-koech"
             target="_blank"
             rel="noreferrer"
             aria-label="GitHub"><Code2 size={18} />
-            </a>
+            </a> */}
 
             {/* <a href="https://linkedin.com/in/yourprofile"
               target="_blank"
