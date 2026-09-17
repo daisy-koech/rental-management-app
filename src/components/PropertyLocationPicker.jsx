@@ -1,80 +1,48 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   MapContainer,
-  TileLayer,
   Marker,
+  TileLayer,
   useMap,
   useMapEvents,
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// Fix Leaflet marker icons when using Vite/React
-delete L.Icon.Default.prototype._getIconUrl;
+const DEFAULT_CENTER = [0.5143, 35.2698];
 
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+const markerIcon = new L.Icon({
   iconUrl:
     "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  iconRetinaUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
   shadowUrl:
     "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
 });
 
-/*
- * Move the map when a new location is selected.
- */
-function MapController({ position, centerMap }) {
-  const map = useMap();
-
-  useEffect(() => {
-    if (!centerMap || !position) {
-      return;
-    }
-
-    map.flyTo(position, 17, {
-      animate: true,
-      duration: 0.8,
-    });
-  }, [map, position, centerMap]);
+function MapClickHandler({ onLocationChange }) {
+  useMapEvents({
+    click(event) {
+      onLocationChange(
+        event.latlng.lat.toFixed(6),
+        event.latlng.lng.toFixed(6)
+      );
+    },
+  });
 
   return null;
 }
 
-/*
- * Handle clicking the map and dragging the marker.
- */
-function LocationMarker({ position, onPositionChange }) {
-  useMapEvents({
-    click(event) {
-      onPositionChange([
-        event.latlng.lat,
-        event.latlng.lng,
-      ]);
-    },
-  });
+function MapController({ position }) {
+  const map = useMap();
 
-  if (!position) {
-    return null;
+  if (position) {
+    map.setView(position);
   }
 
-  return (
-    <Marker
-      position={position}
-      draggable={true}
-      eventHandlers={{
-        dragend(event) {
-          const marker = event.target;
-          const location = marker.getLatLng();
-
-          onPositionChange([
-            location.lat,
-            location.lng,
-          ]);
-        },
-      }}
-    />
-  );
+  return null;
 }
 
 function PropertyLocationPicker({
@@ -82,156 +50,70 @@ function PropertyLocationPicker({
   longitude,
   onLocationChange,
 }) {
-  /*
-   * Determine initial position from existing
-   * property coordinates.
-   */
-  const getInitialPosition = () => {
-    if (
-      latitude !== "" &&
-      longitude !== "" &&
-      latitude !== null &&
-      longitude !== null
-    ) {
-      const lat = Number(latitude);
-      const lng = Number(longitude);
+  const hasCoordinates =
+    latitude !== "" &&
+    latitude !== null &&
+    latitude !== undefined &&
+    longitude !== "" &&
+    longitude !== null &&
+    longitude !== undefined;
 
-      if (
-        !Number.isNaN(lat) &&
-        !Number.isNaN(lng)
-      ) {
-        return [lat, lng];
-      }
-    }
-
-    // Default location: Eldoret, Kenya
-    return [0.5143, 35.2698];
-  };
-
-  const [position, setPosition] =
-    useState(getInitialPosition);
-
-  const [method, setMethod] =
-    useState("map");
-
+  const [mode, setMode] = useState("map");
   const [search, setSearch] = useState("");
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState("");
 
-  const [manualLatitude, setManualLatitude] =
-    useState(
-      latitude !== "" && latitude !== null
-        ? String(latitude)
-        : ""
-    );
+  const position = hasCoordinates
+    ? [Number(latitude), Number(longitude)]
+    : DEFAULT_CENTER;
 
-  const [manualLongitude, setManualLongitude] =
-    useState(
-      longitude !== "" && longitude !== null
-        ? String(longitude)
-        : ""
-    );
-
-  const [manualError, setManualError] =
-    useState("");
-
-  const [centerMap, setCenterMap] =
-    useState(false);
-
-  /*
-   * Update selected position.
-   */
-  function handlePositionChange(newPosition) {
-    setPosition(newPosition);
-
-    setCenterMap(true);
-
-    setManualLatitude(
-      newPosition[0].toFixed(6)
-    );
-
-    setManualLongitude(
-      newPosition[1].toFixed(6)
-    );
-
-    onLocationChange(
-      newPosition[0],
-      newPosition[1]
-    );
+  function handleLatitudeChange(value) {
+    onLocationChange(value, longitude);
   }
 
-  /*
-   * Search for a location.
-   */
+  function handleLongitudeChange(value) {
+    onLocationChange(latitude, value);
+  }
+
+  function handleMapLocationChange(newLatitude, newLongitude) {
+    onLocationChange(newLatitude, newLongitude);
+  }
+
   async function handleSearch(event) {
-    event?.preventDefault();
-    event?.stopPropagation();
+    event.preventDefault();
 
-    const query = search.trim();
-
-    if (!query) {
-      setSearchError(
-        "Please enter a location to search."
-      );
+    if (!search.trim()) {
       return;
     }
 
     setSearching(true);
     setSearchError("");
-    setCenterMap(false);
 
     try {
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=ke&q=${encodeURIComponent(
-          query
-        )}`,
-        {
-          headers: {
-            Accept: "application/json",
-          },
-        }
+        `https://nominatim.openstreetmap.org/search?format=json&countrycodes=ke&limit=1&q=${encodeURIComponent(
+          search.trim()
+        )}`
       );
 
       if (!response.ok) {
-        throw new Error(
-          "Location search failed."
-        );
+        throw new Error("Search failed");
       }
 
       const results = await response.json();
 
       if (!results.length) {
-        setSearchError(
-          "Location not found. Try a more specific address, estate, town, or landmark."
-        );
+        setSearchError("Location not found. Try a more specific search.");
         return;
       }
 
       const result = results[0];
 
-      const lat = Number(result.lat);
-      const lng = Number(result.lon);
-
-      if (
-        Number.isNaN(lat) ||
-        Number.isNaN(lng)
-      ) {
-        throw new Error(
-          "Invalid coordinates returned."
-        );
-      }
-
-      handlePositionChange([lat, lng]);
-
-      setSearch(
-        result.display_name || query
+      onLocationChange(
+        Number(result.lat).toFixed(6),
+        Number(result.lon).toFixed(6)
       );
-    } catch (error) {
-      console.error(
-        "Property location search error:",
-        error
-      );
-
+    } catch {
       setSearchError(
         "Unable to search for that location. Please try again."
       );
@@ -240,154 +122,57 @@ function PropertyLocationPicker({
     }
   }
 
-  /*
-   * Search when Enter is pressed.
-   */
-  function handleSearchKeyDown(event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      event.stopPropagation();
-
-      handleSearch(event);
-    }
-  }
-
-  /*
-   * Switch between map and manual coordinate entry.
-   */
-  function handleMethodChange(newMethod) {
-    setMethod(newMethod);
-    setManualError("");
-    setSearchError("");
-  }
-
-  /*
-   * Apply manually entered coordinates.
-   */
-  function handleManualCoordinates() {
-    setManualError("");
-
-    const lat = Number(
-      manualLatitude.trim()
-    );
-
-    const lng = Number(
-      manualLongitude.trim()
-    );
-
-    if (
-      manualLatitude.trim() === "" ||
-      manualLongitude.trim() === ""
-    ) {
-      setManualError(
-        "Please enter both latitude and longitude."
-      );
-      return;
-    }
-
-    if (
-      Number.isNaN(lat) ||
-      Number.isNaN(lng)
-    ) {
-      setManualError(
-        "Latitude and longitude must be valid numbers."
-      );
-      return;
-    }
-
-    if (lat < -90 || lat > 90) {
-      setManualError(
-        "Latitude must be between -90 and 90."
-      );
-      return;
-    }
-
-    if (lng < -180 || lng > 180) {
-      setManualError(
-        "Longitude must be between -180 and 180."
-      );
-      return;
-    }
-
-    handlePositionChange([lat, lng]);
-
-    setMethod("map");
-  }
-
   return (
     <div className="property-location-picker">
-      {/*Location method*/}
-
       <div className="location-method">
         <button
           type="button"
-          className={
-            method === "map"
-              ? "location-method-button active"
-              : "location-method-button"
-          }
-          onClick={() =>
-            handleMethodChange("map")
-          }
+          className={`location-method-button ${
+            mode === "map" ? "active" : ""
+          }`}
+          onClick={() => setMode("map")}
         >
           Pick on map
         </button>
 
         <button
           type="button"
-          className={
-            method === "manual"
-              ? "location-method-button active"
-              : "location-method-button"
-          }
-          onClick={() =>
-            handleMethodChange("manual")
-          }
+          className={`location-method-button ${
+            mode === "manual" ? "active" : ""
+          }`}
+          onClick={() => setMode("manual")}
         >
           Enter coordinates
         </button>
       </div>
 
-      {/*Map method*/}
-
-      {method === "map" && (
+      {mode === "map" && (
         <>
-          <div className="location-search">
+          <form
+            className="location-search"
+            onSubmit={handleSearch}
+          >
             <input
               type="text"
               value={search}
-              onChange={(event) => {
-                setSearch(event.target.value);
-
-                if (searchError) {
-                  setSearchError("");
-                }
-              }}
-              onKeyDown={handleSearchKeyDown}
-              placeholder="Search estate, street, town or landmark..."
+              onChange={(event) =>
+                setSearch(event.target.value)
+              }
+              placeholder="Search for your property..."
               disabled={searching}
-              aria-label="Search property location"
             />
 
             <button
-              type="button"
+              type="submit"
               className="btn-secondary"
-              onClick={handleSearch}
-              disabled={
-                searching || !search.trim()
-              }
+              disabled={searching || !search.trim()}
             >
-              {searching
-                ? "Searching..."
-                : "Search"}
+              {searching ? "Searching..." : "Search"}
             </button>
-          </div>
+          </form>
 
           {searchError && (
-            <p
-              className="location-search-error"
-              role="alert"
-            >
+            <p className="location-search-error">
               {searchError}
             </p>
           )}
@@ -395,48 +180,57 @@ function PropertyLocationPicker({
           <div className="property-map">
             <MapContainer
               center={position}
-              zoom={17}
+              zoom={15}
               scrollWheelZoom={true}
-              style={{
-                width: "100%",
-                height: "360px",
-              }}
             >
               <TileLayer
-                attribution="&copy; OpenStreetMap contributors"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
 
-              <MapController
-                position={position}
-                centerMap={centerMap}
+              <MapController position={position} />
+
+              <MapClickHandler
+                onLocationChange={handleMapLocationChange}
               />
 
-              <LocationMarker
-                position={position}
-                onPositionChange={
-                  handlePositionChange
-                }
-              />
+              {hasCoordinates && (
+                <Marker
+                  position={position}
+                  icon={markerIcon}
+                  draggable={true}
+                  eventHandlers={{
+                    dragend(event) {
+                      const marker =
+                        event.target;
+
+                      const newPosition =
+                        marker.getLatLng();
+
+                      onLocationChange(
+                        newPosition.lat.toFixed(6),
+                        newPosition.lng.toFixed(6)
+                      );
+                    },
+                  }}
+                />
+              )}
             </MapContainer>
           </div>
 
           <p className="map-instruction">
-            <strong>How to select:</strong>{" "}
-            Search for the area, then click directly
-            on the building or drag the marker to the
-            exact property location.
+            Search for your property, then click the exact
+            building on the map or drag the marker to the
+            correct location.
           </p>
         </>
       )}
 
-      {/* Manual coordinates*/}
-
-      {method === "manual" && (
+      {mode === "manual" && (
         <div className="manual-coordinates">
           <p className="form-hint">
-            If you already have the exact GPS
-            coordinates, enter them below.
+            Enter the exact latitude and longitude of your
+            property.
           </p>
 
           <div className="manual-coordinate-fields">
@@ -449,13 +243,15 @@ function PropertyLocationPicker({
                 id="property-latitude"
                 type="number"
                 step="any"
-                value={manualLatitude}
+                min="-90"
+                max="90"
+                value={latitude}
                 onChange={(event) =>
-                  setManualLatitude(
+                  handleLatitudeChange(
                     event.target.value
                   )
                 }
-                placeholder="e.g. 0.514300"
+                placeholder="e.g. 0.503600"
               />
             </div>
 
@@ -468,59 +264,39 @@ function PropertyLocationPicker({
                 id="property-longitude"
                 type="number"
                 step="any"
-                value={manualLongitude}
+                min="-180"
+                max="180"
+                value={longitude}
                 onChange={(event) =>
-                  setManualLongitude(
+                  handleLongitudeChange(
                     event.target.value
                   )
                 }
-                placeholder="e.g. 35.269800"
+                placeholder="e.g. 35.278900"
               />
             </div>
           </div>
 
-          {manualError && (
-            <p
-              className="location-search-error"
-              role="alert"
-            >
-              {manualError}
-            </p>
-          )}
-
-          <button
-            type="button"
-            className="btn-secondary"
-            onClick={handleManualCoordinates}
-          >
-            Use these coordinates
-          </button>
+          <p className="form-hint">
+            Latitude must be between -90 and 90.
+            Longitude must be between -180 and 180.
+          </p>
         </div>
       )}
 
-      {/*Selected coordinates*/}
+      {hasCoordinates && (
+        <div className="selected-coordinates">
+          <div>
+            <span>Latitude</span>
+            <strong>{latitude}</strong>
+          </div>
 
-      <div className="selected-coordinates">
-        <div>
-          <span>Latitude</span>
-          <strong>
-            {position[0].toFixed(6)}
-          </strong>
+          <div>
+            <span>Longitude</span>
+            <strong>{longitude}</strong>
+          </div>
         </div>
-
-        <div>
-          <span>Longitude</span>
-          <strong>
-            {position[1].toFixed(6)}
-          </strong>
-        </div>
-      </div>
-
-      <p className="form-hint">
-        These coordinates will be saved with the
-        property and used to show its location on
-        the tenant map.
-      </p>
+      )}
     </div>
   );
 }
