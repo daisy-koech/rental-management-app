@@ -10,12 +10,6 @@ import {
 import { getPublicProperty } from "../services/api";
 import "./PropertyView.css";
 
-const MANAGER = {
-  name: "Johnson Koech",
-  email: "johnsonkoech@example.com",
-  phone: "0799 000 000",
-};
-
 function PropertyView() {
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -64,8 +58,7 @@ function PropertyView() {
           <h1>{property.name}</h1>
 
           <p className="property-hero-description">
-            A residential property designed for comfortable,
-            everyday living, with the important details kept simple.
+            {property.description || "Property information coming soon."}
           </p>
         </div>
       </section>
@@ -87,16 +80,13 @@ function PropertyView() {
 
           <div>
             <p>
-              {property.name} is a residential property in{" "}
-              {property.location}, made up of individual units for
-              tenants to call their own.
+              {property.description || "Property information coming soon."}
             </p>
 
             <p>
-              The focus is on comfortable homes and straightforward
-              day-to-day management. From tenancy details to property
-              maintenance, the things that matter are kept organised
-              and easy to access.
+              {property.name} is located in {property.location} and has{" "}
+              {property.number_of_units || "multiple"} rental units available
+              for residents.
             </p>
           </div>
         </div>
@@ -109,12 +99,15 @@ function PropertyView() {
         <h2>What makes up the property.</h2>
 
         <div className="property-facts">
+          {/* Property type */}
           <div className="fact-card">
             <Building2 size={20} className="fact-icon" />
 
             <span className="fact-label">PROPERTY TYPE</span>
 
-            <span className="fact-value">Residential</span>
+            <span className="fact-value">
+              {property.property_type || "Residential"}
+            </span>
 
             <p>
               A residential property with individually managed
@@ -122,6 +115,7 @@ function PropertyView() {
             </p>
           </div>
 
+          {/* Units */}
           <div className="fact-card">
             <Layers3 size={20} className="fact-icon" />
 
@@ -137,12 +131,15 @@ function PropertyView() {
             </p>
           </div>
 
+          {/* Tenancy */}
           <div className="fact-card">
             <HomeIcon size={20} className="fact-icon" />
 
             <span className="fact-label">TENANCY</span>
 
-            <span className="fact-value">Long-term rental</span>
+            <span className="fact-value">
+              {property.tenancy_type || "Long-term rental"}
+            </span>
 
             <p>
               Homes intended for residents looking for a place to
@@ -150,25 +147,32 @@ function PropertyView() {
             </p>
           </div>
 
+          {/* Property manager */}
           <div className="fact-card fact-card-filled">
             <User size={20} className="fact-icon" />
 
             <span className="fact-label">PROPERTY MANAGER</span>
 
-            <span className="fact-value">{MANAGER.name}</span>
+            <span className="fact-value">
+              {property.manager?.name || "Property Manager"}
+            </span>
 
             <div className="fact-contact">
-              <a href={`mailto:${MANAGER.email}`}>
-                <Mail size={15} />
-                {MANAGER.email}
-              </a>
+              {property.manager?.email && (
+                <a href={`mailto:${property.manager.email}`}>
+                  <Mail size={15} />
+                  {property.manager.email}
+                </a>
+              )}
 
-              <a
-                href={`tel:${MANAGER.phone.replace(/\s/g, "")}`}
-              >
-                <Phone size={15} />
-                {MANAGER.phone}
-              </a>
+              {property.manager?.phone && (
+                <a
+                  href={`tel:${property.manager.phone.replace(/\s/g, "")}`}
+                >
+                  <Phone size={15} />
+                  {property.manager.phone}
+                </a>
+              )}
             </div>
           </div>
         </div>
@@ -216,21 +220,25 @@ function PropertyView() {
         </p>
 
         <div className="closing-contact">
-          <a
-            href={`mailto:${MANAGER.email}`}
-            className="btn-cta-primary"
-          >
-            <Mail size={16} />
-            Email {MANAGER.name}
-          </a>
+          {property.manager?.email && (
+            <a
+              href={`mailto:${property.manager.email}`}
+              className="btn-cta-primary"
+            >
+              <Mail size={16} />
+              Email {property.manager.name || "Property Manager"}
+            </a>
+          )}
 
-          <a
-            href={`tel:${MANAGER.phone.replace(/\s/g, "")}`}
-            className="btn-cta-secondary"
-          >
-            <Phone size={16} />
-            Call {MANAGER.name}
-          </a>
+          {property.manager?.phone && (
+            <a
+              href={`tel:${property.manager.phone.replace(/\s/g, "")}`}
+              className="btn-cta-secondary"
+            >
+              <Phone size={16} />
+              Call {property.manager.name || "Property Manager"}
+            </a>
+          )}
         </div>
       </section>
     </div>

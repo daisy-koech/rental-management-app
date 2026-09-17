@@ -24,6 +24,39 @@ export async function register(name, email, password, role) {
   return data;
 }
 
+export async function getProfile() {
+  const response = await fetch(`${API_URL}/profile`, {
+    credentials: "include",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Failed to load profile");
+  }
+
+  return data;
+}
+
+export async function updateProfile(payload) {
+  const response = await fetch(`${API_URL}/profile`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(payload),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Failed to update profile");
+  }
+
+  return data;
+}
+
 export async function login(email, password) {
   const response = await fetch(`${API_URL}/login`, {
     method: "POST",

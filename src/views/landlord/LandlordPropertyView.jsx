@@ -16,6 +16,7 @@ const TABS = [
   { label: "Leases", to: "/landlord/leases" },
   { label: "Notices", to: "/landlord/notices" },
   { label: "End of Stay", to: "/landlord/end-of-stay" },
+  { label: "Profile", to: "/landlord/profile" },
 ];
 
 function LandlordPropertyView() {
@@ -30,6 +31,9 @@ function LandlordPropertyView() {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [description, setDescription] = useState("");
+  const [propertyType, setPropertyType] = useState("");
+  const [tenancyType, setTenancyType] = useState("");
 
   useEffect(() => {
     async function loadProperty() {
@@ -52,6 +56,9 @@ function LandlordPropertyView() {
     setLatitude(property?.latitude ?? "");
     setLongitude(property?.longitude ?? "");
     setImageUrl(property?.image_url || "");
+    setDescription(property?.description || "");
+    setPropertyType(property?.property_type || "Residential");
+    setTenancyType(property?.tenancy_type || "Long-term rental");
     setError("");
     setShowForm(true);
   }
@@ -64,7 +71,7 @@ function LandlordPropertyView() {
       return;
     }
 
-    // latitude/longitude are required (not nullable) on the backend model.
+    // latitude/longitude are required
     if (latitude === "" || longitude === "") {
       setError("Latitude and longitude are required.");
       return;
@@ -79,6 +86,9 @@ function LandlordPropertyView() {
       latitude: Number(latitude),
       longitude: Number(longitude),
       image_url: imageUrl.trim() || null,
+      description: description.trim(),
+      property_type: propertyType.trim(),
+      tenancy_type: tenancyType.trim(),
     };
 
     try {
@@ -133,6 +143,9 @@ function LandlordPropertyView() {
           <div className="property-summary-details">
             <h2>{property.name}</h2>
             <p className="property-summary-location">{property.location}</p>
+            <p className="property-summary-description">
+            {property.description || "No description added yet."}
+            </p>
             <p className="property-summary-coords">
               {property.latitude}, {property.longitude}
             </p>
@@ -168,6 +181,41 @@ function LandlordPropertyView() {
               required
             />
           </div>
+
+          <div className="form-group">
+           <label htmlFor="property-description">Description</label>
+           <textarea
+           id="property-description"
+           value={description}
+           onChange={(e) => setDescription(e.target.value)}
+           placeholder="Describe your property..."
+           rows="5"
+           />
+
+         
+           <label htmlFor="property-type">Property type</label>
+           <input
+           id="property-type"
+           type="text"
+           value={propertyType}
+           onChange={(e) => setPropertyType(e.target.value)}
+           placeholder="e.g. Residential"
+           />
+
+           <label htmlFor="tenancy-type">Tenancy type</label>
+           <input
+           id="tenancy-type"
+           type="text"
+           value={tenancyType}
+           onChange={(e) => setTenancyType(e.target.value)}
+           placeholder="e.g. Long-term rental"
+           />
+           
+           <p className="form-hint">
+             Give tenants a short description of your property, its surroundings,
+             and what makes it convenient.
+           </p>
+         </div>
 
           <div className="form-row">
             <div className="form-group">
@@ -205,7 +253,7 @@ function LandlordPropertyView() {
               onChange={(e) => setImageUrl(e.target.value)}
               placeholder="https://..."
             />
-            <p className="form-hint">Paste a direct image link (ending in .jpg, .png, etc). You can host photos for free on a service like Imgur or Cloudinary.</p>
+            <p className="form-hint">Paste a direct image link (ending in .jpg, .png, etc).</p>
           </div>
 
           <div className="form-actions">

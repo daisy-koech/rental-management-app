@@ -89,7 +89,6 @@ def logout():
     session.clear()
     return {}, 204
 
-
 def property_routes(app):
 
     @app.route("/property", methods=["POST"])
@@ -116,6 +115,11 @@ def property_routes(app):
         latitude = data.get("latitude")
         longitude = data.get("longitude")
         image_url = data.get("image_url")
+        description = data.get("description")
+        property_type = data.get("property_type") or "Residential"
+        tenancy_type = data.get("tenancy_type") or "Long-term rental"
+
+        
 
         if not name or not location or latitude is None or longitude is None:
             return {
@@ -129,6 +133,9 @@ def property_routes(app):
             longitude=longitude,
             image_url=image_url,
             landlord_id=user.id,
+            description=description,
+            property_type=property_type,
+            tenancy_type=tenancy_type,
         )
 
         db.session.add(PROPERTY)
@@ -198,6 +205,15 @@ def property_routes(app):
         if "image_url" in data:
             PROPERTY.image_url = data["image_url"]
 
+        if "description" in data:
+            PROPERTY.description = data["description"]
+
+        if "property_type" in data:
+            PROPERTY.property_type = data["property_type"]
+
+        if "tenancy_type" in data:
+            PROPERTY.tenancy_type = data["tenancy_type"]
+
         db.session.commit()
 
         return PROPERTY.to_dict(), 200
@@ -227,7 +243,17 @@ def property_routes(app):
         if not PROPERTY:
             return {"error": "Property not found"}, 404
 
-        return PROPERTY.to_dict(), 200
+        landlord = User.query.get(PROPERTY.landlord_id)
+
+        property_data = PROPERTY.to_dict()
+
+        property_data["manager"] = {
+            "name": landlord.name if landlord else "Property Manager",
+            "email": landlord.email if landlord else "",
+            "phone": landlord.phone if landlord else "",
+        }
+
+        return property_data, 200
         
     @app.route("/property/units", methods=["GET"])
     def get_units():
@@ -1357,7 +1383,60 @@ def register_routes(app):
         view_func=logout,
         methods=["DELETE"]
     )
+
     property_routes(app)
+
+    @app.route("/profile", methods=["GET"])
+    def get_profile():
+        user = get_current_user()
+
+        if not user:
+            return {"error": "Unauthorized"}, 401
+
+        return user.to_dict(), 200
+
+    @app.route("/profile", methods=["PATCH"])
+    def update_profile():
+        user = get_current_user()
+
+        if not user:
+            return {"error": "Unauthorized"}, 401
+
+        data = request.get_json() or {}
+
+        # Update name
+        if "name" in data:
+            name = data["name"].strip()
+
+            if not name:
+                return {"error": "Name cannot be empty"}, 400
+
+            user.name = name
+
+        # Update email
+        if "email" in data:
+            email = data["email"].strip()
+
+            if not email:
+                return {"error": "Email cannot be empty"}, 400
+
+            existing_user = User.query.filter(
+                User.email == email,
+                User.id != user.id
+            ).first()
+
+            if existing_user:
+                return {"error": "Email already registered"}, 409
+
+            user.email = email
+
+        # Update phone
+        if "phone" in data:
+            user.phone = data["phone"].strip() or None
+
+        db.session.commit()
+
+        return user.to_dict(), 200
 
 
 

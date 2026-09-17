@@ -18,6 +18,7 @@ const TABS = [
   { label: "Leases", to: "/landlord/leases" },
   { label: "Notices", to: "/landlord/notices" },
   { label: "End of Stay", to: "/landlord/end-of-stay" },
+  { label: "Profile", to: "/landlord/profile" },
 ];
 
 function LandlordDashboard() {

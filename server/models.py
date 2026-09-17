@@ -17,6 +17,11 @@ class User(db.Model):
         nullable=False
     )
 
+    phone = db.Column(
+        db.String(30),
+        nullable=True
+    )
+
     password_hash = db.Column(
         db.String(255),
         nullable=False
@@ -43,6 +48,7 @@ class User(db.Model):
             "id": self.id,
             "name": self.name,
             "email": self.email,
+            "phone": self.phone,
             "role": self.role,
         }
 
@@ -79,6 +85,23 @@ class Property(db.Model):
         nullable=True
         )
 
+    description = db.Column(
+        db.Text,
+        nullable=True
+    )
+
+    property_type = db.Column(
+        db.String(100),
+        nullable=True,
+        default="Residential"
+    )
+
+    tenancy_type = db.Column(
+        db.String(100),
+        nullable=True,
+        default="Long-term rental"
+    )
+
     landlord_id = db.Column(
         db.Integer,
         db.ForeignKey("users.id"),
@@ -101,6 +124,10 @@ class Property(db.Model):
             "longitude": self.longitude,
             "landlord_id": self.landlord_id,
             "image_url": self.image_url,
+            "description": self.description,
+            "property_type": self.property_type,
+            "tenancy_type": self.tenancy_type,
+            "number_of_units": len(self.units),
         }
 
 class Unit(db.Model):

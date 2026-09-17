@@ -118,8 +118,8 @@ function HomeView() {
         <h2>{property.name}</h2>
 
         <p>
-          {property.name} is located in {property.location}. This site
-          brings together leases, payments, maintenance requests and
+          {property.name} is located in {property.location}.
+          This site brings together leases, payments, maintenance requests and
           property updates so tenants and the landlord can find what
           they need without digging through messages or paperwork.
         </p>
