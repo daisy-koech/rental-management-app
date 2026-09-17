@@ -71,7 +71,6 @@ function LandlordPropertyView() {
       return;
     }
 
-    // latitude/longitude are required
     if (latitude === "" || longitude === "") {
       setError("Latitude and longitude are required.");
       return;
@@ -109,7 +108,9 @@ function LandlordPropertyView() {
     return (
       <div className="landlord-property-view">
         <h1>Property</h1>
+
         <DashboardTabs tabs={TABS} />
+
         <p>Loading property...</p>
       </div>
     );
@@ -118,6 +119,7 @@ function LandlordPropertyView() {
   return (
     <div className="landlord-property-view">
       <h1>Property</h1>
+
       <DashboardTabs tabs={TABS} />
 
       {error && <p className="error-message">{error}</p>}
@@ -125,7 +127,12 @@ function LandlordPropertyView() {
       {!showForm && !property && (
         <div className="property-empty-state">
           <p>You haven't added your property yet.</p>
-          <button type="button" className="btn-primary" onClick={openForm}>
+
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={openForm}
+          >
             Add your property
           </button>
         </div>
@@ -140,16 +147,37 @@ function LandlordPropertyView() {
               className="property-summary-image"
             />
           )}
+
           <div className="property-summary-details">
             <h2>{property.name}</h2>
-            <p className="property-summary-location">{property.location}</p>
-            <p className="property-summary-description">
-            {property.description || "No description added yet."}
+
+            <p className="property-summary-location">
+              {property.location}
             </p>
+
+            <p className="property-summary-description">
+              {property.description || "No description added yet."}
+            </p>
+
+            <p>
+              <strong>Property type:</strong>{" "}
+              {property.property_type || "Residential"}
+            </p>
+
+            <p>
+              <strong>Tenancy:</strong>{" "}
+              {property.tenancy_type || "Long-term rental"}
+            </p>
+
             <p className="property-summary-coords">
               {property.latitude}, {property.longitude}
             </p>
-            <button type="button" className="btn-secondary" onClick={openForm}>
+
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={openForm}
+            >
               Edit property
             </button>
           </div>
@@ -160,6 +188,7 @@ function LandlordPropertyView() {
         <form className="property-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="property-name">Property name</label>
+
             <input
               id="property-name"
               type="text"
@@ -172,6 +201,7 @@ function LandlordPropertyView() {
 
           <div className="form-group">
             <label htmlFor="property-location">Location</label>
+
             <input
               id="property-location"
               type="text"
@@ -183,43 +213,52 @@ function LandlordPropertyView() {
           </div>
 
           <div className="form-group">
-           <label htmlFor="property-description">Description</label>
-           <textarea
-           id="property-description"
-           value={description}
-           onChange={(e) => setDescription(e.target.value)}
-           placeholder="Describe your property..."
-           rows="5"
-           />
+            <label htmlFor="property-description">
+              Description
+            </label>
 
-         
-           <label htmlFor="property-type">Property type</label>
-           <input
-           id="property-type"
-           type="text"
-           value={propertyType}
-           onChange={(e) => setPropertyType(e.target.value)}
-           placeholder="e.g. Residential"
-           />
+            <textarea
+              id="property-description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Describe your property..."
+              rows="5"
+            />
 
-           <label htmlFor="tenancy-type">Tenancy type</label>
-           <input
-           id="tenancy-type"
-           type="text"
-           value={tenancyType}
-           onChange={(e) => setTenancyType(e.target.value)}
-           placeholder="e.g. Long-term rental"
-           />
-           
-           <p className="form-hint">
-             Give tenants a short description of your property, its surroundings,
-             and what makes it convenient.
-           </p>
-         </div>
+            <p className="form-hint">
+              Give tenants a short description of your property,
+              its surroundings, and what makes it convenient.
+            </p>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="property-type">Property type</label>
+
+            <input
+              id="property-type"
+              type="text"
+              value={propertyType}
+              onChange={(e) => setPropertyType(e.target.value)}
+              placeholder="e.g. Residential"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="tenancy-type">Tenancy type</label>
+
+            <input
+              id="tenancy-type"
+              type="text"
+              value={tenancyType}
+              onChange={(e) => setTenancyType(e.target.value)}
+              placeholder="e.g. Long-term rental"
+            />
+          </div>
 
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="property-lat">Latitude</label>
+
               <input
                 id="property-lat"
                 type="number"
@@ -230,8 +269,10 @@ function LandlordPropertyView() {
                 required
               />
             </div>
+
             <div className="form-group">
               <label htmlFor="property-lng">Longitude</label>
+
               <input
                 id="property-lng"
                 type="number"
@@ -245,7 +286,10 @@ function LandlordPropertyView() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="property-image">Photo URL (optional)</label>
+            <label htmlFor="property-image">
+              Photo URL (optional)
+            </label>
+
             <input
               id="property-image"
               type="url"
@@ -253,13 +297,21 @@ function LandlordPropertyView() {
               onChange={(e) => setImageUrl(e.target.value)}
               placeholder="https://..."
             />
-            <p className="form-hint">Paste a direct image link (ending in .jpg, .png, etc).</p>
+
+            <p className="form-hint">
+              Paste a direct image link ending in .jpg, .png, etc.
+            </p>
           </div>
 
           <div className="form-actions">
-            <button type="submit" className="btn-primary" disabled={saving}>
+            <button
+              type="submit"
+              className="btn-primary"
+              disabled={saving}
+            >
               {saving ? "Saving..." : "Save property"}
             </button>
+
             <button
               type="button"
               className="btn-secondary"
@@ -276,3 +328,4 @@ function LandlordPropertyView() {
 }
 
 export default LandlordPropertyView;
+

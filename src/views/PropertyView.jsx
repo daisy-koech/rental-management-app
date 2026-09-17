@@ -65,28 +65,31 @@ function PropertyView() {
 
       {/* About */}
       <section className="property-introduction">
-        <div className="property-section-label">A CLOSER LOOK</div>
+        <div className="property-section-label">
+          ABOUT THE PROPERTY
+        </div>
 
         <div className="property-introduction-content">
           <div className="property-introduction-heading">
             <HomeIcon size={22} className="intro-icon" />
 
             <h2>
-              A place to live,
+              {property.name}
               <br />
-              settle in and stay.
+              in {property.location}.
             </h2>
           </div>
 
           <div>
             <p>
-              {property.description || "Property information coming soon."}
+              {property.description ||
+                "Property information coming soon."}
             </p>
 
             <p>
-              {property.name} is located in {property.location} and has{" "}
-              {property.number_of_units || "multiple"} rental units available
-              for residents.
+              {property.number_of_units
+                ? `${property.name} currently has ${property.number_of_units} rental units.`
+                : "Property unit information coming soon."}
             </p>
           </div>
         </div>
@@ -94,9 +97,11 @@ function PropertyView() {
 
       {/* Property details */}
       <section className="property-facts-section">
-        <div className="property-section-label">PROPERTY DETAILS</div>
+        <div className="property-section-label">
+          PROPERTY DETAILS
+        </div>
 
-        <h2>What makes up the property.</h2>
+        <h2>Property information at a glance.</h2>
 
         <div className="property-facts">
           {/* Property type */}
@@ -106,12 +111,11 @@ function PropertyView() {
             <span className="fact-label">PROPERTY TYPE</span>
 
             <span className="fact-value">
-              {property.property_type || "Residential"}
+              {property.property_type || "Not specified"}
             </span>
 
             <p>
-              A residential property with individually managed
-              rental units.
+              The type of property being managed.
             </p>
           </div>
 
@@ -122,12 +126,11 @@ function PropertyView() {
             <span className="fact-label">UNITS</span>
 
             <span className="fact-value">
-              {property.number_of_units || "Multiple"}
+              {property.number_of_units ?? "Not specified"}
             </span>
 
             <p>
-              Individual homes within the property, each with its
-              own tenancy and lease details.
+              Rental units currently associated with the property.
             </p>
           </div>
 
@@ -138,12 +141,11 @@ function PropertyView() {
             <span className="fact-label">TENANCY</span>
 
             <span className="fact-value">
-              {property.tenancy_type || "Long-term rental"}
+              {property.tenancy_type || "Not specified"}
             </span>
 
             <p>
-              Homes intended for residents looking for a place to
-              live rather than a short stay.
+              The tenancy arrangement used for the property.
             </p>
           </div>
 
@@ -167,7 +169,10 @@ function PropertyView() {
 
               {property.manager?.phone && (
                 <a
-                  href={`tel:${property.manager.phone.replace(/\s/g, "")}`}
+                  href={`tel:${property.manager.phone.replace(
+                    /\s/g,
+                    ""
+                  )}`}
                 >
                   <Phone size={15} />
                   {property.manager.phone}
@@ -181,7 +186,9 @@ function PropertyView() {
       {/* Living here */}
       <section className="property-details">
         <div className="property-details-heading">
-          <span className="property-section-label">LIVING HERE</span>
+          <span className="property-section-label">
+            LIVING HERE
+          </span>
 
           <h2>
             The everyday details
