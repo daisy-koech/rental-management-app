@@ -159,15 +159,23 @@ function LandlordPropertyView() {
               {property.description || "No description added yet."}
             </p>
 
-            <p>
-              <strong>Property type:</strong>{" "}
-              {property.property_type || "Residential"}
-            </p>
+            <div className="property-summary-meta">
+              <div>
+                <span>Property type</span>
 
-            <p>
-              <strong>Tenancy:</strong>{" "}
-              {property.tenancy_type || "Long-term rental"}
-            </p>
+                <strong>
+                  {property.property_type || "Residential"}
+                </strong>
+              </div>
+
+              <div>
+                <span>Tenancy</span>
+
+                <strong>
+                  {property.tenancy_type || "Long-term rental"}
+                </strong>
+              </div>
+            </div>
 
             <p className="property-summary-coords">
               {property.latitude}, {property.longitude}

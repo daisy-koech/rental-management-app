@@ -99,6 +99,7 @@ a.footer-contact-item:hover {
 
 .footer-bottom {
   border-top: 1px solid rgba(245, 245, 242, 0.15);
+  text-align: center;
 }
 
 .footer-bottom span {
