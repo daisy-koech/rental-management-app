@@ -21,27 +21,36 @@ L.Icon.Default.mergeOptions({
     "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-function MapCenter({ position }) {
+/*
+ * Moves the map when a new location is selected.
+ */
+function MapController({ position, centerMap }) {
   const map = useMap();
 
   useEffect(() => {
-    if (position) {
-      map.setView(position, 17);
+    if (!centerMap || !position) {
+      return;
     }
-  }, [position, map]);
+
+    map.flyTo(position, 17, {
+      animate: true,
+      duration: 0.8,
+    });
+  }, [map, position, centerMap]);
 
   return null;
 }
 
-function LocationMarker({ position, setPosition }) {
+/*
+ * Handles clicking the map and dragging the marker.
+ */
+function LocationMarker({ position, onPositionChange }) {
   useMapEvents({
     click(event) {
-      const newPosition = [
+      onPositionChange([
         event.latlng.lat,
         event.latlng.lng,
-      ];
-
-      setPosition(newPosition);
+      ]);
     },
   });
 
@@ -58,7 +67,7 @@ function LocationMarker({ position, setPosition }) {
           const marker = event.target;
           const location = marker.getLatLng();
 
-          setPosition([
+          onPositionChange([
             location.lat,
             location.lng,
           ]);
@@ -73,29 +82,47 @@ function PropertyLocationPicker({
   longitude,
   onLocationChange,
 }) {
-  const [search, setSearch] = useState("");
-  const [position, setPosition] = useState(
-    latitude !== "" && longitude !== ""
-      ? [Number(latitude), Number(longitude)]
-      : [-0.0917, 34.7680]
-  );
+  /*
+   * Determine the initial marker position.
+   *
+   * If the property already has coordinates,
+   * use them. Otherwise start around Eldoret.
+   */
+  const getInitialPosition = () => {
+    if (
+      latitude !== "" &&
+      longitude !== "" &&
+      latitude !== null &&
+      longitude !== null
+    ) {
+      const lat = Number(latitude);
+      const lng = Number(longitude);
 
+      if (
+        !Number.isNaN(lat) &&
+        !Number.isNaN(lng)
+      ) {
+        return [lat, lng];
+      }
+    }
+
+    return [0.5143, 35.2698];
+  };
+
+  const [position, setPosition] =
+    useState(getInitialPosition);
+
+  const [search, setSearch] = useState("");
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState("");
+  const [centerMap, setCenterMap] = useState(false);
 
-  useEffect(() => {
-    if (latitude !== "" && longitude !== "") {
-      const newPosition = [
-        Number(latitude),
-        Number(longitude),
-      ];
-
-      setPosition(newPosition);
-    }
-  }, [latitude, longitude]);
-
+  /*
+   * Update the selected position.
+   */
   function handlePositionChange(newPosition) {
     setPosition(newPosition);
+    setCenterMap(true);
 
     onLocationChange(
       newPosition[0],
@@ -103,87 +130,162 @@ function PropertyLocationPicker({
     );
   }
 
+  /*
+   * Search for a location using OpenStreetMap.
+   */
   async function handleSearch(event) {
-    event.preventDefault();
+    event?.preventDefault();
+    event?.stopPropagation();
 
-    if (!search.trim()) {
+    const query = search.trim();
+
+    if (!query) {
+      setSearchError(
+        "Please enter a location to search."
+      );
       return;
     }
 
     setSearching(true);
     setSearchError("");
+    setCenterMap(false);
 
     try {
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(
-          search
-        )}`
+        `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=ke&q=${encodeURIComponent(
+          query
+        )}`,
+        {
+          headers: {
+            Accept: "application/json",
+          },
+        }
       );
 
       if (!response.ok) {
-        throw new Error("Location search failed.");
+        throw new Error(
+          "Location search failed."
+        );
       }
 
       const results = await response.json();
 
       if (!results.length) {
         setSearchError(
-          "Location not found. Try a more specific address."
+          "Location not found. Try a more specific address, estate, town, or landmark."
         );
         return;
       }
 
       const result = results[0];
 
-      const newPosition = [
-        Number(result.lat),
-        Number(result.lon),
-      ];
+      const lat = Number(result.lat);
+      const lng = Number(result.lon);
 
-      setPosition(newPosition);
+      if (
+        Number.isNaN(lat) ||
+        Number.isNaN(lng)
+      ) {
+        throw new TypeError(
+          "Invalid coordinates returned."
+        );
+      }
 
-      onLocationChange(
-        newPosition[0],
-        newPosition[1]
+      /*
+       * Move marker to search result.
+       */
+      setPosition([lat, lng]);
+
+      /*
+       * Save coordinates in parent state.
+       */
+      onLocationChange(lat, lng);
+
+      /*
+       * Tell the map to move to the new location.
+       */
+      setCenterMap(true);
+
+      /*
+       * Display the location that was found.
+       */
+      setSearch(
+        result.display_name || query
       );
-    } catch {
+    } catch (error) {
+      console.error(
+        "Property location search error:",
+        error
+      );
+
       setSearchError(
-        "Unable to search for that location."
+        "Unable to search for that location. Please try again."
       );
     } finally {
       setSearching(false);
     }
   }
 
+  /*
+   * Search when Enter is pressed without
+   * submitting the main property form.
+   */
+  function handleSearchKeyDown(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      event.stopPropagation();
+
+      handleSearch(event);
+    }
+  }
+
   return (
     <div className="property-location-picker">
-      <form
-        className="location-search"
-        onSubmit={handleSearch}
-      >
+      {/* Search */}
+
+      <div className="location-search">
         <input
           type="text"
           value={search}
-          onChange={(event) =>
-            setSearch(event.target.value)
-          }
-          placeholder="Search property location..."
+          onChange={(event) => {
+            setSearch(event.target.value);
+
+            if (searchError) {
+              setSearchError("");
+            }
+          }}
+          onKeyDown={handleSearchKeyDown}
+          placeholder="Search estate, street, town or landmark..."
+          disabled={searching}
+          aria-label="Search property location"
         />
 
         <button
-          type="submit"
+          type="button"
           className="btn-secondary"
-          disabled={searching}
+          onClick={handleSearch}
+          disabled={
+            searching || !search.trim()
+          }
         >
-          {searching ? "Searching..." : "Search"}
+          {searching
+            ? "Searching..."
+            : "Search"}
         </button>
-      </form>
+      </div>
+
+      {/* Search error */}
 
       {searchError && (
-        <p className="location-search-error">
+        <p
+          className="location-search-error"
+          role="alert"
+        >
           {searchError}
         </p>
       )}
+
+      {/* Map */}
 
       <div className="property-map">
         <MapContainer
@@ -196,36 +298,56 @@ function PropertyLocationPicker({
           }}
         >
           <TileLayer
-            attribution='&copy; OpenStreetMap contributors'
+            attribution="&copy; OpenStreetMap contributors"
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          <MapCenter position={position} />
+          <MapController
+            position={position}
+            centerMap={centerMap}
+          />
 
           <LocationMarker
             position={position}
-            setPosition={handlePositionChange}
+            onPositionChange={
+              handlePositionChange
+            }
           />
         </MapContainer>
       </div>
 
+      {/* Instructions */}
+
       <p className="map-instruction">
-        Search for your property, then click the exact
-        building on the map or drag the marker to the
-        correct location.
+        <strong>How to select your property:</strong>{" "}
+        Search for the area first. Then click directly
+        on your building or drag the marker to the exact
+        property location.
       </p>
+
+      {/* Coordinates */}
 
       <div className="selected-coordinates">
         <div>
           <span>Latitude</span>
-          <strong>{position[0].toFixed(6)}</strong>
+          <strong>
+            {position[0].toFixed(6)}
+          </strong>
         </div>
 
         <div>
           <span>Longitude</span>
-          <strong>{position[1].toFixed(6)}</strong>
+          <strong>
+            {position[1].toFixed(6)}
+          </strong>
         </div>
       </div>
+
+      <p className="form-hint">
+        The selected location will be saved with your
+        property and used to show its position on the
+        tenant map.
+      </p>
     </div>
   );
 }
