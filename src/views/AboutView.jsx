@@ -325,10 +325,9 @@ function AboutView() {
           </h2>
 
           <p>
-            The application is demonstrated using Cedar Court, a
-            fictional residential property. The property provides
-            a realistic setting for showing how landlords and
-            tenants could use the application in everyday life.
+          The application is demonstrated using a fictional residential
+          property. The property provides a realistic setting for showing
+          how landlords and tenants could use the application in everyday life.
           </p>
 
           <p>

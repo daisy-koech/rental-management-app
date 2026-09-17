@@ -1,10 +1,20 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { login } from "../services/api";
+import { useState, useEffect } from "react";
+import { useNavigate,  } from "react-router-dom";
+import { login, getPublicProperty } from "../services/api";
 import "./LoginView.css";
 
 function LoginView() {
   const navigate = useNavigate();
+  
+  const [property, setProperty] = useState(null);
+
+  useEffect(() => {
+    getPublicProperty()
+      .then(setProperty)
+      .catch((error) => {
+        console.error("Failed to load property:", error);
+      });
+  }, []);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -41,7 +51,7 @@ function LoginView() {
     <div className="login-view">
       <div className="login-card">
         <span className="login-eyebrow">WELCOME BACK</span>
-        <h1>Sign in to Cedar Court</h1>
+        <h1>Sign in to {property?.name || "your account"}</h1>
         <p className="login-subtitle">
           Enter your details to reach your dashboard.
         </p>

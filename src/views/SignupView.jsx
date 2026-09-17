@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { register } from "../services/api";
+import { register, getPublicProperty } from "../services/api";
 import "./LoginView.css";
 
 function SignupView() {
   const navigate = useNavigate();
+  const [property, setProperty] = useState(null);
+
+  useEffect(() => {
+    getPublicProperty()
+      .then(setProperty)
+      .catch((error) => {
+        console.error("Failed to load property:", error);
+      });
+  }, []);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -41,7 +50,7 @@ function SignupView() {
     <div className="login-view">
       <div className="login-card">
         <span className="login-eyebrow">JOIN US</span>
-        <h1>Create your Cedar Court account</h1>
+        <h1>Create your {property?.name || "account"}</h1>
         <p className="login-subtitle">
           Sign up to access your dashboard.
         </p>

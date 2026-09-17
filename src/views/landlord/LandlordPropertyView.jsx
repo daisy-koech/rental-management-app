@@ -165,7 +165,7 @@ function LandlordPropertyView() {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Cedar Court"
+              placeholder="Enter property name"
               required
             />
           </div>

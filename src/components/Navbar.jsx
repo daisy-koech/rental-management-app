@@ -1,27 +1,38 @@
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { logout } from "../services/api";
+import { getPublicProperty, logout } from "../services/api";
 import "./Navbar.css";
 
 function Navbar() {
   const navigate = useNavigate();
 
+  const [property, setProperty] = useState(null);
+
   const user = JSON.parse(localStorage.getItem("user"));
 
-async function handleLogout() {
-  try {
-    await logout();
-  } catch (error) {
-    console.error("Logout failed:", error);
-  } finally {
-    localStorage.removeItem("user");
-    navigate("/login");
+  useEffect(() => {
+    getPublicProperty()
+      .then(setProperty)
+      .catch((error) => {
+        console.error("Failed to load property:", error);
+      });
+  }, []);
+
+  async function handleLogout() {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      localStorage.removeItem("user");
+      navigate("/login");
+    }
   }
-}
 
   return (
     <nav className="navbar">
       <NavLink to="/" className="navbar-title">
-        Cedar Court
+        {property?.name || "Property"}
       </NavLink>
 
       <div className="navbar-links">
