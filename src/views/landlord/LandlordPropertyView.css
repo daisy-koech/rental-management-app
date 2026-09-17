@@ -9,6 +9,8 @@
   margin-bottom: 1rem;
 }
 
+/* Empty Property State */
+
 .property-empty-state {
   margin-top: 2rem;
   padding: 3rem 2rem;
@@ -23,6 +25,8 @@
   margin: 0 0 1rem;
   color: var(--color-text-muted);
 }
+
+/*Property Summary Card*/
 
 .property-summary-card {
   display: grid;
@@ -74,6 +78,8 @@
   line-height: 1.65;
 }
 
+/* Property Type / Tenancy */
+
 .property-summary-meta {
   display: grid;
   grid-template-columns: repeat(2, minmax(140px, 1fr));
@@ -106,6 +112,8 @@
   font-weight: 600;
 }
 
+/* Coordinates Summary */
+
 .property-summary-coords {
   width: 100%;
   margin: 0.5rem 0 1.5rem;
@@ -119,6 +127,8 @@
 .property-summary-details .btn-secondary {
   margin-top: 0.25rem;
 }
+
+/* Property Form */
 
 .property-form {
   display: flex;
@@ -152,9 +162,49 @@
   margin-bottom: 0.75rem;
 }
 
+/* Property Location Picker*/
+
 .property-location-picker {
   width: 100%;
 }
+
+/* Location Method Toggle */
+
+.location-method {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.3rem;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.location-method-button {
+  flex: 1;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.location-method-button:hover {
+  color: var(--color-primary);
+}
+
+.location-method-button.active {
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Location Search */
 
 .location-search {
   display: flex;
@@ -172,10 +222,25 @@
   color: var(--color-text);
 }
 
+.location-search input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.8;
+}
+
 .location-search input:focus {
   outline: none;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(32, 60, 49, 0.08);
+}
+
+.location-search input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.location-search button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .location-search-error {
@@ -183,6 +248,8 @@
   color: var(--color-danger);
   font-size: 0.85rem;
 }
+
+/*Map*/
 
 .property-map {
   width: 100%;
@@ -197,6 +264,21 @@
   z-index: 1;
 }
 
+/*
+ * Keep Leaflet controls visually above the map
+ * without affecting the rest of the page.
+ */
+
+.property-map .leaflet-control {
+  z-index: 10;
+}
+
+.property-map .leaflet-control-zoom a {
+  color: var(--color-primary);
+}
+
+/* Map Instructions */
+
 .map-instruction {
   margin: 0.6rem 0 1rem;
   color: var(--color-text-muted);
@@ -204,10 +286,69 @@
   line-height: 1.5;
 }
 
+.map-instruction strong {
+  color: var(--color-primary);
+}
+
+/*Manual Coordinates */
+
+.manual-coordinates {
+  padding: 1.25rem;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.manual-coordinates > .form-hint {
+  margin-top: 0;
+}
+
+.manual-coordinate-fields {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.manual-coordinates .form-group {
+  margin: 0;
+}
+
+.manual-coordinates label {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--color-text);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.manual-coordinates input {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+.manual-coordinates input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.8;
+}
+
+.manual-coordinates input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(32, 60, 49, 0.08);
+}
+
+/*Selected Coordinates*/
+
 .selected-coordinates {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+  margin-top: 1rem;
 }
 
 .selected-coordinates > div {
@@ -234,19 +375,7 @@
   font-size: 0.9rem;
 }
 
-.location-search input:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.location-search button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.map-instruction strong {
-  color: var(--color-primary);
-}
+/* Responsive*/
 
 @media (max-width: 800px) {
   .property-summary-card {
@@ -295,6 +424,10 @@
     gap: 1rem;
   }
 
+  .location-method {
+    flex-direction: column;
+  }
+
   .location-search {
     flex-direction: column;
   }
@@ -305,6 +438,10 @@
 
   .property-map .leaflet-container {
     height: 300px;
+  }
+
+  .manual-coordinate-fields {
+    grid-template-columns: 1fr;
   }
 
   .selected-coordinates {
