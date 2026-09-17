@@ -5,6 +5,7 @@ import {
   updateProperty,
 } from "../../services/api";
 import DashboardTabs from "../../components/DashboardTabs";
+import PropertyLocationPicker from "../../components/PropertyLocationPicker";
 import "./LandlordPropertyView.css";
 
 const TABS = [
@@ -72,7 +73,9 @@ function LandlordPropertyView() {
     }
 
     if (latitude === "" || longitude === "") {
-      setError("Latitude and longitude are required.");
+      setError(
+        "Please select the exact property location on the map."
+      );
       return;
     }
 
@@ -195,7 +198,9 @@ function LandlordPropertyView() {
       {showForm && (
         <form className="property-form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="property-name">Property name</label>
+            <label htmlFor="property-name">
+              Property name
+            </label>
 
             <input
               id="property-name"
@@ -208,7 +213,9 @@ function LandlordPropertyView() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="property-location">Location</label>
+            <label htmlFor="property-location">
+              Location
+            </label>
 
             <input
               id="property-location"
@@ -240,7 +247,9 @@ function LandlordPropertyView() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="property-type">Property type</label>
+            <label htmlFor="property-type">
+              Property type
+            </label>
 
             <input
               id="property-type"
@@ -252,7 +261,9 @@ function LandlordPropertyView() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="tenancy-type">Tenancy type</label>
+            <label htmlFor="tenancy-type">
+              Tenancy type
+            </label>
 
             <input
               id="tenancy-type"
@@ -263,34 +274,24 @@ function LandlordPropertyView() {
             />
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="property-lat">Latitude</label>
+          {/* Property map */}
+          <div className="form-group">
+            <label>Property location</label>
 
-              <input
-                id="property-lat"
-                type="number"
-                step="any"
-                value={latitude}
-                onChange={(e) => setLatitude(e.target.value)}
-                placeholder="e.g. 0.5254"
-                required
-              />
-            </div>
+            <p className="form-hint property-location-help">
+              Search for your property, then click the exact
+              building on the map or drag the marker to the
+              correct location.
+            </p>
 
-            <div className="form-group">
-              <label htmlFor="property-lng">Longitude</label>
-
-              <input
-                id="property-lng"
-                type="number"
-                step="any"
-                value={longitude}
-                onChange={(e) => setLongitude(e.target.value)}
-                placeholder="e.g. 35.2698"
-                required
-              />
-            </div>
+            <PropertyLocationPicker
+              latitude={latitude}
+              longitude={longitude}
+              onLocationChange={(newLatitude, newLongitude) => {
+                setLatitude(newLatitude);
+                setLongitude(newLongitude);
+              }}
+            />
           </div>
 
           <div className="form-group">
