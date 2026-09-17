@@ -3,6 +3,7 @@ import "./App.css";
 import "leaflet/dist/leaflet.css";
 import "./leafletIconFix"
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import HomeView from "./views/HomeView";
@@ -59,6 +60,7 @@ function App() {
           <Route path="/landlord/end-of-stay" element={<ProtectedRoute role="landlord"><LandlordEndOfStayView /></ProtectedRoute>}/>
         </Routes>
       </div>
+      <Footer />
     </BrowserRouter>
   );
 }
