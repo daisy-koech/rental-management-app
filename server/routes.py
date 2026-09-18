@@ -1,5 +1,7 @@
 from flask import request, session
 from datetime import date
+import math
+import requests
 from extensions import db
 from models import User, Property, Unit, Lease, Payment, Notice, MaintenanceTicket, EndOfStay
 
@@ -215,17 +217,17 @@ def property_routes(app):
         if "amenities" in data:
             amenities = data["amenities"]
 
-        if not isinstance(amenities, list):
-            return {
-                "error": "Amenities must be a list"
-            }, 400
+            if not isinstance(amenities, list):
+                return {
+                    "error": "Amenities must be a list"
+                }, 400
 
-        if len(amenities) > 4:
-            return {
-                "error": "You can select a maximum of 4 amenities"
-            }, 400
+            if len(amenities) > 4:
+                return {
+                    "error": "You can select a maximum of 4 amenities"
+                }, 400
 
-        PROPERTY.amenities = amenities
+            PROPERTY.amenities = amenities
 
         if "image_url" in data:
             PROPERTY.image_url = data["image_url"]
@@ -279,6 +281,139 @@ def property_routes(app):
         }
 
         return property_data, 200
+
+    @app.route("/property/nearby-amenities", methods=["GET"])
+    def get_nearby_amenities():
+        PROPERTY = Property.query.first()
+
+        if not PROPERTY:
+            return {"error": "Property not found"}, 404
+
+        latitude = PROPERTY.latitude
+        longitude = PROPERTY.longitude
+
+        query = f"""
+        [out:json][timeout:25];
+        (
+          nwr(around:3000,{latitude},{longitude})[amenity=school];
+          nwr(around:3000,{latitude},{longitude})[amenity=hospital];
+          nwr(around:3000,{latitude},{longitude})[amenity=clinic];
+          nwr(around:3000,{latitude},{longitude})[amenity=pharmacy];
+          nwr(around:3000,{latitude},{longitude})[shop=supermarket];
+          nwr(around:3000,{latitude},{longitude})[highway=bus_stop];
+          nwr(around:3000,{latitude},{longitude})[amenity=bus_station];
+        );
+        out center tags;
+        """
+
+        try:
+           response = requests.post(
+                "https://overpass-api.de/api/interpreter",
+                data={"data": query},
+                headers={
+                     "User-Agent": "RentalManagementApp/1.0"
+                },
+                timeout=30
+            )
+           response.raise_for_status()
+           elements = response.json().get("elements", [])
+        except Exception as error:
+                return {
+                     "error": str(error)
+                     }, 500
+
+        def calculate_distance(lat1, lon1, lat2, lon2):
+            earth_radius = 6371
+            lat1 = math.radians(lat1)
+            lat2 = math.radians(lat2)
+            delta_lat = math.radians(lat2 - lat1)
+            delta_lon = math.radians(lon2 - lon1)
+
+            a = (
+                math.sin(delta_lat / 2) ** 2
+                + math.cos(lat1)
+                * math.cos(lat2)
+                * math.sin(delta_lon / 2) ** 2
+            )
+
+            c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+            return earth_radius * c
+        
+
+        categories = {
+            "schools": [],
+            "hospitals": [],
+            "clinics": [],
+            "pharmacies": [],
+            "supermarkets": [],
+            "transport": [],
+        }
+
+        for element in elements:  
+            tags = element.get("tags", {})
+            name = tags.get("name")
+
+            if not name:
+                continue
+
+            element_lat = element.get("lat")
+            element_lon = element.get("lon")
+
+            if element_lat is None or element_lon is None:
+                center = element.get("center", {})
+                element_lat = center.get("lat")
+                element_lon = center.get("lon")
+
+            if element_lat is None or element_lon is None:
+                continue
+
+            distance = calculate_distance(
+                latitude,
+                longitude,
+                element_lat,
+                element_lon
+            )
+
+            amenity_type = None
+
+            if tags.get("amenity") == "school":
+                amenity_type = "schools"
+
+            elif tags.get("amenity") == "hospital":
+                amenity_type = "hospitals"
+
+            elif tags.get("amenity") == "clinic":
+                amenity_type = "clinics"
+
+            elif tags.get("amenity") == "pharmacy":
+                amenity_type = "pharmacies"
+
+            elif tags.get("shop") == "supermarket":
+                amenity_type = "supermarkets"
+
+            elif tags.get("highway") == "bus_stop":
+                amenity_type = "transport"
+
+            elif tags.get("amenity") == "bus_station":
+                amenity_type = "transport"
+
+            if amenity_type:
+                categories[amenity_type].append({
+                    "name": name,
+                    "distance_km": round(distance, 2),
+                })
+
+        for category in categories:
+            categories[category].sort(
+                key=lambda item: item["distance_km"]
+            )
+
+            categories[category] = categories[category][:5]
+
+        return {
+            "nearby_amenities": categories
+        }, 200
         
     @app.route("/property/units", methods=["GET"])
     def get_units():
