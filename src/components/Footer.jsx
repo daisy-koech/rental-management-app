@@ -15,11 +15,11 @@ function Footer() {
       });
   }, []);
 
-  const manager = property?.manager;
-
   return (
     <footer className="site-footer">
       <div className="footer-inner">
+
+        {/* Brand */}
         <div className="footer-brand">
           <span className="footer-name">
             {property?.name || "Property"}
@@ -31,6 +31,7 @@ function Footer() {
           </p>
         </div>
 
+        {/* Explore */}
         <div className="footer-links">
           <span className="footer-heading">Explore</span>
 
@@ -40,6 +41,7 @@ function Footer() {
           <Link to="/about">About</Link>
         </div>
 
+        {/* Access */}
         <div className="footer-links">
           <span className="footer-heading">Access</span>
 
@@ -48,35 +50,30 @@ function Footer() {
           <Link to="/login">Log in</Link>
         </div>
 
+        {/* Personal contact */}
         <div className="footer-contact">
           <span className="footer-heading">Get in touch</span>
 
-          {manager?.email && (
-            <a
-              href={`mailto:${manager.email}`}
-              className="footer-contact-item"
-            >
-              <Mail size={15} />
-              {manager.email}
-            </a>
-          )}
+          <a
+            href="mailto:koechdaisy87@gmail.com"
+            className="footer-contact-item"
+          >
+            <Mail size={15} />
+            koechdaisy87@gmail.com
+          </a>
 
-          {manager?.phone && (
-            <a
-              href={`tel:${manager.phone.replace(/\s/g, "")}`}
-              className="footer-contact-item"
-            >
-              <Phone size={15} />
-              {manager.phone}
-            </a>
-          )}
+          <a
+            href="tel:+254113304049"
+            className="footer-contact-item"
+          >
+            <Phone size={15} />
+            +254 113 304 049
+          </a>
 
-          {property?.location && (
-            <span className="footer-contact-item">
-              <MapPin size={15} />
-              {property.location}
-            </span>
-          )}
+          <span className="footer-contact-item">
+            <MapPin size={15} />
+            Eldoret, Kenya
+          </span>
 
           <div className="footer-socials">
             {/* Social links can be added later */}
@@ -84,6 +81,7 @@ function Footer() {
         </div>
       </div>
 
+      {/* Footer bottom */}
       <div className="footer-bottom">
         <span>
           &copy; {new Date().getFullYear()}{" "}
