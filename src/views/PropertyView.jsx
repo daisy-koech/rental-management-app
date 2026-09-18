@@ -58,7 +58,8 @@ function PropertyView() {
           <h1>{property.name}</h1>
 
           <p className="property-hero-description">
-            {property.description || "Property information coming soon."}
+            {property.description ||
+              "Property information coming soon."}
           </p>
         </div>
       </section>
@@ -153,7 +154,9 @@ function PropertyView() {
           <div className="fact-card fact-card-filled">
             <User size={20} className="fact-icon" />
 
-            <span className="fact-label">PROPERTY MANAGER</span>
+            <span className="fact-label">
+              PROPERTY MANAGER
+            </span>
 
             <span className="fact-value">
               {property.manager?.name || "Property Manager"}
@@ -181,6 +184,40 @@ function PropertyView() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Property amenities */}
+      <section className="property-amenities">
+        <div className="property-section-label">
+          PROPERTY AMENITIES
+        </div>
+
+        <div className="property-amenities-heading">
+          <h2>What the property offers.</h2>
+
+          <p>
+            Features and services available as part of the property.
+          </p>
+        </div>
+
+        {property.amenities?.length > 0 ? (
+          <div className="property-amenities-list">
+            {property.amenities.map((amenity) => (
+              <div
+                key={amenity}
+                className="property-amenity-item"
+              >
+                <HomeIcon size={18} />
+                <span>{amenity}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="empty-text">
+            Property amenities will be listed here once they are
+            available.
+          </p>
+        )}
       </section>
 
       {/* Living here */}
@@ -253,4 +290,3 @@ function PropertyView() {
 }
 
 export default PropertyView;
-
