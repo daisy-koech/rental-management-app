@@ -274,10 +274,37 @@ class Payment(db.Model):
     status = db.Column(
         db.String(30),
         nullable=False,
-        default="paid"
+        default="pending"
     )
 
     reference = db.Column(
+        db.String(100),
+        nullable=True
+    )
+
+    payment_method = db.Column(
+        db.String(30),
+        nullable=False,
+        default="manual"
+    )
+
+    phone_number = db.Column(
+        db.String(20),
+        nullable=True
+    )
+
+    checkout_request_id = db.Column(
+        db.String(100),
+        nullable=True,
+        unique=True
+    )
+
+    merchant_request_id = db.Column(
+        db.String(100),
+        nullable=True
+    )
+
+    mpesa_receipt_number = db.Column(
         db.String(100),
         nullable=True
     )
@@ -298,7 +325,12 @@ class Payment(db.Model):
             "amount": float(self.amount),
             "payment_date": self.payment_date.isoformat(),
             "status": self.status,
-            "reference": self.reference
+            "reference": self.reference,
+            "payment_method": self.payment_method,
+            "phone_number": self.phone_number,
+            "checkout_request_id": self.checkout_request_id,
+            "merchant_request_id": self.merchant_request_id,
+            "mpesa_receipt_number": self.mpesa_receipt_number
         }
 
 class Notice(db.Model):
