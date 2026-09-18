@@ -35,6 +35,7 @@ function LandlordPropertyView() {
   const [description, setDescription] = useState("");
   const [propertyType, setPropertyType] = useState("");
   const [tenancyType, setTenancyType] = useState("");
+  const [amenities, setAmenities] = useState([]);
 
   useEffect(() => {
     async function loadProperty() {
@@ -59,7 +60,10 @@ function LandlordPropertyView() {
     setImageUrl(property?.image_url || "");
     setDescription(property?.description || "");
     setPropertyType(property?.property_type || "Residential");
-    setTenancyType(property?.tenancy_type || "Long-term rental");
+    setTenancyType(
+      property?.tenancy_type || "Long-term rental"
+    );
+    setAmenities(property?.amenities || []);
     setError("");
     setShowForm(true);
   }
@@ -68,7 +72,9 @@ function LandlordPropertyView() {
     event.preventDefault();
 
     if (!name.trim() || !location.trim()) {
-      setError("Property name and location are required.");
+      setError(
+        "Property name and location are required."
+      );
       return;
     }
 
@@ -91,6 +97,7 @@ function LandlordPropertyView() {
       description: description.trim(),
       property_type: propertyType.trim(),
       tenancy_type: tenancyType.trim(),
+      amenities,
     };
 
     try {
@@ -159,7 +166,8 @@ function LandlordPropertyView() {
             </p>
 
             <p className="property-summary-description">
-              {property.description || "No description added yet."}
+              {property.description ||
+                "No description added yet."}
             </p>
 
             <div className="property-summary-meta">
@@ -167,7 +175,8 @@ function LandlordPropertyView() {
                 <span>Property type</span>
 
                 <strong>
-                  {property.property_type || "Residential"}
+                  {property.property_type ||
+                    "Residential"}
                 </strong>
               </div>
 
@@ -175,10 +184,30 @@ function LandlordPropertyView() {
                 <span>Tenancy</span>
 
                 <strong>
-                  {property.tenancy_type || "Long-term rental"}
+                  {property.tenancy_type ||
+                    "Long-term rental"}
                 </strong>
               </div>
             </div>
+
+            {property.amenities?.length > 0 && (
+              <div className="property-summary-amenities">
+                <span className="property-summary-amenities-label">
+                  Property Amenities
+                </span>
+
+                <div className="property-amenities-list">
+                  {property.amenities.map((amenity) => (
+                    <span
+                      key={amenity}
+                      className="property-amenity"
+                    >
+                      {amenity}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <p className="property-summary-coords">
               {property.latitude}, {property.longitude}
@@ -196,7 +225,10 @@ function LandlordPropertyView() {
       )}
 
       {showForm && (
-        <form className="property-form" onSubmit={handleSubmit}>
+        <form
+          className="property-form"
+          onSubmit={handleSubmit}
+        >
           <div className="form-group">
             <label htmlFor="property-name">
               Property name
@@ -235,14 +267,17 @@ function LandlordPropertyView() {
             <textarea
               id="property-description"
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) =>
+                setDescription(e.target.value)
+              }
               placeholder="Describe your property..."
               rows="5"
             />
 
             <p className="form-hint">
-              Give tenants a short description of your property,
-              its surroundings, and what makes it convenient.
+              Give tenants a short description of your
+              property, its surroundings, and what makes it
+              convenient.
             </p>
           </div>
 
@@ -255,7 +290,9 @@ function LandlordPropertyView() {
               id="property-type"
               type="text"
               value={propertyType}
-              onChange={(e) => setPropertyType(e.target.value)}
+              onChange={(e) =>
+                setPropertyType(e.target.value)
+              }
               placeholder="e.g. Residential"
             />
           </div>
@@ -269,25 +306,103 @@ function LandlordPropertyView() {
               id="tenancy-type"
               type="text"
               value={tenancyType}
-              onChange={(e) => setTenancyType(e.target.value)}
+              onChange={(e) =>
+                setTenancyType(e.target.value)
+              }
               placeholder="e.g. Long-term rental"
             />
           </div>
 
-          {/* Property map */}
+          <div className="form-group">
+            <label>Property Amenities</label>
+
+            <p className="form-hint">
+              Select up to 4 amenities that best describe
+              your property.
+            </p>
+
+            <div className="amenities-grid">
+              {[
+                "Parking",
+                "Wi-Fi",
+                "24/7 Security",
+                "CCTV",
+                "Borehole Water",
+                "Backup Generator",
+                "Swimming Pool",
+                "Gym",
+                "Children's Play Area",
+                "Elevator",
+                "Pet-Friendly",
+                "Gated Compound",
+              ].map((amenity) => {
+                const selected =
+                  amenities.includes(amenity);
+
+                return (
+                  <label
+                    key={amenity}
+                    className={`amenity-option ${
+                      selected ? "selected" : ""
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selected}
+                      disabled={
+                        !selected &&
+                        amenities.length >= 4
+                      }
+                      onChange={() => {
+                        setAmenities((current) => {
+                          if (
+                            current.includes(amenity)
+                          ) {
+                            return current.filter(
+                              (item) =>
+                                item !== amenity
+                            );
+                          }
+
+                          if (current.length >= 4) {
+                            return current;
+                          }
+
+                          return [
+                            ...current,
+                            amenity,
+                          ];
+                        });
+                      }}
+                    />
+
+                    <span>{amenity}</span>
+                  </label>
+                );
+              })}
+            </div>
+
+            <p className="amenities-count">
+              {amenities.length} / 4 selected
+            </p>
+          </div>
+
           <div className="form-group">
             <label>Property location</label>
 
             <p className="form-hint property-location-help">
-              Search for your property, then click the exact
-              building on the map or drag the marker to the
-              correct location.
+              Search for your property, then click the
+              exact building on the map or drag the marker
+              to the correct location.
             </p>
 
             <PropertyLocationPicker
               latitude={latitude}
               longitude={longitude}
-              onLocationChange={(newLatitude, newLongitude) => {
+              onLocationChange={(
+                newLatitude,
+                newLongitude
+              ) => {
                 setLatitude(newLatitude);
                 setLongitude(newLongitude);
               }}
@@ -303,12 +418,15 @@ function LandlordPropertyView() {
               id="property-image"
               type="url"
               value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
+              onChange={(e) =>
+                setImageUrl(e.target.value)
+              }
               placeholder="https://..."
             />
 
             <p className="form-hint">
-              Paste a direct image link ending in .jpg, .png, etc.
+              Paste a direct image link ending in .jpg,
+              .png, etc.
             </p>
           </div>
 

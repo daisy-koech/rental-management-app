@@ -80,6 +80,12 @@ class Property(db.Model):
         nullable=False
     )
 
+    amenities = db.Column(
+        db.JSON,
+        nullable=False,
+        default=list
+    )
+
     image_url = db.Column(
         db.String(500),
         nullable=True
@@ -122,6 +128,7 @@ class Property(db.Model):
             "location": self.location,
             "latitude": self.latitude,
             "longitude": self.longitude,
+            "amenities": self.amenities or [],
             "landlord_id": self.landlord_id,
             "image_url": self.image_url,
             "description": self.description,

@@ -118,8 +118,17 @@ def property_routes(app):
         description = data.get("description")
         property_type = data.get("property_type") or "Residential"
         tenancy_type = data.get("tenancy_type") or "Long-term rental"
+        amenities = data.get("amenities") or []
 
-        
+        if not isinstance(amenities, list):
+            return {
+                "error": "Amenities must be a list"
+            }, 400
+
+        if len(amenities) > 4:
+            return {
+            "error": "You can select a maximum of 4 amenities"
+        }, 400
 
         if not name or not location or latitude is None or longitude is None:
             return {
@@ -131,6 +140,7 @@ def property_routes(app):
             location=location,
             latitude=latitude,
             longitude=longitude,
+            amenities=amenities,
             image_url=image_url,
             landlord_id=user.id,
             description=description,
@@ -201,6 +211,21 @@ def property_routes(app):
 
         if "longitude" in data:
             PROPERTY.longitude = data["longitude"]
+
+        if "amenities" in data:
+            amenities = data["amenities"]
+
+        if not isinstance(amenities, list):
+            return {
+                "error": "Amenities must be a list"
+            }, 400
+
+        if len(amenities) > 4:
+            return {
+                "error": "You can select a maximum of 4 amenities"
+            }, 400
+
+        PROPERTY.amenities = amenities
 
         if "image_url" in data:
             PROPERTY.image_url = data["image_url"]
