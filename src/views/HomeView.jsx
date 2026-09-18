@@ -1,21 +1,65 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+} from "react-leaflet";
 import { MapPin, Users, Home as HomeIcon } from "lucide-react";
-import { getPublicProperty } from "../services/api";
-import { nearbyPlaces } from "../data/mockData";
+import { getPublicProperty, getNearbyAmenities,} from "../services/api";
 import AmenityCard from "../components/AmenityCard";
 import "./HomeView.css";
 
+function transformNearbyAmenities(data) {
+  const categories = data.nearby_amenities || {};
+
+  const categoryTypes = {
+    schools: "school",
+    hospitals: "hospital",
+    clinics: "hospital",
+    pharmacies: "pharmacy",
+    supermarkets: "market",
+    transport: "transport",
+  };
+
+  return Object.entries(categories).flatMap(
+    ([category, places]) =>
+      (places || []).map((place, index) => ({
+        id: `${category}-${index}-${place.name}`,
+        name: place.name,
+        type: categoryTypes[category] || "other",
+        distance_km: place.distance_km,
+      }))
+  );
+}
+
 function HomeView() {
   const [property, setProperty] = useState(null);
+  const [nearbyAmenities, setNearbyAmenities] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [amenitiesLoading, setAmenitiesLoading] = useState(true);
 
   useEffect(() => {
     getPublicProperty()
       .then(setProperty)
       .catch(() => setProperty(null))
       .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    getNearbyAmenities()
+      .then((data) => {
+        setNearbyAmenities(transformNearbyAmenities(data));
+      })
+      .catch((error) => {
+        console.error(
+          "Nearby amenities loading failed:",
+          error
+        );
+        setNearbyAmenities([]);
+      })
+      .finally(() => setAmenitiesLoading(false));
   }, []);
 
   if (loading) {
@@ -31,11 +75,15 @@ function HomeView() {
       <div className="home-view">
         <section className="hero">
           <div className="hero-text">
-            <span className="hero-eyebrow">PROPERTY INFORMATION</span>
+            <span className="hero-eyebrow">
+              PROPERTY INFORMATION
+            </span>
+
             <h1>The property is being set up.</h1>
+
             <p>
-              Property details will appear here once everything is ready.
-              Please check back shortly.
+              Property details will appear here once everything is
+              ready. Please check back shortly.
             </p>
           </div>
         </section>
@@ -78,7 +126,10 @@ function HomeView() {
 
         <div className="hero-image">
           {property.image_url && (
-            <img src={property.image_url} alt={property.name} />
+            <img
+              src={property.image_url}
+              alt={property.name}
+            />
           )}
 
           <div className="hero-image-tag">
@@ -90,41 +141,77 @@ function HomeView() {
 
       {/* Who this is for */}
       <section className="audience-section">
-      <div className="audience-grid">
-        <div className="audience-card">
-         <HomeIcon size={21} className="audience-icon" />
-         <span className="audience-label">VISITING</span>
-         <p>Explore the property, see where it is and find out what is nearby.</p>
-        </div>
+        <div className="audience-grid">
+          <div className="audience-card">
+            <HomeIcon
+              size={21}
+              className="audience-icon"
+            />
 
-        <div className="audience-card audience-card-filled">
-          <Users size={21} className="audience-icon" />
-          <span className="audience-label">TENANTS</span>
-          <p>View your lease, check payments and report anything that needs attention.</p>
-        </div>
+            <span className="audience-label">
+              VISITING
+            </span>
 
-        <div className="audience-card">
-         <HomeIcon size={21} className="audience-icon" />
-         <span className="audience-label">LANDLORDS</span>
-         <p>Keep track of units, tenants, payments, repairs and property updates.</p>
+            <p>
+              Explore the property, see where it is and find out
+              what is nearby.
+            </p>
+          </div>
+
+          <div className="audience-card audience-card-filled">
+            <Users
+              size={21}
+              className="audience-icon"
+            />
+
+            <span className="audience-label">
+              TENANTS
+            </span>
+
+            <p>
+              View your lease, check payments and report anything
+              that needs attention.
+            </p>
+          </div>
+
+          <div className="audience-card">
+            <HomeIcon
+              size={21}
+              className="audience-icon"
+            />
+
+            <span className="audience-label">
+              LANDLORDS
+            </span>
+
+            <p>
+              Keep track of units, tenants, payments, repairs and
+              property updates.
+            </p>
+          </div>
         </div>
-      </div>
       </section>
 
       {/* Property intro */}
       <section className="property-intro">
-        <span className="section-eyebrow">THE PROPERTY</span>
+        <span className="section-eyebrow">
+          THE PROPERTY
+        </span>
 
         <h2>{property.name}</h2>
 
         <p>
           {property.name} is located in {property.location}.
-          This site brings together leases, payments, maintenance requests and
-          property updates so tenants and the landlord can find what
-          they need without digging through messages or paperwork.
+          This site brings together leases, payments, maintenance
+          requests and property updates so tenants and the landlord
+          can find what they need without digging through messages
+          or paperwork.
         </p>
 
-        <Link to="/property" className="text-link">
+        <Link
+          to="/property"
+          className="text-link"
+        >
           View full property details
         </Link>
       </section>
@@ -133,7 +220,9 @@ function HomeView() {
       {property.latitude && property.longitude && (
         <section className="location-section">
           <div className="location-heading">
-            <span className="section-eyebrow">LOCATION</span>
+            <span className="section-eyebrow">
+              LOCATION
+            </span>
 
             <h2>Where it is</h2>
 
@@ -165,40 +254,65 @@ function HomeView() {
       {/* Nearby */}
       <section className="home-amenities">
         <div className="amenities-heading">
-          <span className="section-eyebrow">NEARBY</span>
+          <span className="section-eyebrow">
+            NEARBY
+          </span>
 
           <h2>What's around the property</h2>
 
           <p>
-            A look at some of the schools, shops, services and transport
-            options nearby.
+            A look at some of the schools, shops, services and
+            transport options nearby.
           </p>
         </div>
 
-        <div className="home-amenities-list">
-          {nearbyPlaces.map((place) => (
-            <AmenityCard key={place.name} amenity={place} />
-          ))}
-        </div>
+        {amenitiesLoading && (
+          <p>Loading nearby amenities...</p>
+        )}
+
+        {!amenitiesLoading &&
+          nearbyAmenities.length === 0 && (
+            <p>No nearby amenities found.</p>
+          )}
+
+        {!amenitiesLoading &&
+          nearbyAmenities.length > 0 && (
+            <div className="home-amenities-list">
+              {nearbyAmenities.map((place) => (
+                <AmenityCard
+                  key={place.id}
+                  amenity={place}
+                />
+              ))}
+            </div>
+          )}
       </section>
 
       {/* CTA */}
       <section className="home-cta">
-        <span className="cta-eyebrow">GET STARTED</span>
+        <span className="cta-eyebrow">
+          GET STARTED
+        </span>
 
         <h2>Sign in to your dashboard</h2>
 
         <p>
-          Tenants and landlords each have their own dashboard, with the
-          information and tools relevant to them.
+          Tenants and landlords each have their own dashboard,
+          with the information and tools relevant to them.
         </p>
 
         <div className="hero-actions">
-          <Link to="/tenant" className="btn-cta-primary">
+          <Link
+            to="/tenant"
+            className="btn-cta-primary"
+          >
             Tenant login
           </Link>
 
-          <Link to="/landlord" className="btn-cta-secondary">
+          <Link
+            to="/landlord"
+            className="btn-cta-secondary"
+          >
             Landlord login
           </Link>
         </div>

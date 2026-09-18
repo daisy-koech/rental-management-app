@@ -159,6 +159,25 @@ export async function getPublicProperty() {
   return data;
 }
 
+export async function getNearbyAmenities() {
+  const response = await fetch(
+    `${API_URL}/property/nearby-amenities`,
+    {
+      method: "GET",
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      data.error || "Failed to load nearby amenities"
+    );
+  }
+
+  return data;
+}
+
 export async function getLandlordTenants() {
   const response = await fetch(`${API_URL}/property/tenants`, {
     method: "GET",
